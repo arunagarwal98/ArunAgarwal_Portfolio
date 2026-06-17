@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frontend SEO — Client Websites | Arun Agarwal</title>
+<meta name="description" content="How I handled technical SEO and page speed fixes across client websites. Real work, honest write-up.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f0f7ff;--white:#fff;--s3:#eaf3ff;--bg2:#e8f2fe;
+  --blue:#1a6ff4;--blue2:#2979ff;--blue3:#5a9fff;--bpale:#dbeafe;
+  --ink:#0d1b3e;--ink2:#1e3a5f;--muted:#64748b;--muted2:#94a3b8;
+  --bdr:rgba(26,111,244,.12);--bdr2:rgba(26,111,244,.25);
+  --fd:'Syne',sans-serif;--fb:'Inter',sans-serif;--fm:'JetBrains Mono',monospace;
+  --r:12px;--r2:18px;--sh:0 4px 24px rgba(26,111,244,.08);--sh2:0 10px 40px rgba(26,111,244,.16);
+  --green:#059669;--red:#dc2626;--orange:#d97706;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:116%;scroll-behavior:smooth;scroll-padding-top:80px}
+body{background:linear-gradient(135deg,#f0f7ff 0%,#fff 50%,#e8f2fe 100%);color:var(--ink);font-family:var(--fb);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--blue);border-radius:2px}
+
+/* nav */
+#nav{position:fixed;top:0;left:0;right:0;z-index:999;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(240,247,255,.94);backdrop-filter:blur(18px);box-shadow:0 1px 0 var(--bdr)}
+.logo{font-family:var(--fd);font-size:1.1rem;font-weight:800;color:var(--ink);text-decoration:none}
+.logo em{color:var(--blue);font-style:normal}
+.back-btn{display:inline-flex;align-items:center;gap:.4rem;font-size:.76rem;color:var(--muted);text-decoration:none;border:1.5px solid var(--bdr2);padding:.35rem .9rem;border-radius:7px;transition:all .2s;font-weight:500}
+.back-btn:hover{color:var(--blue);border-color:var(--blue)}
+.back-btn svg{transition:transform .2s}.back-btn:hover svg{transform:translateX(-2px)}
+
+/* hero */
+.hero{padding:105px 5% 52px;max-width:860px;margin:0 auto}
+.eyebrow{font-size:.62rem;font-family:var(--fm);color:var(--blue);letter-spacing:.18em;text-transform:uppercase;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
+.eyebrow::before{content:'';width:18px;height:2px;background:var(--blue);border-radius:1px}
+h1{font-family:var(--fd);font-size:clamp(1.8rem,4vw,2.7rem);font-weight:800;color:var(--ink);letter-spacing:-.03em;line-height:1.1;margin-bottom:.9rem}
+h1 span{color:var(--blue)}
+.meta-row{display:flex;flex-wrap:wrap;gap:.55rem;margin-bottom:1.4rem}
+.meta-pill{font-size:.65rem;font-family:var(--fm);color:var(--muted);background:var(--white);border:1px solid var(--bdr);padding:.22rem .68rem;border-radius:50px}
+.intro{font-size:.95rem;color:var(--muted);line-height:1.8;max-width:640px;font-weight:300;margin-bottom:2rem}
+.intro strong{color:var(--ink);font-weight:600}
+
+/* stats strip */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--bdr);border:1.5px solid var(--bdr);border-radius:var(--r2);overflow:hidden;box-shadow:var(--sh);margin-bottom:0}
+.stat{background:var(--white);padding:1rem .7rem;text-align:center}
+.stat-n{font-family:var(--fd);font-size:1.5rem;font-weight:800;color:var(--blue)}
+.stat-n.g{color:var(--green)}.stat-n.o{color:var(--orange)}
+.stat-l{font-size:.56rem;font-family:var(--fm);color:var(--muted2);letter-spacing:.06em;text-transform:uppercase;margin-top:.15rem}
+
+/* body */
+.body{max-width:860px;margin:0 auto;padding:52px 5% 60px}
+
+/* section heading */
+.sh{margin-bottom:1.5rem}
+.sh-eye{font-size:.6rem;font-family:var(--fm);color:var(--blue);letter-spacing:.16em;text-transform:uppercase;margin-bottom:.35rem;display:flex;align-items:center;gap:.45rem}
+.sh-eye::before{content:'';width:16px;height:2px;background:var(--blue);border-radius:1px}
+.sh h2{font-family:var(--fd);font-size:clamp(1.2rem,2.4vw,1.65rem);font-weight:800;color:var(--ink);letter-spacing:-.025em}
+.sh p{font-size:.84rem;color:var(--muted);line-height:1.72;margin-top:.4rem;font-weight:300;max-width:600px}
+.sh p strong{color:var(--ink);font-weight:600}
+
+/* divider */
+.div{height:1px;background:linear-gradient(90deg,transparent,var(--bdr2) 30%,var(--bdr2) 70%,transparent);margin:3rem 0}
+
+/* card */
+.card{background:var(--white);border:1.5px solid var(--bdr);border-radius:var(--r2);padding:1.6rem 1.8rem;margin-bottom:1.1rem;box-shadow:var(--sh);position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--blue),#60a5fa)}
+.card h3{font-family:var(--fd);font-size:.95rem;font-weight:800;color:var(--ink);margin-bottom:.8rem;display:flex;align-items:center;gap:.55rem}
+.card p{font-size:.83rem;color:var(--muted);line-height:1.75;font-weight:300}
+.card p+p{margin-top:.65rem}
+.card p strong{color:var(--ink);font-weight:600}
+
+/* note box */
+.note{background:rgba(26,111,244,.04);border:1.5px solid rgba(26,111,244,.18);border-radius:var(--r);padding:.9rem 1.1rem;margin-top:.9rem;font-size:.78rem;color:var(--ink2);line-height:1.65}
+.note strong{font-weight:600}
+
+/* code block */
+.code{background:#0d1b3e;border-radius:var(--r2);overflow:hidden;margin:1.1rem 0}
+.code-top{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem;background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.07)}
+.dots{display:flex;gap:.32rem}
+.dots span{width:8px;height:8px;border-radius:50%}
+.dots span:nth-child(1){background:#ff5f57}.dots span:nth-child(2){background:#febc2e}.dots span:nth-child(3){background:#28c840}
+.fname{font-size:.65rem;font-family:var(--fm);color:rgba(255,255,255,.3)}
+.code pre{font-family:var(--fm);font-size:.72rem;line-height:1.85;color:#e2e8f0;padding:1rem 1.1rem;margin:0;overflow-x:auto;white-space:pre-wrap;word-break:break-word}
+.ck{color:#ff7b72}.cv{color:#79c0ff}.cs{color:#a5d6ff}.cp{color:#94a3b8}.cf{color:#7ee8a2}.cb{color:#ffa657}.cg{color:#4ade80}
+
+/* before/after */
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem}
+.ba-box{border-radius:var(--r);padding:1rem 1.1rem}
+.ba-box.b{background:rgba(220,38,38,.04);border:1.5px solid rgba(220,38,38,.18)}
+.ba-box.a{background:rgba(5,150,105,.04);border:1.5px solid rgba(5,150,105,.2)}
+.ba-label{font-size:.58rem;font-family:var(--fm);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.55rem;display:flex;align-items:center;gap:.35rem}
+.ba-box.b .ba-label{color:var(--red)}.ba-box.a .ba-label{color:var(--green)}
+.ba-box p{font-size:.78rem;color:var(--muted);line-height:1.65}
+.ba-box p strong{color:var(--ink);font-weight:600}
+
+/* tags */
+.tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.9rem}
+.tag{font-size:.63rem;font-family:var(--fm);padding:.16rem .55rem;border-radius:5px;border:1.5px solid rgba(26,111,244,.22);color:var(--blue);background:rgba(26,111,244,.06)}
+
+/* checklist */
+.cl-list{display:flex;flex-direction:column;gap:.5rem;margin-top:.75rem}
+.cl-item{display:flex;align-items:flex-start;gap:.65rem;font-size:.81rem;color:var(--muted);line-height:1.65}
+.cl-dot{width:18px;height:18px;border-radius:5px;background:rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.22);display:flex;align-items:center;justify-content:center;font-size:.65rem;flex-shrink:0;margin-top:.1rem}
+.cl-item strong{color:var(--ink);font-weight:600}
+
+/* results grid */
+.results{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem;margin-top:1rem}
+.res{background:linear-gradient(145deg,rgba(255,255,255,.96),var(--s3));border:1.5px solid var(--bdr);border-radius:var(--r2);padding:1.1rem 1rem;text-align:center;box-shadow:var(--sh)}
+.res-n{font-family:var(--fd);font-size:1.7rem;font-weight:800;color:var(--blue);line-height:1;margin-bottom:.18rem}
+.res-n.g{color:var(--green)}.res-n.o{color:var(--orange)}
+.res-l{font-size:.6rem;font-family:var(--fm);color:var(--muted2);letter-spacing:.06em;text-transform:uppercase}
+.res-d{font-size:.7rem;color:var(--muted);margin-top:.25rem;line-height:1.4}
+
+/* site table */
+.tbl{width:100%;border-collapse:collapse;margin-top:1rem;font-size:.76rem}
+.tbl th{font-family:var(--fm);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted2);background:var(--bg2);padding:.65rem .9rem;text-align:left;border-bottom:1.5px solid var(--bdr)}
+.tbl td{padding:.7rem .9rem;border-bottom:1px solid var(--bdr);color:var(--muted);line-height:1.5}
+.tbl td:first-child{color:var(--ink);font-weight:500;font-family:var(--fm);font-size:.7rem}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--s3)}
+.badge{font-size:.58rem;font-family:var(--fm);padding:.1rem .48rem;border-radius:50px}
+.badge.g{color:var(--green);background:rgba(5,150,105,.08);border:1px solid rgba(5,150,105,.2)}
+.badge.b{color:var(--blue);background:rgba(26,111,244,.08);border:1px solid rgba(26,111,244,.2)}
+
+/* disclaimer */
+.disc{background:rgba(217,119,6,.05);border:1.5px solid rgba(217,119,6,.22);border-radius:var(--r2);padding:.95rem 1.2rem;margin-bottom:1.8rem;display:flex;gap:.7rem;align-items:flex-start}
+.disc p{font-size:.76rem;color:var(--orange);line-height:1.6}
+.disc p strong{color:#b45309;font-weight:600}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+.rv.in{opacity:1;transform:none}
+
+/* footer */
+footer{background:var(--ink);padding:3rem 5% 1.5rem;color:rgba(255,255,255,.5)}
+.ft-i{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2.25rem;margin-bottom:2.25rem}
+.ft-logo{font-family:var(--fd);font-size:1.2rem;font-weight:800;color:#fff;margin-bottom:.6rem;display:block}
+.ft-logo em{color:var(--blue3)}
+.ft-desc{font-size:.78rem;color:rgba(255,255,255,.38);line-height:1.65;max-width:230px;font-weight:300}
+.ft-h{font-size:.66rem;font-family:var(--fm);color:rgba(255,255,255,.28);letter-spacing:.14em;text-transform:uppercase;margin-bottom:.8rem;padding-bottom:.4rem;border-bottom:1px solid rgba(255,255,255,.07)}
+.ft-nav{display:flex;flex-direction:column;gap:.5rem}
+.ft-nav a{font-size:.8rem;color:rgba(255,255,255,.42);text-decoration:none;cursor:pointer;transition:color .2s}
+.ft-nav a:hover{color:var(--blue3)}
+.ft-bot{max-width:1240px;margin:0 auto;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem}
+.ft-bot p{font-size:.72rem;font-family:var(--fm);color:rgba(255,255,255,.25)}
+.ft-bot em{color:var(--blue3);font-style:normal}
+
+@media(max-width:768px){
+  .stats{grid-template-columns:1fr 1fr}
+  .ba{grid-template-columns:1fr}
+  .results{grid-template-columns:1fr 1fr}
+  .ft{grid-template-columns:1fr}
+  .hero{padding:95px 4% 40px}
+  .body{padding:40px 4% 50px}
+}
+@media(max-width:480px){.results{grid-template-columns:1fr}}
+
+/* ── SHARED NAV OVERRIDE FOR CASE STUDY PAGES ── */
+#nav{position:fixed;top:0;left:0;right:0;z-index:999;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;transition:all .3s}
+#nav.sc{background:rgba(248,252,255,.95);backdrop-filter:blur(20px);box-shadow:0 1px 0 rgba(26,111,244,.12)}
+.logo{font-family:var(--fd);font-size:1.2rem;font-weight:800;color:var(--ink);text-decoration:none;letter-spacing:-.02em}
+.logo em{color:#1a6ff4;font-style:normal}
+.nav-links-cs{display:flex;gap:1.5rem;list-style:none;align-items:center}
+.nav-links-cs a{font-size:.73rem;font-weight:500;color:var(--muted);text-decoration:none;letter-spacing:.04em;text-transform:uppercase;transition:color .2s;white-space:nowrap}
+.nav-links-cs a:hover{color:#1a6ff4}
+.ncta-cs{font-size:.77rem;font-weight:600;padding:.42rem 1.1rem;background:#1a6ff4;color:#fff;border-radius:7px;text-decoration:none;box-shadow:0 4px 14px rgba(26,111,244,.3);transition:all .2s;white-space:nowrap}
+.ncta-cs:hover{background:#2979ff;transform:translateY(-1px)}
+.hbg-cs{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.hbg-cs span{display:block;width:21px;height:2px;background:var(--ink);border-radius:1px}
+.mob-cs{display:none;position:fixed;top:72px;left:0;right:0;background:rgba(248,252,255,.97);backdrop-filter:blur(20px);flex-direction:column;align-items:center;padding:2rem;gap:1.5rem;z-index:998;border-bottom:1px solid rgba(26,111,244,.12)}
+.mob-cs.on{display:flex}
+.mob-cs a{font-size:.95rem;font-family:var(--fd);color:var(--ink);text-decoration:none;font-weight:700}
+/* Dropdown */
+.cs-has-dd{position:relative}
+.cs-dropdown{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(-6px);min-width:200px;background:rgba(248,252,255,.97);backdrop-filter:blur(18px);border:1.5px solid rgba(26,111,244,.22);border-radius:14px;padding:.4rem;opacity:0;visibility:hidden;transition:opacity .22s,transform .22s,visibility .22s;pointer-events:none;box-shadow:0 12px 36px rgba(26,111,244,.14)}
+.cs-has-dd:hover .cs-dropdown{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);pointer-events:auto}
+.cs-dropdown a{display:block;padding:.55rem .85rem;border-radius:8px;font-size:.76rem;font-weight:500;color:var(--ink)!important;text-decoration:none;letter-spacing:0!important;text-transform:none!important;transition:background .18s}
+.cs-dropdown a:hover{background:rgba(26,111,244,.07);color:#1a6ff4!important}
+@media(max-width:900px){
+  .nav-links-cs,.ncta-cs{display:none}
+  .hbg-cs{display:flex}
+}
+
+/* ── SHARED FOOTER ── */
+.cs-footer{background:#0d1b3e;color:#fff;padding:3rem 5% 1.5rem;margin-top:4rem}
+.cs-ft-inner{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:2.5rem;max-width:1080px;margin:0 auto;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.cs-ft-logo{font-family:var(--fd);font-size:1.4rem;font-weight:800;display:block;margin-bottom:.5rem}
+.cs-ft-logo em{color:#1a6ff4;font-style:normal}
+.cs-ft-desc{font-size:.76rem;color:rgba(255,255,255,.38);line-height:1.6;max-width:220px}
+.cs-ft-h{font-size:.62rem;font-family:var(--fm,monospace);color:rgba(255,255,255,.35);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.75rem}
+.cs-ft-nav{display:flex;flex-direction:column;gap:.45rem}
+.cs-ft-nav a{font-size:.78rem;color:rgba(255,255,255,.5);text-decoration:none;transition:color .18s}
+.cs-ft-nav a:hover{color:#fff}
+.cs-ft-bot{max-width:1080px;margin:1.5rem auto 0;text-align:center;font-size:.7rem;color:rgba(255,255,255,.22)}
+@media(max-width:768px){
+  .cs-ft-inner{grid-template-columns:1fr 1fr;gap:1.5rem}
+}
+@media(max-width:480px){
+  .cs-ft-inner{grid-template-columns:1fr}
+}
+
+body{padding-top:72px}
+</style>
+</head>
+<body>
+<nav id="nav">
+  <a href="index.html" class="logo">Arun<em>.</em></a>
+  <ul class="nav-links-cs">
+    <li><a href="index.html#home">Home</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#experience">Experience</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="index.html#projects">Projects</a></li>
+    <li class="cs-has-dd">
+      <a href="index.html#casestudies">Case Studies ▾</a>
+      <div class="cs-dropdown">
+        <a href="amazon-fba-case-studies.html">📦 Amazon FBA SEO</a>
+        <a href="on-page-seo-case-study.html">🌐 Frontend SEO</a>
+      </div>
+    </li>
+    <li><a href="index.html#roadmap">Roadmap</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
+  </ul>
+  <a href="index.html#contact" class="ncta-cs">Let's Collaborate</a>
+  <button class="hbg-cs" onclick="document.getElementById('mob-cs').classList.toggle('on')" aria-label="menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div id="mob-cs" class="mob-cs">
+  <a href="/index.html#home">Home</a>
+  <a href="/index.html#about">About</a>
+  <a href="/index.html#experience">Experience</a>
+  <a href="/index.html#skills">Skills</a>
+  <a href="/index.html#projects">Projects</a>
+  <a href="/case_studies/amazon-fba-case-studies.html">📦 Amazon FBA Case Study</a>
+  <a href="/case_studies/on-page-seo-case-study.html">🌐 Frontend SEO Case Study</a>
+  <a href="/index.html#roadmap">Roadmap</a>
+  <a href="/index.html#contact">Contact</a>
+</div>
+
+
+
+
+<div class="hero">
+  <div class="eyebrow">Case Study · SEO Engineer</div>
+  <h1>Frontend SEO<br><span>Client Websites</span></h1>
+  <div class="meta-row">
+    <span class="meta-pill">Aug 2024 – Jun 2025</span>
+    <span class="meta-pill">Multi-client · Contract</span>
+    <span class="meta-pill">WordPress · Shopify</span>
+    <span class="meta-pill">eCommerce · Finance · Local Services</span>
+  </div>
+  <p class="intro">
+    I worked with several small-to-medium client websites as an SEO engineer on a contract basis. Most of them had decent content but slow pages, broken technical setups, and zero structured data. My job was to <strong>find the issues, fix what I could directly, and hand off the rest clearly</strong>. This is a write-up of what that actually looked like.
+  </p>
+  <div class="stats">
+    <div class="stat"><div class="stat-n">8+</div><div class="stat-l">Sites</div></div>
+    <div class="stat"><div class="stat-n g">200+</div><div class="stat-l">Issues Fixed</div></div>
+    <div class="stat"><div class="stat-n">CWV</div><div class="stat-l">LCP · CLS · FID</div></div>
+    <div class="stat"><div class="stat-n o">PA / DR</div><div class="stat-l">Tracked · Ahrefs · Moz</div></div>
+  </div>
+</div>
+
+<div class="body">
+
+  <div class="disc rv">
+    <span style="font-size:1rem;flex-shrink:0">⚠️</span>
+    <p><strong>Client names are confidential.</strong> I've described what I did and what changed — but not who the clients are. Happy to discuss specifics privately.</p>
+  </div>
+
+  <!-- What I worked on -->
+  <div class="sh rv">
+    <div class="sh-eye">The Work</div>
+    <h2>Sites I Touched</h2>
+    <p>All of these were real client projects. Platform mix was mostly WordPress and Shopify. Each one had different problems — I didn't copy-paste the same audit every time.</p>
+  </div>
+
+  <div class="card rv">
+    <h3>📋 Project Summary</h3>
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>Platform</th>
+          <th>Main Problem</th>
+          <th>Done?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Shopify</td><td>Slow LCP, no product schema</td><td><span class="badge g">✓</span></td></tr>
+        <tr><td>WooCommerce</td><td>Broken redirect chains, wasted crawl budget</td><td><span class="badge g">✓</span></td></tr>
+        <tr><td>WordPress</td><td>No structured data, zero internal linking logic</td><td><span class="badge g">✓</span></td></tr>
+        <tr><td>WordPress</td><td>No LocalBusiness schema, bad CLS from fonts</td><td><span class="badge g">✓</span></td></tr>
+        <tr><td>WordPress</td><td>H1 → H4 heading jumps, missing meta on all pages</td><td><span class="badge g">✓</span></td></tr>
+        <tr><td>WordPress</td><td>Orphan pages — nothing linking to them</td><td><span class="badge b">→</span></td></tr>
+        <tr><td>Shopify</td><td>Duplicate product URLs splitting page authority</td><td><span class="badge g">✓</span></td></tr>
+        <tr><td>WordPress</td><td>Thin service pages, no FAQ schema</td><td><span class="badge g">✓</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- How I started -->
+  <div class="sh rv">
+    <div class="sh-eye">Process</div>
+    <h2>How I Started Every Project</h2>
+    <p>Same starting point every time: <strong>Screaming Frog crawl + GSC data pull</strong>. That combination tells you almost everything wrong with a site in under an hour.</p>
+  </div>
+
+  <div class="card rv">
+    <h3>🔄 Standard Start</h3>
+    <p>Crawl the site → filter for 3xx/4xx/5xx, duplicate title tags, missing H1s, images without alt text. Then cross-reference with GSC: find pages that get impressions but have low CTR (usually a meta issue) and pages that rank but have broken schema.</p>
+    <p>After the crawl, I'd run PageSpeed Insights on the top 5–10 pages by traffic. Most sites had at least 2–3 of the same CWV issues. Then I'd build a simple Google Sheet — issue, impact score (1–5), effort score (1–5), owner. Quick wins go first.</p>
+    <div class="note">
+      The Google Sheet approach sounds basic but it's what actually got things done — clients could see what was fixed, what was next, and who owned it. No ambiguity.
+    </div>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- Page Speed / Frontend Perf -->
+  <div class="sh rv">
+    <div class="sh-eye">Frontend Performance</div>
+    <h2>Page Speed & Code Optimisation</h2>
+    <p>This was a big part of the work. Most WordPress sites had <strong>render-blocking scripts, uncompressed images, layout-shifting fonts</strong> — the usual. I fixed what I could in the theme, and wrote clear dev briefs for the rest.</p>
+  </div>
+
+  <div class="card rv">
+    <h3>⚡ LCP Fixes</h3>
+    <p>The most common LCP issue was a <strong>800KB+ hero image loaded without preload</strong>. Browser found it too late. Fix was usually two things together:</p>
+    <div class="code">
+      <div class="code-top"><div class="dots"><span></span><span></span><span></span></div><div class="fname">head-preload.html</div><div></div></div>
+      <pre><span class="cp">&lt;!-- Added to &lt;head&gt; — tells browser to fetch LCP image early --&gt;</span>
+<span class="ck">&lt;link</span> <span class="cv">rel</span>=<span class="cs">"preload"</span>
+      <span class="cv">as</span>=<span class="cs">"image"</span>
+      <span class="cv">href</span>=<span class="cs">"/hero-image.webp"</span>
+      <span class="cv">fetchpriority</span>=<span class="cs">"high"</span><span class="ck">&gt;</span>
+
+<span class="cp">&lt;!-- Also converted PNG → WebP. Average size: 820KB → 180KB --&gt;</span>
+<span class="ck">&lt;img</span> <span class="cv">src</span>=<span class="cs">"hero-image.webp"</span>
+     <span class="cv">width</span>=<span class="cs">"1200"</span>
+     <span class="cv">height</span>=<span class="cs">"600"</span>
+     <span class="cv">alt</span>=<span class="cs">"[descriptive alt text]"</span>
+     <span class="cv">loading</span>=<span class="cs">"eager"</span><span class="ck">&gt;</span></pre>
+    </div>
+    <p>The <code style="font-family:var(--fm);font-size:.8rem;color:var(--blue);background:rgba(26,111,244,.07);padding:.1rem .35rem;border-radius:4px">width/height</code> attributes matter for CLS too — without them, browser can't reserve space, so the page shifts when the image loads.</p>
+  </div>
+
+  <div class="card rv">
+    <h3>📐 CLS Fixes — Fonts & Layout</h3>
+    <p>Layout shift from Google Fonts was a repeat offender. Fix was simple but had to be done right:</p>
+    <div class="code">
+      <div class="code-top"><div class="dots"><span></span><span></span><span></span></div><div class="fname">font-loading-fix.html</div><div></div></div>
+      <pre><span class="cp">&lt;!-- Preconnect first — reduces DNS/handshake time --&gt;</span>
+<span class="ck">&lt;link</span> <span class="cv">rel</span>=<span class="cs">"preconnect"</span> <span class="cv">href</span>=<span class="cs">"https://fonts.googleapis.com"</span><span class="ck">&gt;</span>
+<span class="ck">&lt;link</span> <span class="cv">rel</span>=<span class="cs">"preconnect"</span> <span class="cv">href</span>=<span class="cs">"https://fonts.gstatic.com"</span> <span class="cv">crossorigin</span><span class="ck">&gt;</span>
+
+<span class="cp">/* In CSS — prevents invisible text during font load */</span>
+<span class="cv">@font-face</span> {
+  <span class="cb">font-display</span>: <span class="cf">swap</span>; <span class="cp">/* show fallback font, swap when ready */</span>
+}</pre>
+    </div>
+    <p>On two sites I also had to fix dynamic JS content being <strong>injected above existing page elements</strong> — classic CLS cause. Changed the JS to append instead of prepend, which eliminated the shift immediately.</p>
+  </div>
+
+  <div class="card rv">
+    <h3>🚀 Render Blocking JS/CSS</h3>
+    <p>WordPress themes load a lot of CSS and JS that blocks rendering. I audited each site's resource waterfall in DevTools and moved what could wait to async/defer.</p>
+    <div class="code">
+      <div class="code-top"><div class="dots"><span></span><span></span><span></span></div><div class="fname">script-loading.html</div><div></div></div>
+      <pre><span class="cp">&lt;!-- Before — blocking the parser --&gt;</span>
+<span class="ck">&lt;script</span> <span class="cv">src</span>=<span class="cs">"/js/analytics.js"</span><span class="ck">&gt;&lt;/script&gt;</span>
+
+<span class="cp">&lt;!-- After — doesn't block HTML parsing --&gt;</span>
+<span class="ck">&lt;script</span> <span class="cv">src</span>=<span class="cs">"/js/analytics.js"</span> <span class="cv">defer</span><span class="ck">&gt;&lt;/script&gt;</span>
+
+<span class="cp">&lt;!-- For non-critical CSS — loads async --&gt;</span>
+<span class="ck">&lt;link</span> <span class="cv">rel</span>=<span class="cs">"preload"</span> <span class="cv">href</span>=<span class="cs">"non-critical.css"</span>
+      <span class="cv">as</span>=<span class="cs">"style"</span> <span class="cv">onload</span>=<span class="cs">"this.rel='stylesheet'"</span><span class="ck">&gt;</span></pre>
+    </div>
+    <p>On some WordPress sites, plugins were loading their CSS globally even on pages where they weren't needed. Handled that by conditionally dequeuing scripts on irrelevant pages using WordPress hooks. Nothing fancy — just cleaning up the mess.</p>
+  </div>
+
+  <div class="card rv">
+    <h3>🔍 JS Rendering — CSR vs SSR vs SSG</h3>
+    <p>A couple of client sites ran React or Vue frontends. That meant <strong>Client-Side Rendering (CSR)</strong> — the HTML arrives as a near-empty shell and JavaScript builds the page in the browser. Googlebot can process this, but there's a rendering queue delay that can slow down indexing noticeably.</p>
+    <p>Where the team had flexibility, I recommended moving toward <strong>SSR (Server-Side Rendering)</strong> — the server sends fully-built HTML, so crawlers see everything on first request. For mostly-static pages like blogs or landing pages, <strong>SSG (Static Site Generation)</strong> is the cleanest option: pre-rendered HTML files, nothing to execute, instant crawlability. I used GSC's URL Inspection Tool to check what Googlebot actually rendered after JS execution — usually the fastest way to confirm whether JS content was actually being indexed.</p>
+    <div class="note">For WordPress-only clients, this wasn't relevant. But for the SPA-style setups, understanding the rendering pipeline was what made the audit actually useful.</div>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- Page Authority -->
+  <div class="sh rv">
+    <div class="sh-eye">Authority & Links</div>
+    <h2>Page Authority & Link Profile</h2>
+    <p>Technical fixes don't move rankings if authority is weak. For a few clients this was the real blocker — not the code.</p>
+  </div>
+
+  <div class="card rv">
+    <h3>🔗 Internal Linking & Backlink Audit</h3>
+    <p><strong>Internal linking</strong> was the quickest fix. Most sites had decent homepage authority but important service or category pages had almost no internal links pointing to them — link equity just wasn't flowing anywhere useful. I remapped internal linking from pillar pages outward so Googlebot could reach and prioritise the right pages.</p>
+    <p>On the <strong>backlink side</strong>, I used Ahrefs to check domain rating, referring domains, and whether inbound links to key pages came from relevant sources. I flagged pages that were technically clean but ranking weakly — the backlink gap was usually why. That went into the audit report as a separate recommendation track.</p>
+    <p><strong>Canonical tags</strong> mattered a lot on eCommerce sites. Filter and sort URL variants were creating dozens of near-duplicate pages and splitting authority across all of them. Canonicalising back to the main URL consolidated the signal properly.</p>
+    <div class="note">I tracked Page Authority and Domain Rating via Ahrefs and Moz Link Explorer as reference points — useful for explaining to clients why a technically clean page might still be ranking weakly, and why links and content matter alongside the tech.</div>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- Schema -->
+  <div class="sh rv">
+    <div class="sh-eye">Structured Data</div>
+    <h2>Schema Injection</h2>
+    <p>Most sites had no JSON-LD at all. I injected it manually — not through plugins, because plugins generate bloated markup that often fails validation.</p>
+  </div>
+
+  <div class="card rv">
+    <h3>📄 LocalBusiness — What I Actually Wrote</h3>
+    <p>For local service clients, I wrote the JSON-LD by hand and pasted it into a WordPress Custom HTML block or directly in theme <code style="font-family:var(--fm);font-size:.8rem;color:var(--blue);background:rgba(26,111,244,.07);padding:.1rem .35rem;border-radius:4px">functions.php</code>. Validated every one in Google's Rich Results Test before going live.</p>
+    <div class="code">
+      <div class="code-top"><div class="dots"><span></span><span></span><span></span></div><div class="fname">local-business.json</div><div></div></div>
+      <pre><span class="ck">&lt;script</span> <span class="cv">type</span>=<span class="cs">"application/ld+json"</span><span class="ck">&gt;</span>
+{
+  <span class="cv">"@context"</span>: <span class="cs">"https://schema.org"</span>,
+  <span class="cv">"@type"</span>: <span class="cs">"LocalBusiness"</span>,
+  <span class="cv">"name"</span>: <span class="cs">"[Client Name]"</span>,
+  <span class="cv">"url"</span>: <span class="cs">"https://[domain].com"</span>,
+  <span class="cv">"telephone"</span>: <span class="cs">"+91-XXXXXXXXXX"</span>,
+  <span class="cv">"address"</span>: {
+    <span class="cv">"@type"</span>: <span class="cs">"PostalAddress"</span>,
+    <span class="cv">"addressLocality"</span>: <span class="cs">"[City]"</span>,
+    <span class="cv">"addressCountry"</span>: <span class="cs">"IN"</span>
+  },
+  <span class="cv">"openingHoursSpecification"</span>: [{
+    <span class="cv">"@type"</span>: <span class="cs">"OpeningHoursSpecification"</span>,
+    <span class="cv">"dayOfWeek"</span>: [<span class="cs">"Monday"</span>, <span class="cs">"Friday"</span>],
+    <span class="cv">"opens"</span>: <span class="cs">"09:00"</span>,
+    <span class="cv">"closes"</span>: <span class="cs">"18:00"</span>
+  }]
+}
+<span class="ck">&lt;/script&gt;</span></pre>
+    </div>
+    <p>For blogs and finance sites, I used <strong>FAQPage schema</strong> based on real questions from GSC — the ones getting impressions. That got several pages into the FAQ rich result quickly.</p>
+    <div class="tags">
+      <span class="tag">LocalBusiness</span><span class="tag">FAQPage</span><span class="tag">Article</span>
+      <span class="tag">BreadcrumbList</span><span class="tag">Product</span><span class="tag">Organization</span>
+    </div>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- Results -->
+  <div class="sh rv">
+    <div class="sh-eye">Outcomes</div>
+    <h2>What Actually Changed</h2>
+    <p>Measured in GSC and via re-crawl 4–8 weeks after implementation. These are ranges — not inflated, not one outlier site.</p>
+  </div>
+
+  <div class="results rv">
+    <div class="res"><div class="res-n g">↑ 28%</div><div class="res-l">GSC Impressions</div><div class="res-d">Sites with schema + meta rewrites, avg</div></div>
+    <div class="res"><div class="res-n g">↑ 1.4s</div><div class="res-l">LCP Improved</div><div class="res-d">After WebP + preload, avg</div></div>
+    <div class="res"><div class="res-n">4/6</div><div class="res-l">Rich Results Eligible</div><div class="res-d">Sites that gained after schema work</div></div>
+    <div class="res"><div class="res-n g">↓ 0.18</div><div class="res-l">CLS Score Drop</div><div class="res-d">After image dimension + font fixes</div></div>
+    <div class="res"><div class="res-n">73%</div><div class="res-l">Issues Resolved</div><div class="res-d">From initial crawl, within 30 days</div></div>
+    <div class="res"><div class="res-n">100%</div><div class="res-l">Orphan Pages Fixed</div><div class="res-d">Every orphan linked or removed</div></div>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- Tools -->
+  <div class="sh rv">
+    <div class="sh-eye">Toolkit</div>
+    <h2>What I Used</h2>
+  </div>
+  <div class="card rv">
+    <h3>🛠️ SEO & Audit Tools</h3>
+    <div class="tags">
+      <span class="tag">Screaming Frog</span><span class="tag">Google Search Console</span>
+      <span class="tag">PageSpeed Insights</span><span class="tag">Chrome DevTools</span>
+      <span class="tag">Ahrefs</span><span class="tag">Moz Link Explorer</span>
+      <span class="tag">Rich Results Test</span><span class="tag">GSC URL Inspection</span>
+      <span class="tag">Squoosh</span><span class="tag">Cloudflare</span>
+      <span class="tag">Google Sheets</span>
+    </div>
+  </div>
+
+  <div class="card rv">
+    <h3>💻 Code Skills Used On These Projects</h3>
+    <p>A chunk of this work required going into the actual code — not just flagging issues in a report and handing it off. Here's what I worked with directly:</p>
+    <div class="tags" style="margin-top:.75rem">
+      <span class="tag">HTML5 semantics</span>
+      <span class="tag">CSS (specificity, cascade, layout)</span>
+      <span class="tag">Vanilla JS (DOM, async/defer, event handling)</span>
+      <span class="tag">JSON-LD by hand</span>
+      <span class="tag">WordPress functions.php</span>
+      <span class="tag">Shopify Liquid templates</span>
+      <span class="tag">robots.txt & .htaccess</span>
+      <span class="tag">Open Graph meta tags</span>
+      <span class="tag">Resource hints (preload, preconnect, prefetch)</span>
+      <span class="tag">Lazy loading (native & JS)</span>
+      <span class="tag">Script defer / async</span>
+      <span class="tag">CSS async loading pattern</span>
+    </div>
+    <div class="note" style="margin-top:1rem">Not a frontend developer — but comfortable enough to go in, identify what's causing the SEO issue at the code level, and fix it without breaking the page. That's the range I work in.</div>
+  </div>
+
+</div>
+
+<footer class="cs-footer">
+  <div class="cs-ft-inner">
+    <div>
+      <span class="cs-ft-logo">Arun<em>.</em></span>
+      <p class="cs-ft-desc">ELK Stack Developer → AI Integration Engineer. Jaipur, India.</p>
+    </div>
+    <div>
+      <div class="cs-ft-h">Navigate</div>
+      <nav class="cs-ft-nav">
+        <a href="index.html#about">About</a>
+        <a href="index.html#experience">Experience</a>
+        <a href="index.html#skills">Skills</a>
+        <a href="index.html#projects">Projects</a>
+        <a href="index.html#roadmap">Roadmap</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+    <div>
+      <div class="cs-ft-h">Case Studies</div>
+      <nav class="cs-ft-nav">
+        <a href="amazon-fba-case-studies.html">Amazon FBA SEO</a>
+        <a href="on-page-seo-case-study.html">Frontend SEO</a>
+      </nav>
+    </div>
+    <div>
+      <div class="cs-ft-h">Connect</div>
+      <p style="font-size:.76rem;color:rgba(255,255,255,.38);margin-bottom:.3rem">arun@example.com</p>
+      <p style="font-size:.76rem;color:rgba(255,255,255,.38)">Jaipur, Rajasthan, India</p>
+    </div>
+  </div>
+  <div class="cs-ft-bot"><p>© 2026 Arun Agarwal. All rights reserved.</p></div>
+</footer>
+
+<script>
+const o = new IntersectionObserver(e => {
+  e.forEach(x => { if(x.isIntersecting){ x.target.classList.add('in'); o.unobserve(x.target); } });
+},{threshold:.07,rootMargin:'0px 0px -25px 0px'});
+document.querySelectorAll('.rv').forEach((el,i) => {
+  el.style.transitionDelay = Math.min(i * 0.045, 0.32) + 's';
+  o.observe(el);
+});
+</script>
+
+<script>
+window.addEventListener('scroll', () => {
+  document.getElementById('nav')?.classList.toggle('sc', window.scrollY > 25);
+}, { passive: true });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+site features embedded, crisp inline SVG vector icons for site navigation interactions and social handles to preserve quick rendering speeds.
+
+Navigation / Interface Arrows:
+
+Left Arrow / Prev: A chevron layout mapping vector coordinates (polyline points="15 18 9 12 15 6").
+
+Right Arrow / Next: A directional chevron mapping vector coordinates (polyline points="9 18 15 12 9 6").
+
+Social & Media Footprints (Home / Footer sections):
+
+GitHub Icon: Rendered as an paths geometry for brand profiling.
+
+LinkedIn Icon: Rendered as solid geometric shapes matching professional linking pathways.
+
+X / Twitter Icon: Plotted utilizing specific canvas coordinates (M18.244 2.25h3.308...).
+
+Email Envelope Icon: Drawn using a basic shape rect container path with line pointers.
+
+Global Website Globe: Rendered with a bounding circle, center horizontal crossbar line, and side arc paths.

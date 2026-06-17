@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amazon FBA Listing Optimisation — 50+ ASINs | Arun Agarwal</title>
+<meta name="description" content="How I optimised 50+ Amazon FBA listings — backend search terms, Helium10 Cerebro, title structure, A+ content, BSR tracking. Real work, honest write-up.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+ --bg:#fffaf5;--white:#fff;--s3:#fff8f0;--bg2:#fff3e0;
+  --blue:#1a6ff4;--blue3:#5a9fff;
+  --amz:#ff9900;--amz2:#e88900;--amz-pale:#fff8f0;
+  --ink:#0d1b3e;--ink2:#1e3a5f;--muted:#64748b;--muted2:#94a3b8;
+  --bdr:rgba(255,153,0,.15);--bdr2:rgba(255,153,0,.3);
+  --bdr-n:rgba(26,111,244,.12);
+  --fd:'Syne',sans-serif;--fb:'Inter',sans-serif;--fm:'JetBrains Mono',monospace;
+  --r:12px;--r2:18px;--sh:0 4px 24px rgba(255,153,0,.08);--sh2:0 10px 40px rgba(255,153,0,.15);
+  --green:#059669;--red:#dc2626;--orange:#d97706;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:116%;scroll-behavior:smooth;scroll-padding-top:80px}
+body{background:linear-gradient(135deg,#fffaf5 0%,#fff 50%,#fff3e0 100%);color:var(--ink);font-family:var(--fb);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:var(--amz);border-radius:2px}
+
+/* nav */
+#nav{position:fixed;top:0;left:0;right:0;z-index:999;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;background:rgba(255,250,245,.94);backdrop-filter:blur(18px);box-shadow:0 1px 0 var(--bdr)}
+.logo{font-family:var(--fd);font-size:1.1rem;font-weight:800;color:var(--ink);text-decoration:none}
+.logo em{color:var(--blue);font-style:normal}
+.back-btn{display:inline-flex;align-items:center;gap:.4rem;font-size:.76rem;color:var(--muted);text-decoration:none;border:1.5px solid var(--bdr2);padding:.35rem .9rem;border-radius:7px;transition:all .2s;font-weight:500}
+.back-btn:hover{color:var(--amz);border-color:var(--amz)}
+.back-btn svg{transition:transform .2s}.back-btn:hover svg{transform:translateX(-2px)}
+
+/* hero */
+.hero{padding:105px 5% 52px;max-width:880px;margin:0 auto}
+.eyebrow{font-size:.62rem;font-family:var(--fm);color:var(--amz);letter-spacing:.18em;text-transform:uppercase;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
+.eyebrow::before{content:'';width:18px;height:2px;background:var(--amz);border-radius:1px}
+h1{font-family:var(--fd);font-size:clamp(1.8rem,4vw,2.7rem);font-weight:800;color:var(--ink);letter-spacing:-.03em;line-height:1.1;margin-bottom:.9rem}
+h1 span{color:var(--amz)}
+.meta-row{display:flex;flex-wrap:wrap;gap:.55rem;margin-bottom:1.4rem}
+.meta-pill{font-size:.65rem;font-family:var(--fm);color:var(--muted);background:var(--white);border:1px solid var(--bdr);padding:.22rem .68rem;border-radius:50px}
+.intro{font-size:.95rem;color:var(--muted);line-height:1.8;max-width:660px;font-weight:300;margin-bottom:2rem}
+.intro strong{color:var(--ink);font-weight:600}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--bdr);border:1.5px solid var(--bdr);border-radius:var(--r2);overflow:hidden;box-shadow:var(--sh)}
+.stat{background:var(--white);padding:1rem .6rem;text-align:center}
+.stat-n{font-family:var(--fd);font-size:1.4rem;font-weight:800;color:var(--amz);line-height:1}
+.stat-n.g{color:var(--green)}.stat-n.b{color:var(--blue)}
+.stat-l{font-size:.55rem;font-family:var(--fm);color:var(--muted2);letter-spacing:.06em;text-transform:uppercase;margin-top:.15rem}
+
+/* body */
+.body{max-width:880px;margin:0 auto;padding:52px 5% 60px}
+
+.sh{margin-bottom:1.5rem}
+.sh-eye{font-size:.6rem;font-family:var(--fm);color:var(--amz);letter-spacing:.16em;text-transform:uppercase;margin-bottom:.35rem;display:flex;align-items:center;gap:.45rem}
+.sh-eye::before{content:'';width:16px;height:2px;background:var(--amz);border-radius:1px}
+.sh h2{font-family:var(--fd);font-size:clamp(1.2rem,2.4vw,1.65rem);font-weight:800;color:var(--ink);letter-spacing:-.025em}
+.sh p{font-size:.84rem;color:var(--muted);line-height:1.72;margin-top:.4rem;font-weight:300;max-width:620px}
+.sh p strong{color:var(--ink);font-weight:600}
+
+.div{height:1px;background:linear-gradient(90deg,transparent,var(--bdr2) 30%,var(--bdr2) 70%,transparent);margin:3rem 0}
+
+/* card — amber top border */
+.card{background:var(--white);border:1.5px solid var(--bdr);border-radius:var(--r2);padding:1.6rem 1.8rem;margin-bottom:1.1rem;box-shadow:var(--sh);position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--amz),#fbbf24)}
+.card h3{font-family:var(--fd);font-size:.95rem;font-weight:800;color:var(--ink);margin-bottom:.8rem;display:flex;align-items:center;gap:.55rem}
+.card p{font-size:.83rem;color:var(--muted);line-height:1.75;font-weight:300}
+.card p+p{margin-top:.65rem}
+.card p strong{color:var(--ink);font-weight:600}
+
+.note{background:rgba(255,153,0,.06);border:1.5px solid rgba(255,153,0,.2);border-radius:var(--r);padding:.9rem 1.1rem;margin-top:.9rem;font-size:.78rem;color:var(--ink2);line-height:1.65}
+.note strong{font-weight:600}
+
+/* code block */
+.code{background:#0d1b3e;border-radius:var(--r2);overflow:hidden;margin:1.1rem 0}
+.code-top{display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem;background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.07)}
+.dots{display:flex;gap:.32rem}
+.dots span{width:8px;height:8px;border-radius:50%}
+.dots span:nth-child(1){background:#ff5f57}.dots span:nth-child(2){background:#febc2e}.dots span:nth-child(3){background:#28c840}
+.fname{font-size:.65rem;font-family:var(--fm);color:rgba(255,255,255,.3)}
+.code pre{font-family:var(--fm);font-size:.72rem;line-height:1.85;color:#e2e8f0;padding:1rem 1.1rem;margin:0;overflow-x:auto;white-space:pre-wrap;word-break:break-word}
+.ck{color:#ff7b72}.cv{color:#79c0ff}.cs{color:#a5d6ff}.cp{color:#94a3b8}.cf{color:#7ee8a2}.cb{color:#ffa657}.camz{color:#fbbf24}.cg{color:#4ade80}
+
+/* ASIN cards */
+.asin-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.1rem}
+.asin{border:1.5px solid var(--bdr);border-radius:var(--r2);overflow:hidden;box-shadow:var(--sh);transition:all .22s}
+.asin:hover{border-color:var(--bdr2);transform:translateY(-3px);box-shadow:var(--sh2)}
+.asin-top{background:linear-gradient(135deg,#fff9f0,#fff3e0);padding:.9rem 1.1rem;border-bottom:1.5px solid var(--bdr);display:flex;align-items:flex-start;justify-content:space-between;gap:.6rem}
+.asin-id{font-family:var(--fm);font-size:.65rem;color:var(--amz);font-weight:600}
+.asin-cat{font-family:var(--fd);font-size:.8rem;font-weight:700;color:var(--ink);margin-top:.18rem;line-height:1.25}
+.abadge{font-size:.56rem;font-family:var(--fm);padding:.12rem .5rem;border-radius:50px;flex-shrink:0}
+.abadge.done{color:var(--green);background:rgba(5,150,105,.08);border:1px solid rgba(5,150,105,.2)}
+.abadge.hot{color:var(--amz);background:rgba(255,153,0,.1);border:1px solid rgba(255,153,0,.25)}
+.asin-body{padding:.9rem 1.1rem;display:flex;flex-direction:column;gap:.55rem}
+.arow{display:flex;gap:.6rem;font-size:.76rem;color:var(--muted);line-height:1.55}
+.arow-l{font-family:var(--fm);font-size:.58rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.06em;min-width:58px;flex-shrink:0;margin-top:.1rem}
+.arow strong{color:var(--ink);font-weight:600}
+.asin-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,153,0,.12);border-top:1.5px solid var(--bdr)}
+.an{background:var(--white);padding:.6rem .4rem;text-align:center}
+.an-n{font-family:var(--fd);font-size:.9rem;font-weight:800;color:var(--amz);line-height:1}
+.an-n.g{color:var(--green)}
+.an-l{font-size:.52rem;font-family:var(--fm);color:var(--muted2);letter-spacing:.05em;text-transform:uppercase;margin-top:.1rem}
+
+/* tags */
+.tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.9rem}
+.tag{font-size:.63rem;font-family:var(--fm);padding:.16rem .55rem;border-radius:5px;border:1.5px solid rgba(255,153,0,.28);color:var(--amz);background:rgba(255,153,0,.06)}
+.tag.b{border-color:rgba(26,111,244,.22);color:var(--blue);background:rgba(26,111,244,.06)}
+
+/* ba */
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem}
+.ba-box{border-radius:var(--r);padding:1rem 1.1rem}
+.ba-box.b{background:rgba(220,38,38,.04);border:1.5px solid rgba(220,38,38,.18)}
+.ba-box.a{background:rgba(5,150,105,.04);border:1.5px solid rgba(5,150,105,.2)}
+.ba-label{font-size:.58rem;font-family:var(--fm);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.55rem;color:var(--muted)}
+.ba-box.b .ba-label{color:var(--red)}.ba-box.a .ba-label{color:var(--green)}
+.ba-box p{font-size:.78rem;color:var(--muted);line-height:1.65}
+.ba-box p strong{color:var(--ink);font-weight:600}
+
+/* results */
+.results{display:grid;grid-template-columns:repeat(3,1fr);gap:.85rem;margin-top:1rem}
+.res{background:linear-gradient(145deg,var(--white),var(--s3));border:1.5px solid var(--bdr);border-radius:var(--r2);padding:1.1rem 1rem;text-align:center;box-shadow:var(--sh)}
+.res-n{font-family:var(--fd);font-size:1.7rem;font-weight:800;color:var(--amz);line-height:1;margin-bottom:.18rem}
+.res-n.g{color:var(--green)}.res-n.b{color:var(--blue)}
+.res-l{font-size:.6rem;font-family:var(--fm);color:var(--muted2);letter-spacing:.06em;text-transform:uppercase}
+.res-d{font-size:.68rem;color:var(--muted);margin-top:.25rem;line-height:1.4}
+
+/* disc */
+.disc{background:rgba(255,153,0,.05);border:1.5px solid rgba(255,153,0,.25);border-radius:var(--r2);padding:.95rem 1.2rem;margin-bottom:1.8rem;display:flex;gap:.7rem;align-items:flex-start}
+.disc p{font-size:.76rem;color:var(--orange);line-height:1.6}
+.disc p strong{color:#b45309;font-weight:600}
+
+/* reveal */
+.rv{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+.rv.in{opacity:1;transform:none}
+
+/* footer */
+footer{background:var(--ink);padding:3rem 5% 1.5rem;color:rgba(255,255,255,.5)}
+.ft-i{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:2.25rem;margin-bottom:2.25rem}
+.ft-logo{font-family:var(--fd);font-size:1.2rem;font-weight:800;color:#fff;margin-bottom:.6rem;display:block}
+.ft-logo em{color:var(--blue3)}
+.ft-desc{font-size:.78rem;color:rgba(255,255,255,.38);line-height:1.65;max-width:230px;font-weight:300}
+.ft-h{font-size:.66rem;font-family:var(--fm);color:rgba(255,255,255,.28);letter-spacing:.14em;text-transform:uppercase;margin-bottom:.8rem;padding-bottom:.4rem;border-bottom:1px solid rgba(255,255,255,.07)}
+.ft-nav{display:flex;flex-direction:column;gap:.5rem}
+.ft-nav a{font-size:.8rem;color:rgba(255,255,255,.42);text-decoration:none;cursor:pointer;transition:color .2s}
+.ft-nav a:hover{color:var(--blue3)}
+.ft-bot{max-width:1240px;margin:0 auto;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.6rem}
+.ft-bot p{font-size:.72rem;font-family:var(--fm);color:rgba(255,255,255,.25)}
+.ft-bot em{color:var(--blue3);font-style:normal}
+
+@media(max-width:768px){
+  .stats{grid-template-columns:repeat(3,1fr)}
+  .asin-grid{grid-template-columns:1fr}
+  .ba{grid-template-columns:1fr}
+  .results{grid-template-columns:1fr 1fr}
+  .ft{grid-template-columns:1fr}
+  .hero{padding:95px 4% 40px}
+  .body{padding:40px 4% 50px}
+}
+@media(max-width:480px){.stats{grid-template-columns:1fr 1fr};.results{grid-template-columns:1fr}}
+
+/* ── SHARED NAV OVERRIDE FOR CASE STUDY PAGES ── */
+#nav{position:fixed;top:0;left:0;right:0;z-index:999;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 5%;transition:all .3s}
+#nav.sc{background:rgba(248,252,255,.95);backdrop-filter:blur(20px);box-shadow:0 1px 0 rgba(26,111,244,.12)}
+.logo{font-family:var(--fd);font-size:1.2rem;font-weight:800;color:var(--ink);text-decoration:none;letter-spacing:-.02em}
+.logo em{color:#1a6ff4;font-style:normal}
+.nav-links-cs{display:flex;gap:1.5rem;list-style:none;align-items:center}
+.nav-links-cs a{font-size:.73rem;font-weight:500;color:var(--muted);text-decoration:none;letter-spacing:.04em;text-transform:uppercase;transition:color .2s;white-space:nowrap}
+.nav-links-cs a:hover{color:#1a6ff4}
+.ncta-cs{font-size:.77rem;font-weight:600;padding:.42rem 1.1rem;background:#1a6ff4;color:#fff;border-radius:7px;text-decoration:none;box-shadow:0 4px 14px rgba(26,111,244,.3);transition:all .2s;white-space:nowrap}
+.ncta-cs:hover{background:#2979ff;transform:translateY(-1px)}
+.hbg-cs{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
+.hbg-cs span{display:block;width:21px;height:2px;background:var(--ink);border-radius:1px}
+.mob-cs{display:none;position:fixed;top:72px;left:0;right:0;background:rgba(248,252,255,.97);backdrop-filter:blur(20px);flex-direction:column;align-items:center;padding:2rem;gap:1.5rem;z-index:998;border-bottom:1px solid rgba(26,111,244,.12)}
+.mob-cs.on{display:flex}
+.mob-cs a{font-size:.95rem;font-family:var(--fd);color:var(--ink);text-decoration:none;font-weight:700}
+/* Dropdown */
+.cs-has-dd{position:relative}
+.cs-dropdown{position:absolute;top:calc(100% + 10px);left:50%;transform:translateX(-50%) translateY(-6px);min-width:200px;background:rgba(248,252,255,.97);backdrop-filter:blur(18px);border:1.5px solid rgba(26,111,244,.22);border-radius:14px;padding:.4rem;opacity:0;visibility:hidden;transition:opacity .22s,transform .22s,visibility .22s;pointer-events:none;box-shadow:0 12px 36px rgba(26,111,244,.14)}
+.cs-has-dd:hover .cs-dropdown{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0);pointer-events:auto}
+.cs-dropdown a{display:block;padding:.55rem .85rem;border-radius:8px;font-size:.76rem;font-weight:500;color:var(--ink)!important;text-decoration:none;letter-spacing:0!important;text-transform:none!important;transition:background .18s}
+.cs-dropdown a:hover{background:rgba(26,111,244,.07);color:#1a6ff4!important}
+@media(max-width:900px){
+  .nav-links-cs,.ncta-cs{display:none}
+  .hbg-cs{display:flex}
+}
+
+/* ── SHARED FOOTER ── */
+.cs-footer{background:#0d1b3e;color:#fff;padding:3rem 5% 1.5rem;margin-top:4rem}
+.cs-ft-inner{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:2.5rem;max-width:1080px;margin:0 auto;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.08)}
+.cs-ft-logo{font-family:var(--fd);font-size:1.4rem;font-weight:800;display:block;margin-bottom:.5rem}
+.cs-ft-logo em{color:#1a6ff4;font-style:normal}
+.cs-ft-desc{font-size:.76rem;color:rgba(255,255,255,.38);line-height:1.6;max-width:220px}
+.cs-ft-h{font-size:.62rem;font-family:var(--fm,monospace);color:rgba(255,255,255,.35);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.75rem}
+.cs-ft-nav{display:flex;flex-direction:column;gap:.45rem}
+.cs-ft-nav a{font-size:.78rem;color:rgba(255,255,255,.5);text-decoration:none;transition:color .18s}
+.cs-ft-nav a:hover{color:#fff}
+.cs-ft-bot{max-width:1080px;margin:1.5rem auto 0;text-align:center;font-size:.7rem;color:rgba(255,255,255,.22)}
+@media(max-width:768px){
+  .cs-ft-inner{grid-template-columns:1fr 1fr;gap:1.5rem}
+}
+@media(max-width:480px){
+  .cs-ft-inner{grid-template-columns:1fr}
+}
+
+body{padding-top:72px}
+</style>
+</head>
+<body>
+<nav id="nav">
+  <a href="index.html" class="logo">Arun<em>.</em></a>
+  <ul class="nav-links-cs">
+    <li><a href="/index.html#home">Home</a></li>
+    <li><a href="/index.html#about">About</a></li>
+    <li><a href="/index.html#experience">Experience</a></li>
+    <li><a href="/index.html#skills">Skills</a></li>
+    <li><a href="/index.html#projects">Projects</a></li>
+    <li class="cs-has-dd">
+      <a href="index.html#casestudies">Case Studies ▾</a>
+      <div class="cs-dropdown">
+        <a href="/case_studies/amazon-fba-case-studies.html">📦 Amazon FBA SEO</a>
+        <a href="/case_studies/on-page-seo-case-study.html">🌐 Frontend SEO</a>
+      </div>
+    </li>
+    <li><a href="/index.html#roadmap">Roadmap</a></li>
+    <li><a href="/index.html#contact">Contact</a></li>
+  </ul>
+  <a href="index.html#contact" class="ncta-cs">Let's Collaborate</a>
+  <button class="hbg-cs" onclick="document.getElementById('mob-cs').classList.toggle('on')" aria-label="menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div id="mob-cs" class="mob-cs">
+  <a href="index.html#home">Home</a>
+  <a href="index.html#about">About</a>
+  <a href="index.html#experience">Experience</a>
+  <a href="index.html#skills">Skills</a>
+  <a href="index.html#projects">Projects</a>
+  <a href="amazon-fba-case-studies.html">📦 Amazon FBA Case Study</a>
+  <a href="on-page-seo-case-study.html">🌐 Frontend SEO Case Study</a>
+  <a href="index.html#roadmap">Roadmap</a>
+  <a href="index.html#contact">Contact</a>
+</div>
+
+
+
+
+<div class="hero">
+  <div class="eyebrow">Case Study · Amazon FBA</div>
+  <h1>50+ ASINs<br><span>Listing Optimisation</span></h1>
+  <div class="meta-row">
+    <span class="meta-pill">May 2023 – Jul 2024</span>
+    <span class="meta-pill">15 months · Full-Time</span>
+    <span class="meta-pill">Amazon.in · Amazon.com</span>
+    <span class="meta-pill">Confidential FBA Brand</span>
+  </div>
+  <p class="intro">
+    I joined a confidential FBA brand as their SEO executive for 15 months. My job was the <strong>full listing side</strong> — search term architecture, title and bullet rewrites, A+ content, and tracking what happened to BSR and rankings after each change. This is how I actually worked through it.
+  </p>
+  <div class="stats">
+    <div class="stat"><div class="stat-n">50+</div><div class="stat-l">ASINs</div></div>
+    <div class="stat"><div class="stat-n b">6</div><div class="stat-l">Categories</div></div>
+    <div class="stat"><div class="stat-n">15mo</div><div class="stat-l">Engagement</div></div>
+    <div class="stat"><div class="stat-n g">BSR↑</div><div class="stat-l">Tracked</div></div>
+    <div class="stat"><div class="stat-n">250B</div><div class="stat-l">Backend Used</div></div>
+  </div>
+</div>
+
+<div class="body">
+
+  <div class="disc rv">
+    <span style="font-size:1rem;flex-shrink:0">🔒</span>
+    <p><strong>Brand is confidential.</strong> ASINs below use masked codes. Categories, issues, strategies, and results are real. Happy to discuss specifics privately.</p>
+  </div>
+
+  <!-- ASIN showcase -->
+  <div class="sh rv">
+    <div class="sh-eye">ASIN Showcase</div>
+    <h2>Sample Products — What I Did</h2>
+    <p>Six categories, very different problems. I didn't copy the same fix across all of them — each had its own A9 issue to work through.</p>
+  </div>
+
+  <div class="asin-grid rv">
+
+    <div class="asin">
+      <div class="asin-top">
+        <div>
+          <div class="asin-id">B0XX1KT9PQ · Amazon.in</div>
+          <div class="asin-cat">Home & Kitchen — Storage</div>
+        </div>
+        <span class="abadge done">✓ Done</span>
+      </div>
+      <div class="asin-body">
+        <div class="arow"><span class="arow-l">Problem</span><span>Title started with brand name. <strong>Main buying keyword was word #9.</strong> Backend had 140 bytes used — wasted 110.</span></div>
+        <div class="arow"><span class="arow-l">Title Fix</span><span>Moved top search term to front. Structure: <strong>Keyword → Use → Size → Feature → Brand</strong></span></div>
+        <div class="arow"><span class="arow-l">Backend</span><span>Cerebro reverse-ASIN on top 3 competitors. Found 43 unique terms not in my listing. Filled 250 bytes with no repetition.</span></div>
+      </div>
+      <div class="asin-nums">
+        <div class="an"><div class="an-n">+18</div><div class="an-l">Rank Pos.</div></div>
+        <div class="an"><div class="an-n">250B</div><div class="an-l">Backend</div></div>
+        <div class="an"><div class="an-n g">↑ BSR</div><div class="an-l">Sub-cat</div></div>
+      </div>
+    </div>
+
+    <div class="asin">
+      <div class="asin-top">
+        <div>
+          <div class="asin-id">B0XX4MN8RL · Amazon.in</div>
+          <div class="asin-cat">Sports — Fitness Accessories</div>
+        </div>
+        <span class="abadge done">✓ Done</span>
+      </div>
+      <div class="asin-body">
+        <div class="arow"><span class="arow-l">Problem</span><span>Going against a competitor with 3000+ reviews. Indexed for only 12 keywords. No way to compete head-on.</span></div>
+        <div class="arow"><span class="arow-l">Strategy</span><span>Shifted to <strong>long-tail buyer keywords</strong> — "resistance band for beginners", "home gym under 500". Lower competition, higher intent.</span></div>
+        <div class="arow"><span class="arow-l">Backend</span><span>Added Hindi transliterations alongside English variants. 62 new backend keywords added after Magnet research.</span></div>
+      </div>
+      <div class="asin-nums">
+        <div class="an"><div class="an-n">+62</div><div class="an-l">New KWs</div></div>
+        <div class="an"><div class="an-n">↑ CTR</div><div class="an-l">A/B Image</div></div>
+        <div class="an"><div class="an-n g">2×</div><div class="an-l">Long-tail CVR</div></div>
+      </div>
+    </div>
+
+    <div class="asin">
+      <div class="asin-top">
+        <div>
+          <div class="asin-id">B0XX7PQ3WA · Amazon.in/.com</div>
+          <div class="asin-cat">Beauty — Skincare</div>
+        </div>
+        <span class="abadge hot">🔥 Priority</span>
+      </div>
+      <div class="asin-body">
+        <div class="arow"><span class="arow-l">Problem</span><span><strong>BSR declining 8 weeks straight.</strong> Reviews showed customers confused about ingredients. A+ content was a generic default template.</span></div>
+        <div class="arow"><span class="arow-l">A+ Fix</span><span>Redesigned with ingredient spotlight, before/after, competitor comparison chart, and a cross-ASIN routine guide.</span></div>
+        <div class="arow"><span class="arow-l">Title</span><span>New structure: <strong>Ingredient → Product Type → Skin Concern → Size.</strong> Brand moved to end — brand registry already indexes it.</span></div>
+      </div>
+      <div class="asin-nums">
+        <div class="an"><div class="an-n g">↑ BSR</div><div class="an-l">Reversed</div></div>
+        <div class="an"><div class="an-n">A+</div><div class="an-l">Rebuilt</div></div>
+        <div class="an"><div class="an-n">+22%</div><div class="an-l">CVR</div></div>
+      </div>
+    </div>
+
+    <div class="asin">
+      <div class="asin-top">
+        <div>
+          <div class="asin-id">B0XX9FT2KE · Amazon.in</div>
+          <div class="asin-cat">Electronics — Phone Accessories</div>
+        </div>
+        <span class="abadge done">✓ Done</span>
+      </div>
+      <div class="asin-body">
+        <div class="arow"><span class="arow-l">Problem</span><span>Good PPC spend, but only <strong>8 organic page-1 keywords.</strong> Organic indexing was weak — lots of PPC impressions not converting to organic index.</span></div>
+        <div class="arow"><span class="arow-l">Fix</span><span>Identified 38 terms ranking in PPC but not indexed organically. Added them all to backend. Added every compatible model number — each one indexes separately.</span></div>
+        <div class="arow"><span class="arow-l">Title</span><span>Moved colour variant to end of title — Amazon auto-generates it in variant titles anyway, so front placement just wastes keyword space.</span></div>
+      </div>
+      <div class="asin-nums">
+        <div class="an"><div class="an-n">+38</div><div class="an-l">Indexed</div></div>
+        <div class="an"><div class="an-n g">Pg1</div><div class="an-l">14 KWs</div></div>
+        <div class="an"><div class="an-n">↓ ACOS</div><div class="an-l">PPC Eff.</div></div>
+      </div>
+    </div>
+
+    <div class="asin">
+      <div class="asin-top">
+        <div>
+          <div class="asin-id">B0XX3DV7NQ · Amazon.in/.com</div>
+          <div class="asin-cat">Toys — Educational / STEM</div>
+        </div>
+        <span class="abadge done">✓ A+ Overhaul</span>
+      </div>
+      <div class="asin-body">
+        <div class="arow"><span class="arow-l">Problem</span><span>Zero gifting keywords on a product that's <strong>basically a gift item.</strong> "Birthday gift for 5 year old" — completely missing from the listing.</span></div>
+        <div class="arow"><span class="arow-l">Gifting KWs</span><span>Added 55 gifting-intent terms: Diwali, birthday, Christmas, nephew, niece — each age variant also indexes separately.</span></div>
+        <div class="arow"><span class="arow-l">Seasonal</span><span>Created seasonal backend profiles. Updated 3 weeks before Diwali/Christmas to account for A9 indexing lag.</span></div>
+      </div>
+      <div class="asin-nums">
+        <div class="an"><div class="an-n">+55</div><div class="an-l">Gift KWs</div></div>
+        <div class="an"><div class="an-n g">↑ Q4</div><div class="an-l">Traffic</div></div>
+        <div class="an"><div class="an-n">4×</div><div class="an-l">Festive BSR</div></div>
+      </div>
+    </div>
+
+    <div class="asin">
+      <div class="asin-top">
+        <div>
+          <div class="asin-id">B0XX2JR5HM · Amazon.in</div>
+          <div class="asin-cat">Kitchen — Cookware</div>
+        </div>
+        <span class="abadge done">✓ Done</span>
+      </div>
+      <div class="asin-body">
+        <div class="arow"><span class="arow-l">Problem</span><span><strong>Same keyword repeated 7 times</strong> across title, bullets, and backend. A9 doesn't reward repetition — it just wastes bytes.</span></div>
+        <div class="arow"><span class="arow-l">Fix</span><span>Removed all duplicates. Freed 94 bytes. Replaced with capacity variants ("2L", "2 litre", "2000ml"), material terms, regional language phonetics.</span></div>
+        <div class="arow"><span class="arow-l">Bullets</span><span>Rewrote each bullet to address the <strong>top 5 negative review themes</strong> — heat distribution, cleaning, warranty. Turned objections into selling points.</span></div>
+      </div>
+      <div class="asin-nums">
+        <div class="an"><div class="an-n">94B</div><div class="an-l">Freed</div></div>
+        <div class="an"><div class="an-n">+31</div><div class="an-l">New KWs</div></div>
+        <div class="an"><div class="an-n g">↑ Rev.</div><div class="an-l">Fewer Objec.</div></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="div"></div>
+
+  <!-- Backend 250B -->
+  <div class="sh rv">
+    <div class="sh-eye">Backend Field</div>
+    <h2>The 250-Byte Problem</h2>
+    <p>Amazon gives you 250 bytes in Search Terms. Most sellers either leave half empty, or fill it with keywords already in their title — which A9 already indexes. <strong>Both are wasted space.</strong></p>
+  </div>
+
+  <div class="card rv">
+    <h3>🔬 How I Filled Backend Fields</h3>
+    <p>The rule I followed: <strong>if it's already in your title or bullets, it's already indexed — don't repeat it in backend.</strong> Every byte in Search Terms should be a keyword that's nowhere else in the listing.</p>
+
+    <div class="code">
+      <div class="code-top"><div class="dots"><span></span><span></span><span></span></div><div class="fname">backend-field-example.txt</div><div></div></div>
+      <pre><span class="cp">// Category: Home Kitchen Storage · 250 bytes used / 250 allowed
+// Rule: Zero repetition with title. Zero commas needed — Amazon uses spaces.
+// Cerebro pull: reverse-ASIN'd top 3 competitors → filtered gaps</span>
+
+<span class="camz">// Gaps from Cerebro (high volume, not in listing):</span>
+<span class="cs">plastic storage box lid drawer organiser fridge organiser stackable
+container pantry organisers kitchen rack multipurpose basket wardrobe</span>
+
+<span class="camz">// Size variants (each indexes differently):</span>
+<span class="cs">2L 2litre 2000ml</span>
+
+<span class="camz">// Misspellings (Amazon indexes these — real search volume):</span>
+<span class="cs">storej storidge storaje</span>
+
+<span class="camz">// Hindi phonetic (indexes for vernacular searches):</span>
+<span class="cs">rasoi ke liye dabba rakh bartan</span>
+
+<span class="cg">// Final byte count: 247/250 ✓</span>
+<span class="cp">// Verified via Helium10 Index Checker after 48–72h</span></pre>
+    </div>
+    <div class="note">
+      One thing I noticed: Amazon actually <strong>indexes misspellings</strong> like "storej" or "organiser vs organizer". Running real search data through Cerebro often showed surprising volume on alternate spellings. I added them — they take almost no bytes and can index real traffic.
+    </div>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- Title structure -->
+  <div class="sh rv">
+    <div class="sh-eye">Listing Copy</div>
+    <h2>How I Rewrote Titles</h2>
+    <p>Most titles I inherited had the brand name first and the actual keyword buried halfway through. That's not good for A9 — title position still matters for ranking weight.</p>
+  </div>
+
+  <div class="card rv">
+    <h3>✍️ Before & After — Real Title Rewrite</h3>
+    <div class="ba">
+      <div class="ba-box b">
+        <div class="ba-label">❌ Before</div>
+        <p><strong style="font-family:var(--fm);font-size:.78rem">"BrandName Premium Quality Storage Box for Kitchen and Home — Multiple Colours — 2 Litre"</strong></p>
+        <br>
+        <p>Brand is word 1. "Premium Quality" is noise. Buying keyword isn't until word 6. Colour info wastes prime space — Amazon handles colour through variant dropdowns.</p>
+      </div>
+      <div class="ba-box a">
+        <div class="ba-label">✅ After</div>
+        <p><strong style="font-family:var(--fm);font-size:.78rem">"Airtight Kitchen Storage Container with Lid | 2L Fridge Organiser | Stackable Pantry Dabba | BPA-Free Transparent | Set of 3 — BrandName"</strong></p>
+        <br>
+        <p>Structure: <strong>Primary KW → Use case → Secondary KW → Feature → Size → Brand last.</strong> Every token indexed. Pipes are spaces to A9 — just visual separators for humans.</p>
+      </div>
+    </div>
+    <p style="margin-top:.9rem;font-size:.83rem;color:var(--muted)">I followed this structure on every ASIN. The formula isn't complicated — the hard part is knowing which keyword deserves slot 1, which takes research.</p>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- Tracking -->
+  <div class="sh rv">
+    <div class="sh-eye">Tracking</div>
+    <h2>How I Measured Results</h2>
+    <p>A9 changes take 7–14 days to show. So I didn't check results the next morning — I logged things weekly from day 14 for 8 weeks after any update.</p>
+  </div>
+
+  <div class="card rv">
+    <h3>📊 Weekly Tracking Routine</h3>
+    <p>I kept a simple Google Sheet per ASIN. Columns: target keyword, search volume, position at week 0 (before), then week 2, 4, 6, 8. Plus a manual BSR log 3 times a week — main category and up to 2 sub-categories.</p>
+    <p>After any backend update, I'd run <strong>Helium10 Index Checker at 48–72 hours</strong> to confirm the new keywords actually indexed. Sometimes they don't — usually because of a field format issue or a variation merge conflict. When something didn't index, I'd troubleshoot before assuming the strategy failed.</p>
+    <div class="note">
+      <strong>One thing I always tracked:</strong> Conversion rate in Seller Central Business Reports (sessions vs orders). If rank improved but CVR dropped, that's a listing copy issue, not a keyword issue — they're different problems. I fixed them separately.
+    </div>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- Results -->
+  <div class="sh rv">
+    <div class="sh-eye">Outcomes</div>
+    <h2>What the 15 Months Looked Like</h2>
+  </div>
+
+  <div class="results rv">
+    <div class="res"><div class="res-n">50+</div><div class="res-l">ASINs Done</div><div class="res-d">Title + backend + bullets + A+ reviewed on every ASIN</div></div>
+    <div class="res"><div class="res-n g">+22</div><div class="res-l">Avg Rank Gain</div><div class="res-d">Primary keyword, avg 8 weeks post-optimisation</div></div>
+    <div class="res"><div class="res-n">250B</div><div class="res-l">100% Used</div><div class="res-d">Every ASIN hit 248–250 bytes, zero duplication</div></div>
+    <div class="res"><div class="res-n g">4×</div><div class="res-l">Festive BSR</div><div class="res-d">Seasonal-updated ASINs vs non-updated during Diwali</div></div>
+    <div class="res"><div class="res-n">↓ ACOS</div><div class="res-l">PPC Improved</div><div class="res-d">Better organic indexing meant less PPC needed for visibility</div></div>
+    <div class="res"><div class="res-n b">6</div><div class="res-l">Categories</div><div class="res-d">Home · Sports · Beauty · Kitchen · Electronics · Toys</div></div>
+  </div>
+
+  <div class="div"></div>
+
+  <div class="sh rv">
+    <div class="sh-eye">Tools</div>
+    <h2>What I Used</h2>
+  </div>
+  <div class="card rv">
+    <div class="tags">
+      <span class="tag">Helium10 Cerebro</span><span class="tag">Helium10 Magnet</span>
+      <span class="tag">Helium10 Keyword Tracker</span><span class="tag">Helium10 Index Checker</span>
+      <span class="tag b">Amazon Seller Central</span><span class="tag b">Brand Analytics</span>
+      <span class="tag b">Business Reports</span><span class="tag b">A+ Content Manager</span>
+      <span class="tag b">Advertising Console</span><span class="tag b">Google Sheets</span>
+    </div>
+  </div>
+
+</div>
+
+<footer class="cs-footer">
+  <div class="cs-ft-inner">
+    <div>
+      <span class="cs-ft-logo">Arun<em>.</em></span>
+      <p class="cs-ft-desc">ELK Stack Developer → AI Integration Engineer. Jaipur, India.</p>
+    </div>
+    <div>
+      <div class="cs-ft-h">Navigate</div>
+      <nav class="cs-ft-nav">
+        <a href="index.html#about">About</a>
+        <a href="index.html#experience">Experience</a>
+        <a href="index.html#skills">Skills</a>
+        <a href="index.html#projects">Projects</a>
+        <a href="index.html#roadmap">Roadmap</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+    <div>
+      <div class="cs-ft-h">Case Studies</div>
+      <nav class="cs-ft-nav">
+        <a href="amazon-fba-case-studies.html">Amazon FBA SEO</a>
+        <a href="on-page-seo-case-study.html">Frontend SEO</a>
+      </nav>
+    </div>
+    <div>
+      <div class="cs-ft-h">Connect</div>
+      <p style="font-size:.76rem;color:rgba(255,255,255,.38);margin-bottom:.3rem">arun@example.com</p>
+      <p style="font-size:.76rem;color:rgba(255,255,255,.38)">Jaipur, Rajasthan, India</p>
+    </div>
+  </div>
+  <div class="cs-ft-bot"><p>© 2026 Arun Agarwal. All rights reserved.</p></div>
+</footer>
+
+
+<script>
+const o = new IntersectionObserver(e => {
+  e.forEach(x => { if(x.isIntersecting){ x.target.classList.add('in'); o.unobserve(x.target); } });
+},{threshold:.07,rootMargin:'0px 0px -25px 0px'});
+document.querySelectorAll('.rv').forEach((el,i) => {
+  el.style.transitionDelay = Math.min(i * 0.045, 0.32) + 's';
+  o.observe(el);
+});
+</script>
+
+<script>
+window.addEventListener('scroll', () => {
+  document.getElementById('nav')?.classList.toggle('sc', window.scrollY > 25);
+}, { passive: true });
+</script>
+
+</body>
+</html>

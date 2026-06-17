@@ -1,0 +1,35 @@
+# Logs and runtime variables
+*.log
+.env
+.env.*
+
+# OS and system artifacts
+.DS_Store
+Thumbs.db
+
+# IDE and editor config
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Node / build output
+node_modules/
+dist/
+build/
+
+# Python runtime artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+env/
+
+# Optional temporary files
+*.tmp
+*.temp

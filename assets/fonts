@@ -1,0 +1,6 @@
+Syne (Weights: 400, 600, 700, 800) – Used for heavy display components like headings (h1, h2, logo branding).
+
+Inter (Weights: 300, 400, 500, 600) – Emphasized as the clean, highly legible global body typeface for structural narratives and experience descriptions.
+
+JetBrains Mono (Weights: 300, 400, 500) – Mapped for terminal layouts, embedded code cards (Portfolio.ts), metadata spans, and line statistics.
+
