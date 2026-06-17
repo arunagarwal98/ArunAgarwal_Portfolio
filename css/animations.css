@@ -366,3 +366,98 @@
   .aline { font-size: .82rem; line-height: 1.52; }
   .role-now-card { padding: .8rem 1rem; margin-bottom: .8rem; }
 }
+
+/* ══════════════════════════════════════════════════════════
+   MOTION & INTERACTION POLISH
+   Premium easing, micro-interactions, unified elevation.
+   transform + opacity + box-shadow only — GPU-friendly, 60fps.
+   No layout, structure, or content changes below this line.
+   ══════════════════════════════════════════════════════════ */
+
+/* ── Smoother global reveal easing (refines existing .rv / .stagger) ── */
+.rv, .stagger > * {
+  transition-timing-function: var(--ease-soft);
+  transition-duration: var(--dur-slow);
+  will-change: transform, opacity;
+}
+.rv.pop { transition-timing-function: var(--ease-soft); }
+
+/* ── Buttons: press, hover, focus — refined with consistent easing ── */
+.bf, .bo, .ncta, .cf-btn {
+  transition: transform var(--dur-base) var(--ease-out),
+              box-shadow var(--dur-base) var(--ease-out),
+              background-color var(--dur-base) var(--ease-out),
+              border-color var(--dur-base) var(--ease-out),
+              color var(--dur-base) var(--ease-out);
+  will-change: transform;
+}
+.bf:active, .cf-btn:active { transform: translateY(0) scale(.97); box-shadow: 0 3px 10px rgba(26,111,244,.3); }
+.bo:active, .ncta:active { transform: translateY(0) scale(.97); }
+.bf:focus-visible, .bo:focus-visible, .ncta:focus-visible, .cf-btn:focus-visible {
+  outline: 2px solid var(--blue); outline-offset: 3px;
+}
+
+/* ── Social icon buttons (.sb) — press feedback ── */
+.sb { transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
+.sb:active { transform: translateY(0) scale(.93); }
+.sb:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
+
+/* ── Project cards (.pc) — unify lift + shadow + subtle scale ── */
+.pc { transition: transform var(--dur-slow) var(--ease-soft), box-shadow var(--dur-slow) var(--ease-soft), border-color var(--dur-base) var(--ease-out); }
+.pc:hover { box-shadow: var(--sh-lift); }
+.pc:nth-child(even):hover { box-shadow: var(--sh-lift); }
+
+/* ── Skill cards (.sk) — refined lift with scale, smoother curve ── */
+.sk { transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out); will-change: transform; }
+.sk:hover { transform: translateY(-4px) scale(1.015); box-shadow: var(--sh-hover); }
+.sk-logo-wrap { transition: transform var(--dur-base) var(--ease-spring); }
+.sk:hover .sk-logo-wrap { transform: scale(1.08); }
+
+/* ── EEAT cards, SEO flow steps, contact links — consistent elevation curve ── */
+.ec, .sfs, .ct-lk, .role-now-card, .elk-showcase, .kw-cloud, .rm, .jn-c {
+  transition-timing-function: var(--ease-out);
+}
+.ec:hover, .ct-lk:hover { box-shadow: var(--sh-hover); }
+
+/* ── Nav links: smooth underline sweep instead of instant color swap ── */
+.nl a { position: relative; transition: color var(--dur-base) var(--ease-out); }
+.nl a::after {
+  content: ''; position: absolute; left: 0; bottom: -2px; width: 100%; height: 2px;
+  background: var(--blue); border-radius: 1px; transform: scaleX(0); transform-origin: left;
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.nl a:hover::after { transform: scaleX(1); }
+.nl a.act::after { transform: scaleX(1); }
+
+/* ── Footer + case-study links: gentle fade-in underline ── */
+.ft-nav a, .ct-lk-n { transition: color var(--dur-base) var(--ease-out); }
+
+/* ── Chips, tags, kw-cloud, marquee spans — snappier micro hover ── */
+.chip, .pc-tag, .kw, .elk-tag, .sk-tab {
+  transition: transform var(--dur-fast) var(--ease-out),
+              background-color var(--dur-base) var(--ease-out),
+              color var(--dur-base) var(--ease-out),
+              border-color var(--dur-base) var(--ease-out);
+}
+.pc-tag:hover, .elk-tag:hover { transform: translateY(-1px); border-color: var(--blue); }
+.sk-tab:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+/* ── Form inputs: refined focus ring with smoother easing ── */
+.cf-i { transition: border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
+
+/* ── Hero code-card and about-photo: subtle, premium settle on load ── */
+.cc, .aph-wrap { transition: transform var(--dur-slow) var(--ease-soft), box-shadow var(--dur-slow) var(--ease-soft); }
+
+/* ── Back-to-top + workflow ribbon: smoother curve, same behavior ── */
+.back-to-top { transition: opacity var(--dur-slow) var(--ease-soft), transform var(--dur-slow) var(--ease-soft), background-color var(--dur-base) var(--ease-out); }
+.workflow-ribbon span { transition: transform var(--dur-base) var(--ease-out), background-color var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out); }
+
+/* ── Timeline nodes: smoother scale-in on active state ── */
+.jn-c { transition: transform var(--dur-base) var(--ease-spring), background-color var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out); }
+
+/* ── Page-load entrance: hero content fades + lifts in on first paint ── */
+@media (prefers-reduced-motion: no-preference) {
+  .hero-inner > div { animation: heroEnter .7s var(--ease-soft) both; }
+  .hero-inner > div:nth-child(2) { animation-delay: .08s; }
+  @keyframes heroEnter { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+}

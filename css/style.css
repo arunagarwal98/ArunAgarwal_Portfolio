@@ -8,6 +8,18 @@
   --fd:'Syne',sans-serif;--fb:'Inter',sans-serif;--fm:'JetBrains Mono',monospace;
   --r:12px;--r2:18px;--r3:24px;
   --sh:0 4px 24px rgba(26,111,244,.08);--sh2:0 10px 40px rgba(26,111,244,.16);
+  /* ── Motion system: premium, consistent easing + layered elevation ── */
+  --ease-out:cubic-bezier(.16,1,.3,1);
+  --ease-soft:cubic-bezier(.22,1,.36,1);
+  --ease-spring:cubic-bezier(.34,1.56,.64,1);
+  --ease-in-out:cubic-bezier(.45,0,.55,1);
+  --dur-fast:.18s;--dur-base:.28s;--dur-slow:.5s;
+  --sh-rest:0 1px 2px rgba(13,27,62,.04),0 2px 8px rgba(26,111,244,.06);
+  --sh-hover:0 4px 12px rgba(13,27,62,.06),0 12px 32px rgba(26,111,244,.14);
+  --sh-lift:0 8px 20px rgba(13,27,62,.08),0 24px 48px rgba(26,111,244,.16);
+}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
 }
 html{scroll-behavior:smooth; font-size:120%}
 html,body{scroll-padding-top:92px}
@@ -19,6 +31,11 @@ body{
 }
 ::-webkit-scrollbar{width:3px}
 ::-webkit-scrollbar-thumb{background:var(--blue);border-radius:2px}
+
+/* ── Universal focus-visible ring for accessibility + premium feel ── */
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,.jn:focus-visible,[tabindex]:focus-visible{
+  outline:2px solid var(--blue);outline-offset:3px;border-radius:4px;transition:outline-offset var(--dur-fast) var(--ease-out)
+}
 
 /* ── PAGES ── */
 .page{position:relative;isolation:isolate;display:none;opacity:0;transform:translateY(16px) scale(.993);transition:opacity .4s cubic-bezier(.22,1,.36,1),transform .4s cubic-bezier(.22,1,.36,1)}
@@ -47,7 +64,7 @@ body{
 .nl{display:flex;gap:2rem;list-style:none}
 .nl a{font-size:.78rem;font-weight:500;color:var(--muted);text-decoration:none;letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:color .2s;padding:.2rem 0;border-bottom:2px solid transparent}
 .nl a:hover{color:var(--blue)}
-.nl a.act{color:var(--blue);border-bottom-color:var(--blue)}
+.nl a.act{color:var(--blue)}
 .ncta{font-size:.8rem;font-weight:600;padding:.46rem 1.3rem;background:var(--blue);color:#fff;border-radius:7px;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(26,111,244,.3);transition:all .2s}
 .ncta:hover{background:var(--blue2);transform:translateY(-1px)}
 .hbg{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:4px}
