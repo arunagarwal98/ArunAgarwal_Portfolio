@@ -457,7 +457,130 @@
 
 /* ── Page-load entrance: hero content fades + lifts in on first paint ── */
 @media (prefers-reduced-motion: no-preference) {
-  .hero-inner > div { animation: heroEnter .7s var(--ease-soft) both; }
-  .hero-inner > div:nth-child(2) { animation-delay: .08s; }
   @keyframes heroEnter { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  /* Staggered reveal for hero left column: eyebrow → headline → subhead → ctas → chips → ribbon.
+     animation-fill-mode: both holds opacity:1 after finishing, so this plays nicely with
+     .workflow-ribbon's .rv class (which is otherwise scroll-triggered elsewhere on the page). */
+  .h-eye, .h1, .h-sub, .soc-row, .hctas, .chips, .hero-inner .workflow-ribbon {
+    animation: heroEnter .6s var(--ease-soft) both;
+  }
+  .h-eye { animation-delay: .05s; }
+  .h1 { animation-delay: .12s; }
+  .h-sub { animation-delay: .22s; }
+  .soc-row { animation-delay: .30s; }
+  .hctas { animation-delay: .36s; }
+  .chips { animation-delay: .42s; }
+  .hero-inner .workflow-ribbon { animation-delay: .48s; }
+
+  /* Hero right column settles in slightly after the left column starts */
+  .cc, .hms, .hero-right .sp {
+    animation: heroEnter .6s var(--ease-soft) both;
+  }
+  .cc { animation-delay: .2s; }
+  .hms { animation-delay: .3s; }
+  .hero-right .sp { animation-delay: .38s; }
 }
+
+/* ══════════════════════════════════════════════════════════
+   VIEWPORT-FIT SCALING — Hero & About breathe with screen height
+   Covers 13"–16"+ laptops smoothly via fluid clamp(), instead of
+   jumping at fixed breakpoints. No layout/structure change —
+   only the *amount* of vertical rhythm adapts to available space.
+   ══════════════════════════════════════════════════════════ */
+@media (min-width: 1081px) {
+  .hero-wrap { padding-block: clamp(.5rem, 2.4svh, 2rem); }
+  .hero-inner { padding-top: clamp(60px, 9svh, 90px); gap: clamp(2.4rem, 4.5vw, 4rem); }
+  .h-eye { margin-bottom: clamp(.7rem, 1.6svh, 1.3rem); }
+  .h1 { font-size: clamp(2.4rem, 4.6svh, 4.2rem); margin-bottom: clamp(.8rem, 1.8svh, 1.3rem); }
+  .h-sub { margin-bottom: clamp(1rem, 2.2svh, 1.6rem); line-height: clamp(1.5, 1.7, 1.78); }
+  .soc-row { margin-bottom: clamp(.8rem, 1.8svh, 1.4rem); }
+  .hctas { margin-bottom: clamp(.9rem, 2svh, 1.5rem); }
+  .chips { margin-bottom: clamp(.7rem, 1.6svh, 1.2rem); }
+  .cc-b { padding: clamp(.6rem, 1.6svh, 1rem) clamp(.8rem, 2vw, 1.3rem); }
+  .cl { line-height: clamp(1.55, 1.8, 1.85); }
+  .hms { margin-top: clamp(.8rem, 1.8svh, 1.4rem); }
+
+  .about-hero { padding-block: clamp(16px, 3.5svh, 24px); }
+  .about-grid { gap: clamp(2rem, 3.5vw, 3rem); }
+  .about-lines { gap: clamp(.4rem, 1svh, .65rem); margin-bottom: clamp(.6rem, 1.4svh, 1rem); }
+  .aline { line-height: clamp(1.45, 1.6, 1.65); }
+  .role-now-card { padding: clamp(.7rem, 1.6svh, 1rem) clamp(.9rem, 1.8vw, 1.2rem); margin-bottom: clamp(.6rem, 1.4svh, 1rem); }
+}
+
+/* ══════════════════════════════════════════════════════════
+   STICKY NAV — already position:fixed (stronger than sticky,
+   always pinned regardless of scroll). Reinforcing scrolled-state
+   polish only — no positioning change needed.
+   ══════════════════════════════════════════════════════════ */
+#nav.sc { box-shadow: 0 1px 0 var(--bdr), 0 8px 24px rgba(13,27,62,.05); }
+
+/* ══════════════════════════════════════════════════════════
+   ULTRA-SMOOTH SCROLL
+   ══════════════════════════════════════════════════════════ */
+html, body { scroll-behavior: smooth; }
+
+/* ══════════════════════════════════════════════════════════
+   FOOTER — guarantee the document ends exactly at the footer,
+   no trailing blank space on any screen size.
+   ══════════════════════════════════════════════════════════ */
+html, body { height: auto; min-height: 0; }
+footer { margin: 0; }
+
+/* ══════════════════════════════════════════════════════════
+   RESUME CTA — distinct accent so it reads as its own "tab"
+   ══════════════════════════════════════════════════════════ */
+.resume-cta {
+  border-color: var(--blue);
+  color: var(--blue);
+  position: relative;
+  overflow: hidden;
+}
+.resume-cta::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--blue);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform var(--dur-base) var(--ease-out);
+  z-index: 0;
+}
+.resume-cta { z-index: 1; }
+.resume-cta:hover { color: #fff; box-shadow: var(--sh-hover); }
+.resume-cta:hover::before { transform: scaleX(1); }
+.resume-cta:hover, .resume-cta:active { border-color: var(--blue); }
+
+/* ══════════════════════════════════════════════════════════
+   GLORIA-LO-STYLE THREE-TIER INTERACTION POLISH
+   Hook (H1) → Pitch (h-sub) → Deepen (About). Bold, interactive,
+   layered hover feedback on the existing copy — no text changes.
+   ══════════════════════════════════════════════════════════ */
+
+/* Hook: headline highlight spans get a living, breathing underline */
+.h1 .hl, .h1 .hl2 { position: relative; display: inline-block; }
+.h1 .hl::after, .h1 .hl2::after {
+  content: '';
+  position: absolute; left: 0; bottom: .04em; width: 100%; height: .09em;
+  background: var(--blue); opacity: .18; border-radius: 2px;
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .8s var(--ease-soft);
+  animation: hookUnderline 1s var(--ease-soft) .9s both;
+}
+@keyframes hookUnderline { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* Pitch: bolded keywords inside the sub-headline get a subtle hover lift, reinforcing scannability */
+.h-sub strong { position: relative; transition: color var(--dur-base) var(--ease-out); cursor: default; }
+.h-sub strong:hover { color: var(--blue); }
+
+/* Deepen: About section's role-card and timeline lines get a richer, springier hover */
+.role-now-card { transition: transform var(--dur-base) var(--ease-spring), box-shadow var(--dur-base) var(--ease-out), border-color var(--dur-base) var(--ease-out); }
+.role-now-card:hover { transform: translateY(-3px) scale(1.01); box-shadow: var(--sh-hover); }
+.aline { transition: transform var(--dur-base) var(--ease-out), color var(--dur-base) var(--ease-out); border-radius: 6px; }
+.aline:hover { transform: translateX(4px); }
+.aline:hover strong { color: var(--blue); }
+
+/* About stat counters: springy pop on hover, reinforcing credibility at a glance */
+.ast, .hms-c { transition: transform var(--dur-base) var(--ease-spring); }
+.ast:hover, .hms-c:hover { transform: translateY(-3px) scale(1.04); }
+
+/* About photo: gentle tilt-settle already exists via JS tilt; add hover depth via shadow only */
+.aph-wrap:hover { box-shadow: var(--sh-lift); }
