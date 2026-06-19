@@ -1,6 +1,4 @@
-/**
- * SINGLE-PAGE CORE LOGIC
- */
+
 const SECTION_IDS = ['home','about','experience','skills','projects','roadmap','contact'];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -12,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initStatCounters('.hms-n');
   initStatCounters('.asg-n');
   initJourneyLine();
+  initTypewriter();
   updateActiveNavLink();
   const hash = window.location.hash.replace('#','');
   if (hash && SECTION_IDS.includes(hash)) {
@@ -135,3 +134,121 @@ function handleFormSubmitAction(event) {
   setTimeout(() => { b.textContent = 'Send Message'; b.style.background = ''; b.disabled = false; event.target.reset(); }, 3000);
 }
 function hf(e) { handleFormSubmitAction(e); }
+
+/**
+ * HERO CODE CARD — typewriter loop.
+ * Reads the original syntax-highlighted markup once, then on every load
+ * (refresh / open) types it out line-by-line, character-by-character,
+ * holds the fully-typed state for 5s, clears, and loops indefinitely.
+ * HTML tags are never split mid-tag — only visible text characters are
+ * counted, so the existing span/class structure (and thus colors) stays
+ * intact at every frame of the animation.
+ */
+function initTypewriter() {
+  const box = document.getElementById('cc-typewriter');
+  if (!box) return;
+
+  // Respect reduced-motion: just show the finished code, no looping animation.
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    return;
+  }
+
+  // Capture each line's original line-number + content HTML, then clear the box
+  // so we can rebuild it progressively without ever losing the source markup.
+  const lineEls = Array.from(box.querySelectorAll('.cl'));
+  const lines = lineEls.map(cl => ({
+    ln: cl.querySelector('.ln')?.outerHTML || '',
+    ct: cl.querySelector('.ct')?.innerHTML || ''
+  }));
+  if (!lines.length) return;
+
+  const HOLD_MS = 5000;     // pause on the fully-typed state
+  const CHAR_MS = 14;       // typing speed per visible character
+  const LINE_PAUSE_MS = 90; // brief pause between lines, feels more natural
+
+  // Reveals `count` visible characters of an HTML string, keeping all tags whole/valid.
+  function revealVisibleChars(html, count) {
+    let out = '';
+    let visible = 0;
+    let i = 0;
+    const openTags = [];
+    while (i < html.length && visible < count) {
+      if (html[i] === '<') {
+        const close = html.indexOf('>', i);
+        if (close === -1) break;
+        const tag = html.slice(i, close + 1);
+        out += tag;
+        const isClosing = tag[1] === '/';
+        const isSelfClosing = /\/>$/.test(tag);
+        if (!isClosing && !isSelfClosing) {
+          const tagName = tag.match(/^<([a-zA-Z0-9]+)/);
+          if (tagName) openTags.push(tagName[1]);
+        } else if (isClosing) {
+          openTags.pop();
+        }
+        i = close + 1;
+        continue;
+      }
+      if (html[i] === '&') {
+        // step over HTML entities (e.g. &nbsp;) as a single visible character
+        const semi = html.indexOf(';', i);
+        if (semi !== -1 && semi - i < 8) {
+          out += html.slice(i, semi + 1);
+          visible++;
+          i = semi + 1;
+          continue;
+        }
+      }
+      out += html[i];
+      visible++;
+      i++;
+    }
+    // Close any tags that were left open so the fragment is always valid markup.
+    for (let t = openTags.length - 1; t >= 0; t--) out += `</${openTags[t]}>`;
+    return out;
+  }
+
+  function countVisible(html) {
+    return html.replace(/<[^>]*>/g, '').replace(/&[a-zA-Z]+;/g, '_').length;
+  }
+
+  let generation = 0;
+  box.dataset.typing = '1';
+
+  async function typeOnce(myGen) {
+    box.innerHTML = '';
+    for (let li = 0; li < lines.length; li++) {
+      if (myGen !== generation) return;
+      const { ln, ct } = lines[li];
+      const total = countVisible(ct);
+      const lineDiv = document.createElement('div');
+      lineDiv.className = 'cl';
+      lineDiv.innerHTML = ln + '<span class="ct"></span>';
+      box.appendChild(lineDiv);
+      const ctSpan = lineDiv.querySelector('.ct');
+      for (let c = 1; c <= total; c++) {
+        if (myGen !== generation) return;
+        ctSpan.innerHTML = revealVisibleChars(ct, c) + '<span class="typed-cursor-el">█</span>';
+        await new Promise(r => setTimeout(r, CHAR_MS));
+      }
+      ctSpan.innerHTML = ct; // remove the live cursor once the line is fully typed; final line keeps its own cursor span
+      await new Promise(r => setTimeout(r, LINE_PAUSE_MS));
+    }
+    if (myGen !== generation) return;
+    await new Promise(r => setTimeout(r, HOLD_MS));
+    if (myGen !== generation) return;
+    typeOnce(myGen);
+  }
+
+  typeOnce(generation);
+
+  // Pause the loop when the tab isn't visible (saves work), resume cleanly on return.
+  // Bumping `generation` invalidates any in-flight loop instantly, even mid-await,
+  // so hidden/visible toggles can never run two typing loops concurrently.
+  document.addEventListener('visibilitychange', () => {
+    generation++;
+    if (!document.hidden) {
+      typeOnce(generation);
+    }
+  });
+}
