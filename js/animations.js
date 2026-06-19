@@ -54,10 +54,15 @@ document.addEventListener('DOMContentLoaded', () => {
   initHeroCanvas();
   initHeroH1();
   initScrollAnimations();
+  initHeroMotion();
   initAboutTilt();
   initExperienceTimeline();
   initSkillTabs();
   initWorkflowRibbonCycle();
+  initMagneticButtons();
+  initSpotlightCards('.pc');
+  initCardTilt('.pc', { strength: 5 });
+  initCardTilt('.sk', { strength: 4 });
 });
 
 /* ── HERO CANVAS ── */
@@ -297,4 +302,132 @@ function initWorkflowRibbonCycle() {
   });
 }
 
+/* ── HERO MOTION SENSITIVITY ──
+   Mouse-driven parallax on the background glow blobs + a gentle 3D tilt on the
+   code card, mirroring the same proven technique already used for the About
+   photo tilt (initAboutTilt). Desktop-only via hover-capable check; respects
+   prefers-reduced-motion. transform-only, so it's GPU-cheap and never
+   triggers layout/reflow. */
+function initHeroMotion() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return; // skip on touch devices
+
+  const wrap = document.querySelector('.hero-wrap');
+  const bg = document.querySelector('.hbg-el');
+  const card = document.querySelector('.hero-right .cc-tilt');
+  const spotlight = document.querySelector('.hero-spotlight');
+  if (!wrap) return;
+
+  let rafId = null;
+  let targetX = 0, targetY = 0, curX = 0, curY = 0;
+
+  function loop() {
+    // ease toward the target position for a smooth, springy follow rather than 1:1 snapping
+    curX += (targetX - curX) * 0.08;
+    curY += (targetY - curY) * 0.08;
+    if (bg) bg.style.transform = `translate3d(${curX * 22}px, ${curY * 16}px, 0)`;
+    if (card) {
+      card.style.transform = `perspective(900px) rotateY(${curX * 4}deg) rotateX(${-curY * 4}deg)`;
+    }
+    rafId = requestAnimationFrame(loop);
+  }
+
+  wrap.addEventListener('mousemove', e => {
+    const r = wrap.getBoundingClientRect();
+    targetX = ((e.clientX - r.left) / r.width - 0.5) * 2;   // -1 .. 1
+    targetY = ((e.clientY - r.top) / r.height - 0.5) * 2;   // -1 .. 1
+    if (spotlight) {
+      spotlight.style.setProperty('--sx', `${((e.clientX - r.left) / r.width) * 100}%`);
+      spotlight.style.setProperty('--sy', `${((e.clientY - r.top) / r.height) * 100}%`);
+    }
+    if (!rafId) rafId = requestAnimationFrame(loop);
+  });
+
+  wrap.addEventListener('mouseleave', () => {
+    targetX = 0; targetY = 0;
+    // let the easing loop carry it back to rest, then stop the loop once settled
+    const settle = setInterval(() => {
+      if (Math.abs(curX) < 0.01 && Math.abs(curY) < 0.01) {
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+        if (bg) bg.style.transform = '';
+        if (card) card.style.transform = '';
+        clearInterval(settle);
+      }
+    }, 100);
+  });
+}
+
 window.addEventListener('scroll',()=>{},{passive:true});
+
+/* ── MAGNETIC BUTTONS ──
+   Premium SaaS-style hover: primary/secondary CTAs subtly pull toward the
+   cursor within their bounds, then spring back on leave. Desktop-only,
+   transform-only (translate), respects prefers-reduced-motion.
+   Composes with each button's existing CSS :hover lift (set via inline
+   style here, which would otherwise override and cancel that lift since
+   inline styles win over stylesheet rules) so the lift is preserved. */
+function initMagneticButtons() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+  const targets = document.querySelectorAll('.bf, .bo, .ncta');
+  targets.forEach(btn => {
+    // Match each button class's own CSS :hover translateY lift, so the magnetic
+    // pull adds to it instead of silently replacing it via inline-style precedence.
+    const liftY = btn.classList.contains('bf') ? -2 : -1; // .bf lifts -2px, .bo/.ncta lift -1px
+    let raf = null;
+    btn.addEventListener('mousemove', e => {
+      const r = btn.getBoundingClientRect();
+      const x = (e.clientX - r.left - r.width / 2) * 0.25;
+      const y = (e.clientY - r.top - r.height / 2) * 0.35;
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        btn.style.transform = `translate(${x}px, ${liftY + y}px)`;
+      });
+    });
+    btn.addEventListener('mouseleave', () => {
+      if (raf) cancelAnimationFrame(raf);
+      btn.style.transform = '';
+    });
+  });
+}
+
+/* ── SPOTLIGHT-FOLLOWS-CURSOR (project cards) ──
+   Sets --mx/--my CSS custom properties used by the .pc::after radial-gradient
+   glow defined in CSS. Cheap (no rAF needed — just two property writes). */
+function initSpotlightCards(selector) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+  document.querySelectorAll(selector).forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty('--mx', `${e.clientX - r.left}px`);
+      card.style.setProperty('--my', `${e.clientY - r.top}px`);
+    });
+  });
+}
+/* ── 3D TILT ON HOVER (project + skill cards) ──
+   Subtle perspective tilt that follows cursor position within each card,
+   the same premium-SaaS pattern as the hero code-card tilt. Desktop-only,
+   GPU-cheap (transform only), respects prefers-reduced-motion. */
+function initCardTilt(selector, opts) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+  const strength = (opts && opts.strength) || 6;
+  const cards = document.querySelectorAll(selector);
+  cards.forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      card.style.setProperty('--tiltX', `${-y * strength}deg`);
+      card.style.setProperty('--tiltY', `${x * strength}deg`);
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.setProperty('--tiltX', '0deg');
+      card.style.setProperty('--tiltY', '0deg');
+    });
+  });
+}
