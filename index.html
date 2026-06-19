@@ -29,6 +29,7 @@
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/animations.css">
 <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/enhance.css">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -114,10 +115,12 @@
   <div class="hbg-el"></div>
   <div class="hdots"></div>
   <div class="hlines"></div>
+  <div class="hero-particles" aria-hidden="true"></div>
+  <div class="hero-spotlight" aria-hidden="true"></div>
   <div class="hero-inner">
     <div>
       <div class="h-eye">Welcome to my Universe</div>
-      <h1 class="h1">Crafting<br><span class="hl">Search &amp; Systems</span><br><span class="hl2">Intelligence</span></h1>
+      <h1 class="h1"><span class="hl3">Crafting</span><br><span class="hl">Search &amp; Systems</span><br><span class="hl2">Intelligence</span></h1>
       <p class="h-sub">I'm Arun Agarwal — <strong>ELK Stack Developer</strong> at 8Bit System Pvt Ltd, building toward <strong>AI Integration Engineering</strong>. 4+ years across Amazon FBA SEO, technical SEO, and now Elasticsearch + Python backend.</p>
       <div class="soc-row">
         <a href="https://github.com/arun-agarwal" target="_blank" class="sb" title="GitHub"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" style="color:var(--ink)"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg></a>
@@ -138,8 +141,9 @@
     </div>
     <div class="hero-right">
       <div class="cc">
+        <div class="cc-tilt">
         <div class="cc-hdr"><div class="cc-dots"><span></span><span></span><span></span></div><div class="cc-f">Portfolio.ts</div><div style="width:50px"></div></div>
-        <div class="cc-b">
+        <div class="cc-b" id="cc-typewriter">
           <div class="cl"><span class="ln">01</span><span class="ct"><span class="ck">const</span> <span class="cv">engineer</span> = {</span></div>
           <div class="cl"><span class="ln">02</span><span class="ct">&nbsp;&nbsp;<span class="cp">name:</span> <span class="cs">'Arun Agarwal'</span>,</span></div>
           <div class="cl"><span class="ln">03</span><span class="ct">&nbsp;&nbsp;<span class="cp">current:</span> <span class="cs">'ELK Stack Dev'</span>,</span></div>
@@ -149,6 +153,7 @@
           <div class="cl"><span class="ln">07</span><span class="ct">&nbsp;&nbsp;<span class="cp">motto:</span> <span class="cs">"Grow in Public"</span></span></div>
           <div class="cl"><span class="ln">08</span><span class="ct">};</span></div>
           <div class="cl"><span class="ln">09</span><span class="ct"><span class="cv">engineer</span>.<span class="cf">showcase</span>();<span class="typed-cursor-el">█</span></span></div>
+        </div>
         </div>
       </div>
       <div class="hms">
@@ -458,30 +463,36 @@
         </div>
       </div>
 
-      <!-- LLM / AI featured first (most relevant to goal) -->
-      <div class="proj-section-head rv"><div class="proj-sec-title">LLM &amp; AI Integration <span>— Primary Focus</span></div></div>
-      <div class="proj-grid-2 stagger rv">
-        <article class="pc featured">
-          <div class="pc-vis ai-vis"><span class="pc-ic">🤖</span><div class="pc-vn">SEO Brief Generator</div></div>
+      <!-- Core Python first, then API, then LLM/RAG -->
+      <div class="proj-section-head rv"><div class="proj-sec-title">Core Python <span>— Backend</span></div></div>
+      <div class="proj-grid-3 stagger rv">
+        <article class="pc">
+          <div class="pc-vis"><span class="pc-ic">⚡</span><div class="pc-vn">SEO Audit Health Checker</div></div>
           <div class="pc-body">
-            <div class="pc-phase">Phase 03 · LLM</div>
-            <div class="pc-name">LLM-Powered SEO Content Brief Generator</div>
-            <div class="pc-desc">Keyword + URL → LLM API → structured content brief: intent analysis, heading outline, word count, meta copy, semantic keywords.</div>
-            <div class="pc-tech"><div class="pc-tl">Stack</div><div class="pc-td">OpenAI/Anthropic SDK · few-shot prompt template · JSON-mode output · FastAPI · python-dotenv</div></div>
-            <div class="pc-hls"><div class="pc-hl">JSON-mode — machine-parseable structured output</div><div class="pc-hl">SEO expertise makes prompts genuinely useful</div></div>
-            <div class="pc-tags"><span class="pc-tag">LLM API</span><span class="pc-tag">OpenAI SDK</span><span class="pc-tag">FastAPI</span><span class="pc-tag">Prompt Eng.</span></div>
-            <div class="pc-links"><a href="https://github.com/arun-agarwal" target="_blank" class="pcl s">GitHub →</a><a href="#" class="pcl g">Demo →</a></div>
+            <div class="pc-phase">Phase 01 · Core Python</div>
+            <div class="pc-name">SEO Audit Health Checker</div>
+            <div class="pc-desc">Crawls URLs and checks on-page SEO factors: missing meta tags, broken links, HTTP status codes, heading structure, and canonical issues. Outputs actionable audit reports for technical SEO fixes.</div>
+            <div class="pc-tags"><span class="pc-tag">FastAPI</span><span class="pc-tag"> HTTP requests</span><span class="pc-tag">uvicorn</span><span class="pc-tag">REST</span></div>
+            <div class="pc-links"><a href="https://github.com/arun-agarwal" target="_blank" class="pcl s">GitHub →</a></div>
           </div>
         </article>
-        <article class="pc featured">
-          <div class="pc-vis ai-vis"><span class="pc-ic">📄</span><div class="pc-vn">RAG Prototype</div></div>
+        <article class="pc">
+          <div class="pc-vis"><span class="pc-ic">🔗</span><div class="pc-vn">Password Entropy Calculator</div></div>
           <div class="pc-body">
-            <div class="pc-phase">Phase 03 · RAG</div>
-            <div class="pc-name">Document Q&amp;A — RAG Prototype</div>
-            <div class="pc-desc">Upload text document → ask natural language questions. RAG from scratch: chunk → embed → cosine similarity → LLM answer (streaming).</div>
-            <div class="pc-tech"><div class="pc-tl">Stack</div><div class="pc-td">Python · OpenAI Embeddings API · numpy cosine similarity · context injection · SSE streaming</div></div>
-            <div class="pc-hls"><div class="pc-hl">RAG built manually — understands the mechanism</div><div class="pc-hl">Cosine similarity from scratch via numpy</div></div>
-            <div class="pc-tags"><span class="pc-tag">RAG</span><span class="pc-tag">Embeddings</span><span class="pc-tag">numpy</span><span class="pc-tag">SSE</span></div>
+            <div class="pc-phase">Phase 01 · Core Python</div>
+            <div class="pc-name">Password Entropy Calculator</div>
+            <div class="pc-desc">Calculates password strength using Shannon entropy formula based on character set size and password length. Provides security ratings and improvement suggestions per NIST guidelines.</div>
+            <div class="pc-tags"><span class="pc-tag">Python</span><span class="pc-tag">requests</span><span class="pc-tag">concurrency</span><span class="pc-tag">HTTP</span></div>
+            <div class="pc-links"><a href="https://github.com/ArunAgarwal-aiplatform/password-entropy-calculator" target="_blank" class="pcl s">GitHub →</a></div>
+          </div>
+        </article>
+        <article class="pc">
+          <div class="pc-vis"><span class="pc-ic">🌤️</span><div class="pc-vn">Loan Amortization Revealer</div></div>
+          <div class="pc-body">
+            <div class="pc-phase">Phase 01 · Core Python</div>
+            <div class="pc-name">Loan Amortization Revealer</div>
+            <div class="pc-desc">Generates complete loan amortization schedules showing monthly payments, principal vs. interest breakdown, and remaining balance over time. Supports different loan terms and interest rates.</div>
+            <div class="pc-tags"><span class="pc-tag">Python</span><span class="pc-tag">requests</span><span class="pc-tag">dotenv</span><span class="pc-tag">CLI</span></div>
             <div class="pc-links"><a href="https://github.com/arun-agarwal" target="_blank" class="pcl s">GitHub →</a></div>
           </div>
         </article>
@@ -521,38 +532,29 @@
         </article>
       </div>
 
-
-
-
-      <div class="proj-section-head rv" style="margin-top:2rem"><div class="proj-sec-title">Core Python <span>— Backend</span></div></div>
-      <div class="proj-grid-3 stagger rv">
-        <article class="pc">
-          <div class="pc-vis"><span class="pc-ic">⚡</span><div class="pc-vn">SEO Audit Health Checker</div></div>
+      <div class="proj-section-head rv" style="margin-top:2rem"><div class="proj-sec-title">LLM &amp; AI Integration <span>— Primary Focus</span></div></div>
+      <div class="proj-grid-2 stagger rv">
+        <article class="pc featured">
+          <div class="pc-vis ai-vis"><span class="pc-ic">🤖</span><div class="pc-vn">SEO Brief Generator</div></div>
           <div class="pc-body">
-            <div class="pc-phase">Phase 01 · Core Python</div>
-            <div class="pc-name">SEO Audit Health Checker</div>
-            <div class="pc-desc">Crawls URLs and checks on-page SEO factors: missing meta tags, broken links, HTTP status codes, heading structure, and canonical issues. Outputs actionable audit reports for technical SEO fixes.</div>
-            <div class="pc-tags"><span class="pc-tag">FastAPI</span><span class="pc-tag"> HTTP requests</span><span class="pc-tag">uvicorn</span><span class="pc-tag">REST</span></div>
-            <div class="pc-links"><a href="https://github.com/arun-agarwal" target="_blank" class="pcl s">GitHub →</a></div>
+            <div class="pc-phase">Phase 03 · LLM</div>
+            <div class="pc-name">LLM-Powered SEO Content Brief Generator</div>
+            <div class="pc-desc">Keyword + URL → LLM API → structured content brief: intent analysis, heading outline, word count, meta copy, semantic keywords.</div>
+            <div class="pc-tech"><div class="pc-tl">Stack</div><div class="pc-td">OpenAI/Anthropic SDK · few-shot prompt template · JSON-mode output · FastAPI · python-dotenv</div></div>
+            <div class="pc-hls"><div class="pc-hl">JSON-mode — machine-parseable structured output</div><div class="pc-hl">SEO expertise makes prompts genuinely useful</div></div>
+            <div class="pc-tags"><span class="pc-tag">LLM API</span><span class="pc-tag">OpenAI SDK</span><span class="pc-tag">FastAPI</span><span class="pc-tag">Prompt Eng.</span></div>
+            <div class="pc-links"><a href="https://github.com/arun-agarwal" target="_blank" class="pcl s">GitHub →</a><a href="#" class="pcl g">Demo →</a></div>
           </div>
         </article>
-        <article class="pc">
-          <div class="pc-vis"><span class="pc-ic">🔗</span><div class="pc-vn">Password Entropy Calculator</div></div>
+        <article class="pc featured">
+          <div class="pc-vis ai-vis"><span class="pc-ic">📄</span><div class="pc-vn">RAG Prototype</div></div>
           <div class="pc-body">
-            <div class="pc-phase">Phase 01 · Core Python</div>
-            <div class="pc-name">Password Entropy Calculator</div>
-            <div class="pc-desc">Calculates password strength using Shannon entropy formula based on character set size and password length. Provides security ratings and improvement suggestions per NIST guidelines.</div>
-            <div class="pc-tags"><span class="pc-tag">Python</span><span class="pc-tag">requests</span><span class="pc-tag">concurrency</span><span class="pc-tag">HTTP</span></div>
-            <div class="pc-links"><a href="https://github.com/ArunAgarwal-aiplatform/password-entropy-calculator" target="_blank" class="pcl s">GitHub →</a></div>
-          </div>
-        </article>
-        <article class="pc">
-          <div class="pc-vis"><span class="pc-ic">🌤️</span><div class="pc-vn">Loan Amortization Revealer</div></div>
-          <div class="pc-body">
-            <div class="pc-phase">Phase 01 · Core Python</div>
-            <div class="pc-name">Loan Amortization Revealer</div>
-            <div class="pc-desc">Generates complete loan amortization schedules showing monthly payments, principal vs. interest breakdown, and remaining balance over time. Supports different loan terms and interest rates.</div>
-            <div class="pc-tags"><span class="pc-tag">Python</span><span class="pc-tag">requests</span><span class="pc-tag">dotenv</span><span class="pc-tag">CLI</span></div>
+            <div class="pc-phase">Phase 03 · RAG</div>
+            <div class="pc-name">Document Q&amp;A — RAG Prototype</div>
+            <div class="pc-desc">Upload text document → ask natural language questions. RAG from scratch: chunk → embed → cosine similarity → LLM answer (streaming).</div>
+            <div class="pc-tech"><div class="pc-tl">Stack</div><div class="pc-td">Python · OpenAI Embeddings API · numpy cosine similarity · context injection · SSE streaming</div></div>
+            <div class="pc-hls"><div class="pc-hl">RAG built manually — understands the mechanism</div><div class="pc-hl">Cosine similarity from scratch via numpy</div></div>
+            <div class="pc-tags"><span class="pc-tag">RAG</span><span class="pc-tag">Embeddings</span><span class="pc-tag">numpy</span><span class="pc-tag">SSE</span></div>
             <div class="pc-links"><a href="https://github.com/arun-agarwal" target="_blank" class="pcl s">GitHub →</a></div>
           </div>
         </article>
@@ -663,5 +665,6 @@
 
 <script src="js/main.js"></script>
 <script src="js/animations.js"></script>
+  <script src="js/enhance.js"></script>
 </body>
 </html>
