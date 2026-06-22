@@ -357,8 +357,6 @@ function initHeroMotion() {
   });
 }
 
-window.addEventListener('scroll',()=>{},{passive:true});
-
 /* ── MAGNETIC BUTTONS ──
    Premium SaaS-style hover: primary/secondary CTAs subtly pull toward the
    cursor within their bounds, then spring back on leave. Desktop-only,
