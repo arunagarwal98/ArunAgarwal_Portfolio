@@ -1,4 +1,6 @@
-
+/**
+ * SINGLE-PAGE CORE LOGIC
+ */
 const SECTION_IDS = ['home','about','experience','skills','projects','roadmap','contact'];
 
 document.addEventListener('DOMContentLoaded', () => {
