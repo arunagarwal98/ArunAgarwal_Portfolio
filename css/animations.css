@@ -1,20 +1,29 @@
-
+/* ════════════════════════════════════════════════════════════
+   ANIMATIONS.CSS — 2026 AI Motion System
+   3D entrances · scan lines · neural canvas · holographic
+   ════════════════════════════════════════════════════════════ */
 
 /* ── PAGE ENTRY ── */
 @keyframes pageIn{
-  from{opacity:0;filter:blur(4px);transform:translateY(6px)}
+  from{opacity:0;filter:blur(4px);transform:translateY(6px) perspective(1200px) rotateX(1.5deg)}
   to{opacity:1;filter:blur(0);transform:none}
 }
 body{animation:pageIn .7s cubic-bezier(.22,1,.36,1) both}
 
-/* ── SCROLL REVEALS ── */
-.rv{opacity:0;transform:translateY(20px);transition:opacity .58s cubic-bezier(.22,1,.36,1),transform .58s cubic-bezier(.22,1,.36,1)}
+/* ── SCROLL REVEALS — 3D entrance variants ── */
+.rv{opacity:0;transform:translateY(20px);transition:opacity .55s cubic-bezier(.22,1,.36,1),transform .55s cubic-bezier(.22,1,.36,1)}
 .rv.in{opacity:1;transform:none}
-.rv.l{transform:translateX(-22px)}.rv.l.in{transform:none}
-.rv.r{transform:translateX(22px)}.rv.r.in{transform:none}
-.rv.pop{transform:scale(.94) translateY(14px);transition:opacity .52s cubic-bezier(.34,1.56,.64,1),transform .52s cubic-bezier(.34,1.56,.64,1)}
+.rv.l{transform:translateX(-20px) perspective(1000px) rotateY(4deg)}.rv.l.in{transform:none}
+.rv.r{transform:translateX(20px) perspective(1000px) rotateY(-4deg)}.rv.r.in{transform:none}
+.rv.pop{
+  transform:scale(.93) translateY(16px) perspective(1000px) rotateX(5deg);
+  transition:opacity .52s cubic-bezier(.34,1.56,.64,1),transform .52s cubic-bezier(.34,1.56,.64,1);
+}
 .rv.pop.in{transform:none}
-.stagger>*{opacity:0;transform:translateY(16px);transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1)}
+.stagger>*{
+  opacity:0;transform:translateY(16px) perspective(1000px) rotateX(4deg);
+  transition:opacity .5s cubic-bezier(.22,1,.36,1),transform .5s cubic-bezier(.22,1,.36,1);
+}
 .stagger.in>*:nth-child(1){opacity:1;transform:none;transition-delay:.04s}
 .stagger.in>*:nth-child(2){opacity:1;transform:none;transition-delay:.10s}
 .stagger.in>*:nth-child(3){opacity:1;transform:none;transition-delay:.16s}
@@ -22,68 +31,200 @@ body{animation:pageIn .7s cubic-bezier(.22,1,.36,1) both}
 .stagger.in>*:nth-child(5){opacity:1;transform:none;transition-delay:.28s}
 .stagger.in>*:nth-child(6){opacity:1;transform:none;transition-delay:.34s}
 
-/* ── JPATH timeline node stagger ── */
-.jpath.in .jn:nth-child(1){opacity:1;transform:none;transition-delay:.05s}
-.jpath.in .jn:nth-child(2){opacity:1;transform:none;transition-delay:.15s}
-.jpath.in .jn:nth-child(3){opacity:1;transform:none;transition-delay:.25s}
-.jpath.in .jn:nth-child(4){opacity:1;transform:none;transition-delay:.35s}
-.jpath.in .jn:nth-child(5){opacity:1;transform:none;transition-delay:.45s}
+/* ── TIMELINE NODES — 3D fold up ── */
+.jpath.in .jn{opacity:1;transform:none}
+.jpath.in .jn:nth-child(1){transition-delay:.05s}
+.jpath.in .jn:nth-child(2){transition-delay:.15s}
+.jpath.in .jn:nth-child(3){transition-delay:.25s}
+.jpath.in .jn:nth-child(4){transition-delay:.35s}
+.jpath.in .jn:nth-child(5){transition-delay:.45s}
 
-/* ── CODE CARD line pulse ── */
+/* ══════════════════════════════════════════════════
+   NAV ENTRANCE — staggered items drop in
+   ══════════════════════════════════════════════════ */
+#nav .nl li{
+  opacity:0;
+  transform:translateY(-10px) perspective(400px) rotateX(-12deg);
+  animation:navDrop .5s cubic-bezier(.22,1,.36,1) forwards;
+}
+#nav .nl li:nth-child(1){animation-delay:.08s}
+#nav .nl li:nth-child(2){animation-delay:.14s}
+#nav .nl li:nth-child(3){animation-delay:.20s}
+#nav .nl li:nth-child(4){animation-delay:.26s}
+#nav .nl li:nth-child(5){animation-delay:.32s}
+#nav .nl li:nth-child(6){animation-delay:.38s}
+#nav .nl li:nth-child(7){animation-delay:.44s}
+#nav .nl li:nth-child(8){animation-delay:.50s}
+@keyframes navDrop{
+  to{opacity:1;transform:none}
+}
+
+/* Nav CTA entrance */
+#nav .ncta{
+  opacity:0;transform:translateY(-8px) scale(.92);
+  animation:navCtaIn .55s .55s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+@keyframes navCtaIn{to{opacity:1;transform:none}}
+
+/* Logo entrance */
+#nav .logo{
+  opacity:0;transform:perspective(300px) rotateY(-20deg) translateX(-10px);
+  animation:logoIn .65s .02s cubic-bezier(.22,1,.36,1) forwards;
+}
+@keyframes logoIn{to{opacity:1;transform:none}}
+
+/* Scroll progress */
+#scroll-progress{
+  position:fixed;top:0;left:0;z-index:9999;height:2px;width:0%;
+  background:linear-gradient(90deg,var(--blue),#60a5fa,var(--blue));
+  background-size:200% auto;
+  transition:width .12s linear;pointer-events:none;
+  animation:progressShimmer 2s linear infinite;
+}
+@keyframes progressShimmer{0%{background-position:0%}100%{background-position:200%}}
+
+/* ══════════════════════════════════════════════════
+   HERO — 3D WORD ENTRANCE
+   ══════════════════════════════════════════════════ */
+.h1 .hl3,.h1 .hl,.h1 .hl2{
+  display:inline-block;opacity:0;
+  animation:wordZIn .95s cubic-bezier(.22,1,.36,1) both;
+}
+.h1 .hl3{animation-delay:.16s}
+.h1 .hl {animation-delay:.32s}
+.h1 .hl2{animation-delay:.48s}
+@keyframes wordZIn{
+  from{
+    opacity:0;
+    transform:perspective(800px) translateZ(-120px) translateY(24px) rotateX(18deg) scale(.88);
+    filter:blur(10px);
+  }
+  to{opacity:1;transform:none;filter:blur(0)}
+}
+
+/* Hero left elements — staggered 3D rise */
+#home .h-eye,#home .h-sub,#home .soc-row,
+#home .hctas,#home .chips,#home .workflow-ribbon{
+  opacity:0;transform:translateY(20px) perspective(600px) rotateX(8deg);
+  filter:blur(3px);
+  animation:heroElem3D .85s cubic-bezier(.22,1,.36,1) both;
+}
+#home .h-eye          {animation-delay:.06s}
+#home .h-sub          {animation-delay:.50s}
+#home .soc-row        {animation-delay:.62s}
+#home .hctas          {animation-delay:.72s}
+#home .chips          {animation-delay:.82s}
+#home .workflow-ribbon{animation-delay:.92s}
+@keyframes heroElem3D{
+  to{opacity:1;transform:none;filter:blur(0)}
+}
+
+/* Hero right — 3D slide from right + depth */
+#home .hero-right{
+  opacity:0;
+  transform:translateX(30px) perspective(600px) rotateY(-12deg) scale(.96);
+  animation:heroRight3D 1.05s .22s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes heroRight3D{
+  to{opacity:1;transform:none}
+}
+
+/* ── HERO GRID ── */
+.hero-grid{
+  position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle,rgba(26,111,244,.16) 1px,transparent 1px);
+  background-size:38px 38px;
+  opacity:0;animation:gridIn 2s 1s ease forwards;
+}
+@keyframes gridIn{to{opacity:.45}}
+
+/* ── SCAN LINE ── */
+.hero-scan{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.hero-scan::after{
+  content:'';position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(26,111,244,.5),transparent);
+  opacity:0;animation:scanLine 9s 2s ease-in-out infinite;
+}
+@keyframes scanLine{
+  0%{top:0%;opacity:0}5%{opacity:.6}90%{opacity:.2}100%{top:100%;opacity:0}
+}
+
+/* ── STATUS PILL RING ── */
+.sp::before{
+  content:'';position:absolute;inset:-5px;border-radius:50px;
+  border:1.5px solid rgba(22,163,74,.22);
+  animation:statusRing 2.8s ease-in-out infinite;pointer-events:none;
+}
+@keyframes statusRing{0%,100%{opacity:0;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
+
+/* ── CODE CARD — AI scanner ── */
+.cc{position:relative;overflow:hidden}
+.cc::after{
+  content:'';position:absolute;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(26,111,244,.6),transparent);
+  animation:ccScan 6s 3s ease-in-out infinite;pointer-events:none;z-index:20;
+}
+@keyframes ccScan{
+  0%{top:0%;opacity:0}8%{opacity:.8}92%{opacity:.25}100%{top:100%;opacity:0}
+}
+
+/* ── CODE LINE PULSE ── */
 .cl{animation:clPulse 7s ease-in-out infinite}
-.cl:nth-child(2n){animation-delay:.8s}
-.cl:nth-child(3n){animation-delay:1.6s}
+.cl:nth-child(2n){animation-delay:.8s}.cl:nth-child(3n){animation-delay:1.6s}
 @keyframes clPulse{0%,100%{opacity:1}50%{opacity:.72}}
 
-/* ── EYE / DOT PING ── */
-@keyframes eyePulse{0%,100%{box-shadow:0 0 0 0 rgba(26,111,244,0)}50%{box-shadow:0 0 0 8px rgba(26,111,244,.04)}}
-@keyframes dotPing{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.6);opacity:.5}}
+/* ── GRADIENT SHIFT (h1) ── */
+@keyframes gradShift{from{background-position:0%}to{background-position:200%}}
 
-/* ── STATUS PILL dot ── */
-@keyframes spPulse{0%,100%{box-shadow:0 0 0 0 rgba(22,163,74,.4)}50%{box-shadow:0 0 0 5px rgba(22,163,74,0)}}
-
-/* ── GRADIENT SHIFT on .hl ── */
-@keyframes gradientShift{from{background-position:0%}to{background-position:200%}}
-
-/* ── BLOB FLOAT ── */
+/* ── BLOBS ── */
 @keyframes floatBlob1{from{transform:translate(0,0)}to{transform:translate(36px,-28px)}}
 @keyframes floatBlob2{from{transform:translate(0,0)}to{transform:translate(-28px,36px)}}
 
-/* ── SCROLL CUE FLOAT ── */
+/* ── EYE / DOT ── */
+@keyframes eyePulse{0%,100%{box-shadow:0 0 0 0 rgba(26,111,244,0)}50%{box-shadow:0 0 0 8px rgba(26,111,244,.04)}}
+@keyframes dotPing{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.6);opacity:.5}}
+
+/* ── STATUS DOT ── */
+@keyframes spPulse{0%,100%{box-shadow:0 0 0 0 rgba(22,163,74,.4)}50%{box-shadow:0 0 0 5px rgba(22,163,74,0)}}
+
+/* ── BLINK cursor ── */
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ── SCROLL CUE ── */
 @keyframes cueFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
 
-/* ── SKILL ICON BOB ── */
-@keyframes iconBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+/* ── SEPARATOR ── */
+@keyframes sepPulse{0%,100%{opacity:.6}50%{opacity:1}}
 
 /* ── CHIP FLOAT ── */
 @media(prefers-reduced-motion:no-preference){
   .chip{animation:chipFloat 5.5s ease-in-out infinite}
-  .chips .chip:nth-child(1){animation-delay:0s}
-  .chips .chip:nth-child(2){animation-delay:-.8s}
-  .chips .chip:nth-child(3){animation-delay:-1.6s}
-  .chips .chip:nth-child(4){animation-delay:-2.4s}
-  .chips .chip:nth-child(5){animation-delay:-3.2s}
-  .chips .chip:nth-child(6){animation-delay:-4s}
-  .chips .chip:nth-child(7){animation-delay:-4.8s}
-  .chips .chip:nth-child(8){animation-delay:-5.6s}
+  .chips .chip:nth-child(1){animation-delay:0s}.chips .chip:nth-child(2){animation-delay:-.8s}
+  .chips .chip:nth-child(3){animation-delay:-1.6s}.chips .chip:nth-child(4){animation-delay:-2.4s}
+  .chips .chip:nth-child(5){animation-delay:-3.2s}.chips .chip:nth-child(6){animation-delay:-4s}
+  .chips .chip:nth-child(7){animation-delay:-4.8s}.chips .chip:nth-child(8){animation-delay:-5.6s}
   @keyframes chipFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
   .chip:hover{animation-play-state:paused}
 }
 
-/* ── PROFILE FLOAT ── */
+/* ── PHOTO FLOAT + GLOW ── */
 @media(prefers-reduced-motion:no-preference){
   .aph-wrap{animation:photoFloat 7s ease-in-out infinite}
   @keyframes photoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
   .aph-wrap:hover{animation-play-state:paused}
 }
+.aph-wrap::after{
+  content:'';position:absolute;inset:-14px;z-index:-1;border-radius:24px;
+  background:radial-gradient(ellipse at 50% 60%,rgba(26,111,244,.13),transparent 70%);
+  filter:blur(18px);pointer-events:none;
+  animation:photoGlow 6s ease-in-out infinite alternate;
+}
+@keyframes photoGlow{from{opacity:.6;transform:scale(1)}to{opacity:1;transform:scale(1.06)}}
 
-/* ── TICKER ── */
-@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+/* ── ICON BOB ── */
+@keyframes iconBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
 
-/* ── MARQUEE ── */
-@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-
-/* ── CARD FLOAT for featured ── */
+/* ── FEATURED CARD FLOAT ── */
 @media(prefers-reduced-motion:no-preference){
   .pc.featured{animation:cardFloat 7s ease-in-out infinite}
   .pc.featured:nth-child(2){animation-delay:-3.5s}
@@ -91,78 +232,59 @@ body{animation:pageIn .7s cubic-bezier(.22,1,.36,1) both}
   @keyframes cardFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
 }
 
-/* ── ROLE PANEL slide in ── */
+/* ── ROLE PANEL 3D OPEN ── */
 @keyframes rolePanelIn{
-  from{opacity:0;transform:translateY(-12px) scale(.99)}
+  from{opacity:0;transform:perspective(1000px) rotateX(-4deg) translateY(-12px) scale(.99)}
   to  {opacity:1;transform:none}
 }
-.role-panel.open .rp-inner{animation:rolePanelIn .38s cubic-bezier(.22,1,.36,1)}
+.role-panel.open .rp-inner{animation:rolePanelIn .42s cubic-bezier(.2,.8,.4,1)}
 
 /* ── ACTIVE NODE PULSE ── */
-.jn.active .jn-c{animation:activeNodePulse 2.4s ease-in-out infinite}
 @keyframes activeNodePulse{
-  0%,100%{box-shadow:0 0 0 0 rgba(26,111,244,0),0 4px 18px rgba(26,111,244,.42)}
-  50%{box-shadow:0 0 0 9px rgba(26,111,244,.1),0 4px 18px rgba(26,111,244,.42)}
+  0%,100%{box-shadow:0 12px 0 rgba(13,27,62,.2),0 0 0 0 rgba(26,111,244,0),0 20px 32px rgba(26,111,244,.32)}
+  50%{box-shadow:0 12px 0 rgba(13,27,62,.2),0 0 0 9px rgba(26,111,244,.12),0 20px 32px rgba(26,111,244,.32)}
 }
 
-/* ── EEAT shimmer ── */
-.ec::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(120deg,transparent,rgba(255,255,255,.5),transparent);
-  transform:translateX(-120%);transition:transform .55s ease;pointer-events:none;
+/* ── SKILL PANEL 3D ENTER ── */
+@keyframes panelIn{
+  from{opacity:0;transform:perspective(1000px) rotateX(6deg) translateY(10px)}
+  to{opacity:1;transform:none}
 }
+.sk-panel{display:none}
+.sk-panel.active{display:block;animation:panelIn .32s cubic-bezier(.2,.8,.4,1)}
+
+/* ── EEAT SHIMMER ── */
+.ec::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent,rgba(255,255,255,.5),transparent);transform:translateX(-120%);transition:transform .55s ease;pointer-events:none}
 .ec:hover::before{transform:translateX(120%)}
 
-/* ── SEO flow icon ── */
-.si-ic{transition:transform .22s cubic-bezier(.34,1.56,.64,1)}
-.sfs:hover .si-ic{transform:scale(1.18) rotate(-6deg)}
+/* ── SEO FLOW SHIMMER ── */
+.sfs::before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,transparent,rgba(255,255,255,.5),transparent);transform:translateX(-120%);transition:transform .55s ease;pointer-events:none}
+.sfs:hover::before{transform:translateX(120%)}
 
-/* ── ROADMAP top line reveal ── */
-.rm::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2.5px;
-  background:linear-gradient(90deg,var(--blue),#60a5fa);
-  transform:scaleX(0);transform-origin:left;
-  transition:transform .32s cubic-bezier(.22,1,.36,1);
-}
-.rm:hover::before{transform:scaleX(1)}
+/* ── MARQUEE + TICKER ── */
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.sk-marquee:hover .sk-marquee-inner{animation-play-state:paused}
 
-/* ── BLINK cursor ── */
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-
-/* ── GRID FADE IN ── */
-@keyframes gridReveal{to{opacity:.5}}
-
-/* ── HERO word Z ── */
-@keyframes wordZIn{
-  from{opacity:0;transform:translateZ(-70px) translateY(16px) scale(.95);filter:blur(8px)}
-  to  {opacity:1;transform:none;filter:blur(0)}
-}
-
-/* ── HERO elem rise ── */
-@keyframes heroElemRise{to{opacity:1;transform:none;filter:blur(0)}}
-
-/* ── HERO right in ── */
-@keyframes heroRightIn{to{opacity:1;transform:none}}
-
-/* ── STATUS RING ── */
-@keyframes statusRing{0%,100%{opacity:0;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
-
-/* ── SCROLL PROGRESS shimmer ── */
-@keyframes progressShimmer{0%{background-position:0% center}100%{background-position:200% center}}
-
-/* ── BTN SPIN ── */
-@keyframes btnSpin{to{transform:rotate(360deg)}}
-
-/* ── PHOTO AMBIENT ── */
-@keyframes photoAmbient{from{opacity:.6;transform:scale(1)}to{opacity:1;transform:scale(1.05)}}
-
-/* ── PAGE SECTIONS always visible ── */
-.page-section{display:block}
+/* ── WORKFLOW LIT ── */
+.workflow-ribbon span.lit{background:var(--blue)!important;color:#fff!important;transform:translateY(-2px)}
 
 /* ── REDUCED MOTION ── */
 @media(prefers-reduced-motion:reduce){
-  body,.chip,.aph-wrap,.pc.featured,.cl{animation:none!important}
+  body,
+  .h1 .hl3,.h1 .hl,.h1 .hl2,
+  #home .h-eye,#home .h-sub,#home .soc-row,
+  #home .hctas,#home .chips,#home .workflow-ribbon,
+  #home .hero-right,
+  #nav .nl li,#nav .ncta,#nav .logo,
+  .chip,.aph-wrap,.pc.featured,.cl,
+  .hero-grid,.hero-scan::after,.cc::after{
+    animation:none!important;opacity:1!important;
+    transform:none!important;filter:none!important;
+  }
   .rv,.rv.l,.rv.r,.rv.pop{opacity:1!important;transform:none!important}
   .stagger>*{opacity:1!important;transform:none!important}
   .jn{opacity:1!important;transform:none!important}
+  .aph-wrap::after,.sp::before,#scroll-progress{animation:none!important}
+  .pc::before,.pc::after,.sk::before,.ec::before,.sfs::before{display:none}
 }
