@@ -23,7 +23,7 @@ My long-term goal is to become an **AI Integration Engineer**, building backend 
 
 Instead of jumping directly into AI frameworks, I'm building my knowledge layer by layer:
 
-**SEO → ELK Stack → Core Python → Backend APIs → Databases → AI Integrations → RAG → Agentic Systems**
+**SEO → Core Python → ELK Stack → Backend APIs → Databases → AI Integrations → RAG → Agentic Systems**
 
 Every repository, project, and case study represents one step in that journey.
 
