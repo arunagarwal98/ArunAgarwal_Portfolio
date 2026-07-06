@@ -1099,3 +1099,370 @@ body.cursor-hover #cursor-dot{width:4px;height:4px}
   #mouse-glow,#cursor-dot,#cursor-ring{display:none!important}
   .ts-card{opacity:1!important;transform:none!important}
 }
+
+/* ══════════════════════════════════════════
+   SKILLS — upgraded 2026 system
+   ══════════════════════════════════════════ */
+.sk-tab-badge{font-size:.55rem;font-family:var(--fm);padding:.1rem .45rem;border-radius:50px;margin-left:.3rem;font-weight:600}
+.sk-tab.active .sk-tab-badge,.sk-tab:hover .sk-tab-badge{background:rgba(255,255,255,.2);color:#fff}
+.sk-tab .sk-tab-badge{background:rgba(26,111,244,.08);color:var(--blue)}
+.sk-tab .sk-tab-badge.building{background:rgba(41,121,255,.08);color:var(--blue2)}
+.sk-tab .sk-tab-badge.proven{background:rgba(5,150,105,.08);color:#059669}
+.sk-tab .sk-tab-badge.next{background:rgba(124,58,237,.08);color:#7c3aed}
+
+.sk-panel-intro{font-size:.82rem;color:var(--muted);font-weight:300;line-height:1.6;margin-bottom:1.4rem;padding:.75rem 1rem;background:rgba(26,111,244,.04);border-left:2.5px solid var(--blue);border-radius:0 var(--r) var(--r) 0}
+
+/* Bigger logos — 56px icon area, 5-col grid */
+.sk-grid-logo{display:grid;grid-template-columns:repeat(5,1fr);gap:1.1rem}
+.sk-logo-wrap{width:56px;height:56px;display:flex;align-items:center;justify-content:center;transition:transform var(--dur) var(--ease-spring)}
+.sk-logo{width:52px;height:52px;display:block;animation:iconBob 4.5s ease-in-out infinite}
+.sk:hover .sk-logo-wrap{transform:perspective(var(--persp-c)) translateZ(16px) scale(1.12)}
+.sk{padding:1.2rem .9rem;gap:.55rem}
+
+/* Skill metadata line */
+.sk-meta{font-size:.6rem;font-family:var(--fm);color:var(--muted2);text-align:center;line-height:1.3;margin-top:.1rem}
+
+/* AI / next skills — slightly dimmed */
+.sk-next{opacity:.85}
+.sk-next:hover{opacity:1}
+
+/* ══════════════════════════════════════════
+   PROJECTS — status system
+   ══════════════════════════════════════════ */
+
+/* Status legend */
+.proj-legend{display:flex;align-items:center;gap:1.5rem;margin-bottom:2rem;flex-wrap:wrap}
+.proj-legend-item{display:flex;align-items:center;gap:.45rem;font-size:.75rem;font-family:var(--fm);color:var(--muted)}
+.proj-status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.proj-status-dot.live{background:#16a34a;box-shadow:0 0 6px rgba(22,163,74,.5)}
+.proj-status-dot.wip{background:#d97706;box-shadow:0 0 6px rgba(217,119,6,.4)}
+.proj-status-dot.planned{background:var(--muted2);box-shadow:none}
+
+/* Phase header */
+.proj-phase-header{display:flex;align-items:flex-start;flex-direction:column;gap:.4rem;margin:2.5rem 0 1.25rem;padding:1.2rem 1.4rem;background:linear-gradient(135deg,rgba(26,111,244,.04),rgba(248,252,255,.8));border:1.5px solid var(--bdr);border-radius:var(--r2);border-left:3px solid var(--blue);box-shadow:var(--sh);position:relative;overflow:hidden}
+.proj-phase-header::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:linear-gradient(to bottom,var(--blue),#60a5fa);border-radius:0}
+.proj-phase-badge{font-size:.65rem;font-family:var(--fm);font-weight:700;padding:.22rem .75rem;border-radius:50px;letter-spacing:.06em;text-transform:uppercase}
+.proj-phase-badge.done{background:rgba(22,163,74,.1);color:#059669;border:1px solid rgba(22,163,74,.25)}
+.proj-phase-badge.active{background:rgba(26,111,244,.1);color:var(--blue);border:1px solid rgba(26,111,244,.25)}
+.proj-phase-badge.planned{background:rgba(100,116,139,.08);color:var(--muted);border:1px solid rgba(100,116,139,.2)}
+.proj-phase-title{font-family:var(--fd);font-size:1.05rem;font-weight:800;color:var(--ink);margin:0}
+.proj-phase-sub{font-size:.76rem;color:var(--muted);font-weight:300;margin:0}
+
+/* Card status bar — coloured top stripe */
+.pc-status-bar{position:absolute;top:0;left:0;right:0;height:3px;z-index:3}
+.pc-status-bar.live{background:linear-gradient(90deg,#16a34a,#4ade80)}
+.pc-status-bar.wip{background:linear-gradient(90deg,#d97706,#fbbf24)}
+.pc-status-bar.planned{background:linear-gradient(90deg,var(--muted2),rgba(148,163,184,.4))}
+
+/* Status row inside card */
+.pc-status-row{display:flex;align-items:center;gap:.5rem;margin-bottom:.25rem;flex-wrap:wrap}
+.pc-status-chip{font-size:.62rem;font-family:var(--fm);font-weight:700;padding:.18rem .65rem;border-radius:50px;letter-spacing:.04em}
+.pc-status-chip.live{background:rgba(22,163,74,.1);color:#059669;border:1px solid rgba(22,163,74,.25)}
+.pc-status-chip.wip{background:rgba(217,119,6,.1);color:#d97706;border:1px solid rgba(217,119,6,.2)}
+.pc-status-chip.planned{background:rgba(100,116,139,.08);color:var(--muted);border:1px solid rgba(100,116,139,.2)}
+.pc-highlight-chip{font-size:.62rem;font-family:var(--fm);font-weight:700;padding:.18rem .65rem;border-radius:50px;background:rgba(26,111,244,.1);color:var(--blue);border:1px solid rgba(26,111,244,.25)}
+
+/* AI card special vis */
+.pc-ai-badge{position:absolute;top:.6rem;right:.75rem;font-size:.58rem;font-family:var(--fm);font-weight:700;color:#60a5fa;background:rgba(96,165,250,.15);border:1px solid rgba(96,165,250,.25);padding:.15rem .55rem;border-radius:50px;z-index:2}
+
+/* Planned card — dimmed */
+.pc-planned{opacity:.78}
+.pc-planned:hover{opacity:1}
+.pc-vis-dark{background:linear-gradient(145deg,rgba(13,27,62,.92),rgba(26,62,140,.85))!important}
+.pc-vis-dark .pc-vn{color:rgba(255,255,255,.7)}
+
+/* Responsive */
+@media(max-width:1080px){
+  .sk-grid-logo{grid-template-columns:repeat(4,1fr)}
+}
+@media(max-width:768px){
+  .sk-grid-logo{grid-template-columns:repeat(3,1fr)}
+  .proj-legend{gap:1rem}
+}
+@media(max-width:480px){
+  .sk-grid-logo{grid-template-columns:repeat(2,1fr)}
+}
+
+/* ══════════════════════════════════════════
+   SKILLS — enlarged logos, metadata, tab badges
+   ══════════════════════════════════════════ */
+.sk-grid-logo{grid-template-columns:repeat(5,1fr);gap:1.1rem}
+.sk{padding:1.3rem 1rem}
+.sk-logo-wrap{width:56px;height:56px}
+.sk-logo{width:48px;height:48px}
+.sk-n{font-size:.74rem;font-weight:600;margin-top:.1rem}
+.sk-meta{font-size:.6rem;font-family:var(--fm);color:var(--muted2);line-height:1.4;margin-top:.08rem;margin-bottom:.15rem;text-align:center}
+.sk-panel-intro{font-size:.82rem;color:var(--muted);font-weight:300;line-height:1.6;margin-bottom:1.2rem;padding:.75rem 1rem;background:rgba(26,111,244,.04);border-left:2.5px solid var(--blue);border-radius:0 var(--r) var(--r) 0}
+.sk-next{border-style:dashed}
+.sk-next .sk-logo-wrap{opacity:.65}
+.sk-tab-badge{font-size:.55rem;font-family:var(--fm);padding:.1rem .45rem;border-radius:50px;margin-left:.25rem;font-weight:600;letter-spacing:.04em}
+.sk-tab.active .sk-tab-badge,.sk-tab-badge{background:rgba(255,255,255,.2);color:inherit}
+.sk-tab:not(.active) .sk-tab-badge{background:rgba(26,111,244,.1);color:var(--blue)}
+.sk-tab-badge.building{color:#d97706!important;background:rgba(217,119,6,.1)!important}
+.sk-tab-badge.proven{color:#059669!important;background:rgba(5,150,105,.1)!important}
+.sk-tab-badge.next{color:#7c3aed!important;background:rgba(124,58,237,.1)!important}
+
+/* ══════════════════════════════════════════
+   PROJECTS — status system, phase headers, AI cards
+   ══════════════════════════════════════════ */
+
+/* Status bar — top edge of card */
+.pc-status-bar{position:absolute;top:0;left:0;right:0;height:3px;z-index:3}
+.pc-status-bar.live{background:linear-gradient(90deg,#059669,#34d399)}
+.pc-status-bar.wip{background:linear-gradient(90deg,#d97706,#fbbf24)}
+.pc-status-bar.planned{background:linear-gradient(90deg,#6366f1,#a78bfa)}
+
+/* Status row inside card body */
+.pc-status-row{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;margin-bottom:.1rem}
+.pc-status-chip{font-size:.6rem;font-family:var(--fm);font-weight:600;padding:.18rem .6rem;border-radius:50px;letter-spacing:.04em}
+.pc-status-chip.live{color:#059669;background:rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.25)}
+.pc-status-chip.wip{color:#d97706;background:rgba(217,119,6,.1);border:1px solid rgba(217,119,6,.25)}
+.pc-status-chip.planned{color:#6366f1;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.25)}
+.pc-highlight-chip{font-size:.6rem;font-family:var(--fm);font-weight:700;padding:.18rem .65rem;border-radius:50px;color:var(--blue);background:rgba(26,111,244,.1);border:1px solid rgba(26,111,244,.25)}
+
+/* Phase header */
+.proj-phase-header{margin:2.5rem 0 1.1rem;display:flex;flex-direction:column;gap:.3rem;padding-left:1rem;border-left:3px solid var(--blue)}
+.proj-phase-badge{font-size:.65rem;font-family:var(--fm);font-weight:700;letter-spacing:.06em;padding:.2rem .7rem;border-radius:50px;width:fit-content}
+.proj-phase-badge.done{color:#059669;background:rgba(5,150,105,.1);border:1px solid rgba(5,150,105,.25)}
+.proj-phase-badge.active{color:var(--blue);background:rgba(26,111,244,.1);border:1px solid rgba(26,111,244,.25);animation:badgePulse 2.5s ease-in-out infinite}
+@keyframes badgePulse{0%,100%{box-shadow:0 0 0 0 rgba(26,111,244,0)}50%{box-shadow:0 0 0 5px rgba(26,111,244,.08)}}
+.proj-phase-badge.planned{color:#6366f1;background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2)}
+.proj-phase-title{font-family:var(--fd);font-size:1.1rem;font-weight:800;color:var(--ink)}
+.proj-phase-sub{font-size:.76rem;color:var(--muted);font-weight:300}
+
+/* Status legend */
+.proj-legend{display:flex;align-items:center;gap:1.5rem;margin-bottom:2rem;flex-wrap:wrap}
+.proj-legend-item{display:flex;align-items:center;gap:.45rem;font-size:.72rem;font-family:var(--fm);color:var(--muted)}
+.proj-status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.proj-status-dot.live{background:#059669;box-shadow:0 0 6px rgba(5,150,105,.5)}
+.proj-status-dot.wip{background:#d97706;box-shadow:0 0 6px rgba(217,119,6,.4);animation:dotBlink 2s ease-in-out infinite}
+.proj-status-dot.planned{background:#6366f1;opacity:.6}
+@keyframes dotBlink{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* AI card badge */
+.pc-ai-badge{position:absolute;top:.75rem;right:.75rem;font-size:.58rem;font-family:var(--fm);font-weight:700;color:#7ee8a2;background:rgba(74,222,128,.15);border:1px solid rgba(74,222,128,.3);padding:.2rem .6rem;border-radius:50px;z-index:2;letter-spacing:.06em}
+
+/* Planned card — dimmed */
+.pc-planned{opacity:.75}
+.pc-planned:hover{opacity:1}
+.pc-planned .pc-vis{filter:saturate(.5)}
+
+/* Dark vis variant */
+.pc-vis-dark{background:linear-gradient(145deg,rgba(30,41,59,.95),rgba(15,23,42,.9))}
+.pc-vis-dark .pc-vn{color:rgba(255,255,255,.55)}
+
+/* ══════════════════════════════════════════
+   3D SHOWCASE — Visible depth effects
+   All effects use GPU-only transforms
+   ══════════════════════════════════════════ */
+
+/* ── HERO H1 — 3D word entrance visible ── */
+.h1{perspective:900px;perspective-origin:50% 50%}
+
+/* ── NAV — 3D unfold clearly ── */
+.nl a{transform-style:preserve-3d}
+
+/* ── BUTTONS — pressed depth system ── */
+.bf,.bo,.ncta{
+  transform-style:preserve-3d;
+  position:relative;
+}
+/* Physical bottom edge — makes button look 3D like a key */
+.bf::after{
+  content:'';
+  position:absolute;bottom:-4px;left:2px;right:2px;height:4px;
+  background:rgba(13,27,62,.35);
+  border-radius:0 0 8px 8px;
+  transform:translateZ(-1px);
+  transition:height .15s,bottom .15s;
+}
+.bo::after{
+  content:'';
+  position:absolute;bottom:-3px;left:2px;right:2px;height:3px;
+  background:rgba(26,111,244,.2);
+  border-radius:0 0 8px 8px;
+  transition:height .15s,bottom .15s;
+}
+.bf:hover::after{height:6px;bottom:-6px}
+.bf:active::after{height:1px;bottom:-1px}
+.bo:hover::after{height:5px;bottom:-5px}
+.bo:active::after{height:0;bottom:0}
+
+/* ── CARD STACK DEPTH — visible layered shadows ── */
+.pc{
+  box-shadow:
+    /* Bottom face — 3D depth illusion */
+    0 2px 0 0 rgba(26,111,244,.06),
+    0 4px 0 0 rgba(26,111,244,.04),
+    0 6px 0 0 rgba(26,111,244,.02),
+    /* Drop shadow */
+    0 8px 24px rgba(13,27,62,.08);
+  transition:transform .38s cubic-bezier(.2,.8,.4,1),box-shadow .38s cubic-bezier(.2,.8,.4,1),border-color .2s;
+}
+.pc:hover{
+  box-shadow:
+    0 4px 0 0 rgba(26,111,244,.1),
+    0 8px 0 0 rgba(26,111,244,.07),
+    0 12px 0 0 rgba(26,111,244,.04),
+    0 16px 0 0 rgba(26,111,244,.02),
+    0 24px 60px rgba(26,111,244,.22),
+    0 8px 20px rgba(13,27,62,.12);
+}
+
+/* ── SKILL CARDS — neon edge on hover ── */
+.sk{
+  box-shadow:
+    0 3px 0 rgba(13,27,62,.07),
+    0 6px 0 rgba(13,27,62,.03),
+    0 8px 20px rgba(26,111,244,.06);
+}
+.sk:hover{
+  box-shadow:
+    0 8px 0 rgba(13,27,62,.1),
+    0 14px 0 rgba(13,27,62,.04),
+    0 20px 40px rgba(26,111,244,.2),
+    0 0 0 1px rgba(26,111,244,.3),
+    inset 0 1px 0 rgba(255,255,255,.8)!important;
+}
+
+/* ── ROADMAP — 3D lift stack ── */
+.rm{
+  box-shadow:
+    0 3px 0 rgba(13,27,62,.07),
+    0 6px 0 rgba(13,27,62,.03);
+}
+.rm:hover{
+  box-shadow:
+    0 12px 0 rgba(13,27,62,.09),
+    0 20px 0 rgba(13,27,62,.04),
+    0 28px 40px rgba(26,111,244,.16)!important;
+}
+
+/* ── BENTO GRID — physical depth ── */
+.bento{
+  box-shadow:
+    0 3px 0 rgba(13,27,62,.07),
+    0 6px 0 rgba(13,27,62,.03),
+    0 10px 24px rgba(26,111,244,.06);
+}
+.bento:hover{
+  box-shadow:
+    0 10px 0 rgba(13,27,62,.09),
+    0 18px 0 rgba(13,27,62,.04),
+    0 28px 40px rgba(26,111,244,.16)!important;
+}
+
+/* ── ELK SHOWCASE — deepest 3D ── */
+.elk-showcase{
+  box-shadow:
+    0 6px 0 rgba(13,27,62,.45),
+    0 12px 0 rgba(13,27,62,.25),
+    0 18px 0 rgba(13,27,62,.12),
+    0 32px 64px rgba(13,27,62,.3);
+}
+.elk-showcase:hover{
+  box-shadow:
+    0 14px 0 rgba(13,27,62,.4),
+    0 24px 0 rgba(13,27,62,.2),
+    0 32px 0 rgba(13,27,62,.1),
+    0 48px 80px rgba(13,27,62,.35)!important;
+}
+
+/* ── TIMELINE NODES — 3D coin flip on active ── */
+.jn.active .jn-c{
+  animation:coinFlip 1s ease forwards,activeNodePulse 2.4s 1s ease-in-out infinite;
+}
+@keyframes coinFlip{
+  0%{transform:perspective(400px) rotateY(0deg)}
+  50%{transform:perspective(400px) rotateY(90deg) scale(.9)}
+  100%{transform:perspective(400px) rotateY(0deg) translateZ(20px) translateY(-4px)}
+}
+
+/* ── SOCIAL BUTTONS — Y-axis flip ── */
+.sb{transform-style:preserve-3d}
+
+/* ── CHIP HOVER — physical lift ── */
+.chip{
+  box-shadow:0 2px 0 rgba(13,27,62,.12),0 3px 8px rgba(26,111,244,.08);
+}
+.chip:hover{
+  box-shadow:0 6px 0 rgba(13,27,62,.16),0 10px 20px rgba(26,111,244,.24)!important;
+}
+
+/* ── CONTACT LINKS — 3D slide ── */
+.ct-lk:hover{
+  box-shadow:
+    -4px 0 0 var(--blue),
+    0 8px 0 rgba(13,27,62,.06),
+    0 16px 28px rgba(26,111,244,.14)!important;
+}
+
+/* ── FORM INPUTS — depth on focus ── */
+.cf-i:focus{
+  transform:perspective(600px) translateZ(6px)!important;
+  box-shadow:
+    0 0 0 3px rgba(26,111,244,.12),
+    0 4px 0 rgba(13,27,62,.08),
+    0 8px 20px rgba(26,111,244,.1)!important;
+}
+
+/* ── PHASE HEADERS — glowing left bar ── */
+.proj-phase-header{
+  position:relative;
+}
+.proj-phase-header::after{
+  content:'';position:absolute;left:-2px;top:0;bottom:0;width:3px;
+  background:linear-gradient(to bottom,var(--blue),#60a5fa);
+  border-radius:2px;
+  box-shadow:0 0 12px rgba(26,111,244,.5);
+  animation:barGlow 2.5s ease-in-out infinite;
+}
+@keyframes barGlow{
+  0%,100%{box-shadow:0 0 8px rgba(26,111,244,.4)}
+  50%{box-shadow:0 0 18px rgba(26,111,244,.8)}
+}
+
+/* ── SCROLL REVEAL — 3D perspective entrance ── */
+.rv{perspective:1000px}
+.rv.pop{transform-origin:bottom center}
+
+/* ── HOVER TRANSITION TIMING ── */
+.bf:hover,.bo:hover,.ncta:hover{transition-duration:.18s}
+.bf:active,.bo:active,.ncta:active{transition-duration:.08s!important}
+
+/* ══════════════════════════════════════════
+   AI-THEMED DECORATIVE ELEMENTS
+   ══════════════════════════════════════════ */
+
+/* AI gradient accent on section eyebrows */
+.ey::before{
+  background:linear-gradient(90deg,var(--blue),#60a5fa);
+  box-shadow:0 0 10px rgba(26,111,244,.5);
+  animation:eyeBarPulse 3s ease-in-out infinite;
+}
+@keyframes eyeBarPulse{
+  0%,100%{opacity:.7;box-shadow:0 0 6px rgba(26,111,244,.3)}
+  50%{opacity:1;box-shadow:0 0 14px rgba(26,111,244,.7)}
+}
+
+/* AI card corner — futuristic bracket decoration */
+.pc-ai-card::before{
+  content:'';position:absolute;top:8px;left:8px;
+  width:14px;height:14px;
+  border-top:2px solid rgba(96,165,250,.6);
+  border-left:2px solid rgba(96,165,250,.6);
+  z-index:11;border-radius:2px 0 0 0;
+  pointer-events:none;
+}
+.pc-ai-card::after{
+  /* Override spotlight, use corner bracket */
+  content:'';position:absolute;bottom:8px;right:8px;
+  width:14px;height:14px;
+  border-bottom:2px solid rgba(96,165,250,.4);
+  border-right:2px solid rgba(96,165,250,.4);
+  z-index:11;border-radius:0 0 2px 0;
+  pointer-events:none;
+  /* Remove the spotlight gradient for ai cards */
+  background:none!important;
+  inset:auto!important;
+}
