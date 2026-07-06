@@ -1,6 +1,6 @@
 # 👋 Hi, I'm Arun Agarwal
 
-## ELK Stack Developer | Python Backend Developer | Building Toward AI Integration Engineering
+## ELK Stack Developer | Python Backend Scripts | Building Toward AI Integration Engineering
 
 ![Portfolio](https://img.shields.io/badge/Portfolio-Live-success)
 ![ELK Stack](https://img.shields.io/badge/ELK-Developer-005571)
