@@ -1,0 +1,196 @@
+# 👋 Hi, I'm Arun Agarwal
+
+## ELK Stack Developer | Python Backend Developer | Building Toward AI Integration Engineering
+
+![Portfolio](https://img.shields.io/badge/Portfolio-Live-success)
+![ELK Stack](https://img.shields.io/badge/ELK-Developer-005571)
+![Python](https://img.shields.io/badge/Python-Learning-3776AB?logo=python&logoColor=white)
+![Backend](https://img.shields.io/badge/Backend-In%20Progress-009688)
+![License](https://img.shields.io/badge/License-MIT-success)
+
+🌐 **Live Portfolio:**  
+https://itsarunagarwal.vercel.app
+
+---
+
+# 🧭 Why This Portfolio Exists
+
+This portfolio is more than a personal website—it's a public record of my technical journey.
+
+I started my career in **SEO**, where I learned how search engines work and helped businesses improve their online visibility. Today, I work as an **ELK Stack Developer**, building log pipelines, dashboards, and observability solutions.
+
+My long-term goal is to become an **AI Integration Engineer**, building backend systems that connect APIs, databases, retrieval pipelines, and Large Language Models into practical applications.
+
+Instead of jumping directly into AI frameworks, I'm building my knowledge layer by layer:
+
+**SEO → ELK Stack → Core Python → Backend APIs → Databases → AI Integrations → RAG → Agentic Systems**
+
+Every repository, project, and case study represents one step in that journey.
+
+---
+
+# 🚀 What You'll Find Here
+
+This portfolio brings together everything I'm building and learning, including:
+
+- Python projects
+- Backend API projects
+- ELK Stack experience
+- Technical case studies
+- Learning roadmap
+- Resume
+- Project showcase
+- Career timeline
+
+Rather than treating this as a static resume, I continuously update it as I complete new projects and gain new experience.
+
+---
+
+# 🛠️ Built With
+
+- HTML5
+- CSS3
+- JavaScript (Vanilla)
+- Vercel
+
+---
+
+# 📂 Repository Structure
+
+```text
+portfolio/
+
+├── index.html
+├── css/
+│   ├── style.css
+│   ├── animations.css
+│   └── responsive.css
+│
+├── js/
+│   ├── main.js
+│   └── animations.js
+│
+├── assets/
+│   ├── Arun_Agarwal.png
+│   └── Arun_Agarwal_Resume.pdf
+│
+├── case_studies/
+│   ├── amazon-fba-case-study.html
+│   └── frontend-seo-case-study.html
+│
+└── README.md
+```
+
+---
+
+# 🌱 Learning Journey
+
+| Phase | Focus | Status |
+|-------|-------|:------:|
+| Phase 1 | Core Python Foundations | ✅ |
+| Phase 2 | FastAPI & Backend APIs | 🚧 |
+| Phase 3 | SQL & Databases | 🚧 |
+| Phase 4 | AI & LLM API Integrations | ⏳ |
+| Phase 5 | RAG & Agentic Workflows | ⏳ |
+| Phase 6 | Production-ready AI Backend Systems | ⏳ |
+
+---
+
+# 📌 Featured Repositories
+
+### 🐍 Core Python Foundations
+
+Building strong programming fundamentals before using frameworks.
+
+➡️ https://github.com/ArunAgarwal-aiplatform/core-python-for-ai
+
+---
+
+### ⚡ Python APIs + Data + Databases
+
+Learning FastAPI, REST APIs, PostgreSQL, SQLAlchemy, and backend development.
+
+➡️ https://github.com/ArunAgarwal-aiplatform/python-apis-data-databases
+
+---
+
+### 🌐 SEO Audit Health Checker
+
+A Python-based SEO auditing project combining my SEO background with automation.
+
+➡️ https://github.com/ArunAgarwal-aiplatform/seo-audit-health-checker
+
+---
+
+# 💼 Current Focus
+
+Outside of my professional work as an ELK Stack Developer, I'm currently focused on:
+
+- Strengthening Python fundamentals
+- Building REST APIs with FastAPI
+- Working with PostgreSQL and SQLAlchemy
+- Learning backend architecture
+- Preparing for AI and LLM integrations
+- Building projects in public
+
+---
+
+# 🚀 Run Locally
+
+Clone the repository
+
+```bash
+git clone <your-repository-url>
+```
+
+Open the project folder
+
+```bash
+cd portfolio
+```
+
+Run a local server
+
+### Python
+
+```bash
+python -m http.server 8000
+```
+
+### Node.js
+
+```bash
+npx serve .
+```
+
+Open your browser:
+
+```
+http://localhost:8000
+```
+
+---
+
+# 💬 Feedback
+
+This portfolio evolves as I learn.
+
+If you notice a cleaner implementation, better design choice, performance improvement, or a more effective way to structure something, I'd genuinely appreciate your feedback.
+
+Continuous learning is the main purpose of this project.
+
+---
+
+# 📫 Connect
+
+🌐 Portfolio  
+https://itsarunagarwal.vercel.app
+
+🐙 GitHub  
+https://github.com/arunagarwal98
+
+---
+
+⭐ Thank you for visiting my portfolio.
+
+I hope this repository reflects not only what I've built so far, but also the direction I'm intentionally growing toward.
