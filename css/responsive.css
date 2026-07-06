@@ -136,3 +136,16 @@
   .h1{font-size:4.4rem}
   html{font-size:18px}
 }
+
+/* Larger skill grid adjustments */
+@media(max-width:1080px){
+  .sk-grid-logo{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:768px){
+  .sk-grid-logo{grid-template-columns:repeat(2,1fr)}
+  .proj-phase-header{padding-left:.75rem}
+  .proj-legend{gap:1rem}
+}
+@media(min-width:1081px) and (max-width:1280px){
+  .sk-grid-logo{grid-template-columns:repeat(4,1fr)}
+}
