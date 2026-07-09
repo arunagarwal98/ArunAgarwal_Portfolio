@@ -365,28 +365,58 @@ function initWorkflowRibbon() {
 
 /* ── CONTACT FORM ── */
 function initContactForm() {
-  const form = document.querySelector('.cf');
+  const form = document.getElementById('contact-form');
   const btn = document.getElementById('cfb');
   if (!form || !btn) return;
-  form.addEventListener('submit', e => {
+
+  form.addEventListener('submit', async e => {
     e.preventDefault();
+
+    // 3D button press animation
     btn.textContent = 'Sending...';
     btn.classList.add('loading');
     btn.disabled = true;
-    setTimeout(() => {
+
+    const data = new FormData(form);
+
+    try {
+      const res = await fetch('https://formspree.io/f/mnjkkzdk', {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+
+      if (res.ok) {
+        // Success state
+        btn.classList.remove('loading');
+        btn.textContent = 'Sent ✓';
+        btn.style.background = '#059669';
+        btn.style.boxShadow = '0 4px 0 rgba(5,150,105,.35),0 6px 20px rgba(5,150,105,.3)';
+
+        setTimeout(() => {
+          btn.textContent = 'Send Message';
+          btn.style.background = '';
+          btn.style.boxShadow = '';
+          btn.disabled = false;
+          form.reset();
+        }, 3500);
+      } else {
+        throw new Error('Server error');
+      }
+    } catch (err) {
       btn.classList.remove('loading');
-      btn.textContent = 'Sent ✓';
-      btn.style.background = '#059669';
+      btn.textContent = 'Failed — Try Again';
+      btn.style.background = '#dc2626';
+      btn.style.boxShadow = '0 4px 0 rgba(220,38,38,.35)';
+      btn.disabled = false;
       setTimeout(() => {
         btn.textContent = 'Send Message';
         btn.style.background = '';
-        btn.disabled = false;
-        form.reset();
+        btn.style.boxShadow = '';
       }, 3000);
-    }, 1400);
+    }
   });
 }
-function hf(e) { e.preventDefault(); document.querySelector('.cf')?.dispatchEvent(new Event('submit')); }
 
 /* ── KEYBOARD NAV ── */
 function initKeyboardNav() {
