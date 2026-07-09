@@ -1249,15 +1249,19 @@
 >
           <label>
     Name:
-    <input type="name" name="name">
+    <input type="text" name="name" placeholder="Your name" required autocomplete="name">
   </label>
   <label>
     Your email:
-    <input type="email" name="email">
+    <input type="email" name="email" placeholder="Your email" required autocomplete="email">
+  </label>
+        <label>
+    Name:
+    <input type="text" name="Subject" placeholder="AI project · ELK work · SEO audit · Python collab" >
   </label>
   <label>
     Your message:
-    <textarea name="message"></textarea>
+    <textarea name="message" placeholder="What are you working on?" required></textarea> 
   </label>
   <!-- your other form fields go here -->
   <button type="submit">Send</button>
