@@ -79,34 +79,7 @@ function updateScrollVelocity() {
   }
 }
 
-/* ═══════════════════════════════════════════
-   CUSTOM CURSOR
-═══════════════════════════════════════════ */
-function initCustomCursor() {
-  const dot  = document.getElementById('m-cursor-dot');
-  const ring = document.getElementById('m-cursor');
-  if (!dot || !ring) return;
 
-  let mx = -100, my = -100;
-  let rx = -100, ry = -100;
-  let rafId;
-
-  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; }, { passive: true });
-
-  function lerp(a, b, t) { return a + (b - a) * t; }
-
-  function loop() {
-    rx = lerp(rx, mx, 0.12);
-    ry = lerp(ry, my, 0.12);
-
-    dot.style.left  = mx + 'px';
-    dot.style.top   = my + 'px';
-    ring.style.left = rx + 'px';
-    ring.style.top  = ry + 'px';
-
-    rafId = requestAnimationFrame(loop);
-  }
-  rafId = requestAnimationFrame(loop);
 
   // Hover states
   const interactiveSelectors = 'a,button,.bf,.bo,.sb,.pc,.sk,.bento,.rm,.ec,.ct-lk,.pcl,.chip,.ncta,.jn,.otp,.ft-nav a';
