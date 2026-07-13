@@ -3,32 +3,7 @@
    NO colour changes · NO layout changes · pure enhancement
    ════════════════════════════════════════════════════════ */
 
-/* ══ LOADING SCREEN ══ */
-#m-loader{
-  position:fixed;inset:0;z-index:99999;
-  background:var(--ink);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;
-  transition:opacity .6s var(--ease-soft),transform .6s var(--ease-soft);
-}
-#m-loader.out{opacity:0;transform:scale(1.04);pointer-events:none}
-.ml-name{
-  font-family:var(--fd);font-size:clamp(2rem,6vw,4rem);font-weight:800;
-  color:#fff;letter-spacing:-.04em;overflow:hidden;display:flex;gap:.04em;
-}
-.ml-char{
-  display:inline-block;opacity:0;
-  transform:translateY(40px) rotateX(-20deg);
-  transform-origin:bottom;
-  transition:opacity .5s var(--ease-soft),transform .5s var(--ease-soft);
-}
-.ml-char.in{opacity:1;transform:none}
-.ml-bar-wrap{width:min(280px,60vw);height:2px;background:rgba(255,255,255,.1);border-radius:2px;overflow:hidden}
-.ml-bar-fill{height:100%;background:linear-gradient(90deg,var(--blue),#60a5fa);width:0;transition:width .15s linear;border-radius:2px}
-.ml-pct{font-family:var(--fm);font-size:.75rem;color:rgba(255,255,255,.4);letter-spacing:.12em}
-.ml-tag{font-family:var(--fm);font-size:.62rem;color:rgba(255,255,255,.25);letter-spacing:.18em;text-transform:uppercase}
-/* Body hidden until loader done */
-body:not(.loaded) main,body:not(.loaded) footer,body:not(.loaded) #nav{opacity:0}
-body.loaded main,body.loaded footer,body.loaded #nav{opacity:1;transition:opacity .5s .1s ease}
+
 
 /* ══ CUSTOM CURSOR ══ */
 @media(hover:hover) and (pointer:fine){
