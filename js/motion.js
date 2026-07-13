@@ -47,47 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /* ═══════════════════════════════════════════
    LOADING SCREEN
 ═══════════════════════════════════════════ */
-function initLoadingScreen() {
-  // Only show on first visit in session
-  if (sessionStorage.getItem('loaded')) return removeLoader();
 
-  const loader = document.getElementById('m-loader');
-  if (!loader) return;
-
-  const bar  = loader.querySelector('.ml-bar-fill');
-  const pct  = loader.querySelector('.ml-pct');
-  const name = loader.querySelector('.ml-name');
-
-  // Animate name letters
-  if (name) {
-    name.innerHTML = name.textContent.split('').map(c =>
-      c === ' ' ? '<span>&nbsp;</span>' : `<span class="ml-char">${c}</span>`
-    ).join('');
-    name.querySelectorAll('.ml-char').forEach((ch, i) => {
-      ch.style.transitionDelay = `${i * 0.04}s`;
-      setTimeout(() => ch.classList.add('in'), 100 + i * 40);
-    });
-  }
-
-  let p = 0;
-  const tick = setInterval(() => {
-    p += Math.random() * 18 + 4;
-    if (p >= 100) { p = 100; clearInterval(tick); }
-    if (bar)  bar.style.width = p + '%';
-    if (pct)  pct.textContent = Math.round(p) + '%';
-    if (p === 100) setTimeout(removeLoader, 320);
-  }, 80);
-
-  function removeLoader() {
-    if (!loader) { document.body.classList.add('loaded'); sessionStorage.setItem('loaded','1'); return; }
-    loader.classList.add('out');
-    setTimeout(() => {
-      loader.remove();
-      document.body.classList.add('loaded');
-      sessionStorage.setItem('loaded', '1');
-    }, 700);
-  }
-}
 
 /* ═══════════════════════════════════════════
    SMOOTH SCROLL — native Lenis-style damping
