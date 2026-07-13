@@ -20,7 +20,6 @@ const M = {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  initLoadingScreen();
   initSmoothScroll();
   if (!M.reduce) {
     if (M.hover && !M.mobile) {
@@ -44,10 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-/* ═══════════════════════════════════════════
-   LOADING SCREEN
-═══════════════════════════════════════════ */
-
+/* Loading screen removed */
 
 /* ═══════════════════════════════════════════
    SMOOTH SCROLL — native Lenis-style damping
