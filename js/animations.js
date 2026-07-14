@@ -1,918 +1,659 @@
-/**
- * ANIMATIONS.JS — 2026 AI · Neural canvas · 3D tilt · Magnetic
- * Spotlight · Hero parallax · Photo tilt · EC tilt · Particles
- */
-document.addEventListener('DOMContentLoaded', () => {
-  const reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-  const hasHover = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+/* ===== experience-contact-3d.js ===== */
+/* Experience + Contact 3D interactive enhancers.
+   Presentation only. Attaches to existing markup. */
+(function () {
+  const init = () => {
+    /* -------- number chips on experience nodes -------- */
+    document.querySelectorAll('#experience .jn').forEach((n, i) => {
+      const c = n.querySelector('.jn-c');
+      if (c && !c.getAttribute('data-step')) c.setAttribute('data-step', String(i + 1).padStart(2, '0'));
+    });
 
-  initScrollProgress();
-  initHeroCanvas();
-
-  if (!reduce) {
-    injectHeroElements();
-    initHeroParticles();
-    if (hasHover) {
-      initHeroMotion();
-      initMagneticButtons();
-      initCardTilt3D('.pc', 8, 32);
-      initCardTilt3D('.sk', 6, 18);
-      initCardTilt3D('.ec', 6, 14);
-      initCardTilt3D('.rm', 4, 12);
-      initSpotlight('.pc');
-      initAboutPhotoTilt();
+    /* -------- 3D tilt on hover (nodes + contact tiles) -------- */
+    const tilt = (el, max = 10) => {
+      let raf = 0;
+      const onMove = (e) => {
+        const r = el.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width) * 2 - 1;   // -1..1
+        const y = ((e.clientY - r.top) / r.height) * 2 - 1;
+        el.style.setProperty('--mx', ((e.clientX - r.left) / r.width) * 100 + '%');
+        el.style.setProperty('--my', ((e.clientY - r.top) / r.height) * 100 + '%');
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          el.style.setProperty('--rx', (-y * max).toFixed(2) + 'deg');
+          el.style.setProperty('--ry', (x * max).toFixed(2) + 'deg');
+        });
+      };
+      const onLeave = () => {
+        cancelAnimationFrame(raf);
+        el.style.setProperty('--rx', '0deg');
+        el.style.setProperty('--ry', '0deg');
+      };
+      el.addEventListener('pointermove', onMove);
+      el.addEventListener('pointerleave', onLeave);
+    };
+    const isCoarse = matchMedia('(hover:none)').matches;
+    if (!isCoarse) {
+      document.querySelectorAll('#experience .jn').forEach((el) => tilt(el, 8));
+      document.querySelectorAll('#contact .ctq').forEach((el) => tilt(el, 6));
     }
-  }
-});
 
-/* ══════════════════════════════════════════
-   SCROLL PROGRESS
-   ══════════════════════════════════════════ */
-function initScrollProgress() {
-  const bar = document.getElementById('scroll-progress');
-  if (!bar) return;
-  window.addEventListener('scroll', () => {
-    const total = document.documentElement.scrollHeight - window.innerHeight;
-    if (total > 0) bar.style.width = (window.scrollY / total * 100) + '%';
-  }, { passive: true });
-}
+    /* -------- experience: mark active node when role-panel shows -------- */
+    const nodes = document.querySelectorAll('#experience .jn');
+    nodes.forEach((n) =>
+      n.addEventListener('click', () => {
+        nodes.forEach((x) => x.classList.remove('is-active'));
+        n.classList.add('is-active');
+      })
+    );
 
-/* ══════════════════════════════════════════
-   INJECT HERO ELEMENTS (grid + scan + particles)
-   ══════════════════════════════════════════ */
-function injectHeroElements() {
-  const wrap = document.querySelector('.hero-wrap');
-  if (!wrap) return;
-  ['hero-grid', 'hero-scan', 'hero-particles'].forEach(cls => {
-    if (!wrap.querySelector('.' + cls)) {
-      const el = document.createElement('div');
-      el.className = cls;
-      el.setAttribute('aria-hidden', 'true');
-      wrap.appendChild(el);
+    /* -------- contact: ripple + copy feedback -------- */
+    document.querySelectorAll('#contact .ctq').forEach((btn) => {
+      btn.addEventListener('pointerdown', (e) => {
+        const r = btn.getBoundingClientRect();
+        const d = Math.max(r.width, r.height);
+        const s = document.createElement('span');
+        s.className = 'ripple';
+        s.style.width = s.style.height = d + 'px';
+        s.style.left = e.clientX - r.left - d / 2 + 'px';
+        s.style.top = e.clientY - r.top - d / 2 + 'px';
+        btn.appendChild(s);
+        setTimeout(() => s.remove(), 620);
+      });
+      const copyVal = btn.getAttribute('data-copy');
+      if (copyVal) {
+        btn.addEventListener('click', async (e) => {
+          e.preventDefault();
+          try { await navigator.clipboard.writeText(copyVal); } catch {}
+          const label = btn.querySelector('.ctq-t b');
+          const orig = label ? label.textContent : '';
+          btn.classList.add('copied');
+          if (label) label.textContent = 'Copied ✓';
+          setTimeout(() => {
+            btn.classList.remove('copied');
+            if (label) label.textContent = orig;
+          }, 1600);
+        });
+      }
+    });
+
+    /* -------- contact: form field has-value class for floating label look -------- */
+    document.querySelectorAll('#contact .cf-i').forEach((i) => {
+      const wrap = i.closest('.cf-g');
+      const sync = () => wrap && wrap.classList.toggle('has-value', !!i.value.trim());
+      i.addEventListener('input', sync); sync();
+    });
+
+    /* -------- IST live clock (if not already ticking) -------- */
+    const clock = document.getElementById('ct-clock');
+    if (clock && !clock.dataset.ticking) {
+      clock.dataset.ticking = '1';
+      const pad = (n) => String(n).padStart(2, '0');
+      const tick = () => {
+        const d = new Date(Date.now() + 330 * 60000); // IST = UTC+5:30
+        clock.textContent = pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes());
+      };
+      tick(); setInterval(tick, 30000);
     }
-  });
-}
+  };
 
-/* ══════════════════════════════════════════
-   HERO CANVAS — neural graph with 3D parallax depth
-   ══════════════════════════════════════════ */
-function initHeroCanvas() {
-  if (window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
-  const canvas = document.getElementById('hero-canvas');
-  if (!canvas) return;
+  if (document.readyState !== 'loading') init();
+  else document.addEventListener('DOMContentLoaded', init);
+})();
+;
+/* ===== career-icons.js ===== */
+/* Career timeline: swap emoji glyphs with clean inline SVG icons.
+   Runs on load + observes re-renders. Idempotent. */
+(function () {
+  const ICONS = {
+    // Notepad / freelance
+    0: `<svg class="jn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h9a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M6 7H4M6 12H4M6 17H4"/><path d="M10 8h5M10 12h5M10 16h3"/></svg>`,
+    // Box / Amazon FBA
+    1: `<svg class="jn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8 12 3 3 8v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5"/><path d="M12 13v8"/><path d="M7.5 5.5l9 5"/></svg>`,
+    // Globe / Yolk Media
+    2: `<svg class="jn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18z"/></svg>`,
+    // Graduation cap / SabkiShiksha
+    3: `<svg class="jn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/><path d="M22 10v6"/></svg>`,
+    // Magnifier / ELK Dev
+    4: `<svg class="jn-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/><path d="M11 8a3 3 0 0 0-3 3"/></svg>`,
+  };
 
-  const section = document.getElementById('home');
-  const ctx = canvas.getContext('2d');
+  const inject = () => {
+    document.querySelectorAll('#experience .jn').forEach((n) => {
+      const idx = parseInt(n.getAttribute('data-role') || '-1', 10);
+      const disk = n.querySelector('.jn-c');
+      if (!disk || !ICONS[idx]) return;
+      if (disk.querySelector('.jn-ic')) return;
+      // Insert SVG before the emoji span (kept as fallback but hidden via CSS)
+      disk.insertAdjacentHTML('afterbegin', ICONS[idx]);
+    });
+  };
 
-  function resize() {
-    canvas.width = section.offsetWidth;
-    canvas.height = section.offsetHeight;
+  if (document.readyState !== 'loading') inject();
+  else document.addEventListener('DOMContentLoaded', inject);
+  [300, 900, 1800, 3000].forEach((t) => setTimeout(inject, t));
+
+  const arm = () => {
+    const t = document.querySelector('#experience');
+    if (!t) { setTimeout(arm, 500); return; }
+    new MutationObserver(() => inject()).observe(t, { childList: true, subtree: true });
+  };
+  arm();
+})();
+;
+/* ===== career-scroll.js ===== */
+/* Career timeline scroll animator:
+   - Reveals each .jn with staggered layered 3D entry
+   - Drives --jline-p (0..1) on .jpath-line based on scroll progress
+   Presentation only. */
+(function () {
+  function init() {
+    var timeline = document.getElementById('jtimeline');
+    if (!timeline) return;
+    var line = document.getElementById('jline');
+    var nodes = timeline.querySelectorAll('.jn');
+    if (!nodes.length) return;
+
+    // Stagger reveal
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.25, rootMargin: '0px 0px -8% 0px' });
+    nodes.forEach(function (n) { io.observe(n); });
+
+    // Scroll progress on line (0..1 as section crosses viewport)
+    var raf = 0;
+    function update() {
+      var r = timeline.getBoundingClientRect();
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      var start = vh * 0.85;                       // begin when top enters 85%
+      var end = vh * 0.25;                          // finish when top hits 25%
+      var p = (start - r.top) / (start - end);
+      if (p < 0) p = 0; else if (p > 1) p = 1;
+      if (line) line.style.setProperty('--jline-p', p.toFixed(3));
+    }
+    function onScroll() {
+      if (raf) return;
+      raf = requestAnimationFrame(function () { raf = 0; update(); });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+
+    // Safety: after 2.4s force-reveal any node still hidden (avoid empty look)
+    setTimeout(function () {
+      nodes.forEach(function (n) { n.classList.add('in'); });
+      if (line && parseFloat(getComputedStyle(line).getPropertyValue('--jline-p') || '0') < 0.05) {
+        line.style.setProperty('--jline-p', '1');
+      }
+    }, 2400);
   }
-  resize();
 
-  const COUNT = Math.min(52, Math.floor(canvas.width / 22));
-  const MAX = 180;
-  const LAYERS = 3; // depth layers
+  if (document.readyState !== 'loading') init();
+  else document.addEventListener('DOMContentLoaded', init);
+})();
+;
+/* ===== career-carousel.js ===== */
+/* Career carousel:
+   - Snap-scroll horizontal card list
+   - Detects centered card via IntersectionObserver on the track root
+   - Marks that card .is-active and triggers a click so main.js updates
+     the role-panel via its existing initExperienceTimeline() wiring.
+   - Prev/Next arrows + pagination dots + keyboard support.
+   Presentation only.
+*/
+(function () {
+  function init() {
+    var track = document.getElementById('jctrack');
+    if (!track) return;
+    var cards = Array.prototype.slice.call(track.querySelectorAll('.jc-card'));
+    if (!cards.length) return;
+    var dots = Array.prototype.slice.call(document.querySelectorAll('#jcdots .jc-dot'));
+    var arrows = Array.prototype.slice.call(document.querySelectorAll('#experience .jc-arrow'));
+    var activeIdx = -1;
+    var suppressUntil = 0;
 
-  const nodes = Array.from({ length: COUNT }, (_, i) => ({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    vx: (Math.random() - .5) * .32,
-    vy: (Math.random() - .5) * .32,
-    r: Math.random() * 2 + .6,
-    phase: Math.random() * Math.PI * 2,
-    layer: Math.floor(Math.random() * LAYERS), // 0=back,1=mid,2=front
-    variant: Math.random() > .65 ? 1 : 0
-  }));
+    function setActive(i, opts) {
+      opts = opts || {};
+      if (i < 0 || i >= cards.length || i === activeIdx) return;
+      activeIdx = i;
+      cards.forEach(function (c, k) { c.classList.toggle('is-active', k === i); });
+      dots.forEach(function (d, k) { d.classList.toggle('is-active', k === i); });
+      arrows.forEach(function (b) {
+        var dir = parseInt(b.getAttribute('data-jc-dir'), 10);
+        if (dir === -1) b.disabled = (i === 0);
+        if (dir === 1)  b.disabled = (i === cards.length - 1);
+      });
+      // Sync legacy panel logic in main.js by dispatching a click on the card.
+      // main.js listens on `.jn[data-role]` clicks — clicking opens the role
+      // panel. We suppress its side-effect of scrolling the panel into view
+      // by clearing the panel scroll target from happening during passive scroll.
+      if (opts.dispatch !== false) {
+        // Temporarily prevent the click from re-scrolling: main.js only scrolls
+        // when the user *clicks* — a synthetic click still triggers it. So we
+        // simulate via a custom event that main.js does NOT listen for, and
+        // instead directly rebuild the panel using the exposed ROLES data.
+        renderPanel(i);
+      }
+    }
 
-  let t = 0, rafId, running = true;
-  let mx = -9999, my = -9999;
-  let pmx = 0, pmy = 0; // parallax mouse
+    function renderPanel(i) {
+      if (typeof window.buildRolePanel === 'function') {
+        var panel = document.getElementById('role-panel');
+        if (!panel) return;
+        panel.innerHTML = window.buildRolePanel(i);
+        panel.classList.add('open');
+      } else if (window.ROLES && window.ROLES[i]) {
+        // Fallback: main.js not yet loaded. Retry shortly.
+        setTimeout(function () { renderPanel(i); }, 120);
+      } else {
+        // Last-resort: click the underlying node so main.js panel wiring runs.
+        cards[i].click();
+      }
+    }
 
-  canvas.addEventListener('mousemove', e => {
-    const r = canvas.getBoundingClientRect();
-    mx = e.clientX - r.left;
-    my = e.clientY - r.top;
-    pmx = ((e.clientX - r.left) / r.width - .5) * 2;
-    pmy = ((e.clientY - r.top) / r.height - .5) * 2;
-  });
-  canvas.addEventListener('mouseleave', () => { mx = -9999; my = -9999; pmx = 0; pmy = 0; });
+    // Scroll → active-card detection (throttled via rAF)
+    var raf = 0;
+    function detect() {
+      raf = 0;
+      if (Date.now() < suppressUntil) return;
+      var tr = track.getBoundingClientRect();
+      var center = tr.left + tr.width / 2;
+      var best = 0, bestD = Infinity;
+      for (var k = 0; k < cards.length; k++) {
+        var r = cards[k].getBoundingClientRect();
+        var d = Math.abs((r.left + r.width / 2) - center);
+        if (d < bestD) { bestD = d; best = k; }
+      }
+      setActive(best);
+    }
+    function onScroll() { if (!raf) raf = requestAnimationFrame(detect); }
+    track.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
 
-  function draw() {
-    if (!running) return;
-    t += .009;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Snap helper
+    function scrollToIdx(i) {
+      if (i < 0) i = 0; else if (i >= cards.length) i = cards.length - 1;
+      var card = cards[i];
+      var tr = track.getBoundingClientRect();
+      var r = card.getBoundingClientRect();
+      var delta = (r.left + r.width / 2) - (tr.left + tr.width / 2);
+      suppressUntil = Date.now() + 650;
+      track.scrollBy({ left: delta, behavior: 'smooth' });
+      setActive(i);
+    }
 
-    // Parallax offset per layer
-    const layerOffsets = [
-      { x: pmx * 8, y: pmy * 6 },
-      { x: pmx * 16, y: pmy * 12 },
-      { x: pmx * 28, y: pmy * 20 }
+    // Prev / Next buttons
+    arrows.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var dir = parseInt(btn.getAttribute('data-jc-dir'), 10) || 1;
+        scrollToIdx(activeIdx + dir);
+      });
+    });
+
+    // Dots
+    dots.forEach(function (dot, i) {
+      dot.addEventListener('click', function () { scrollToIdx(i); });
+    });
+
+    // Card icons + editorial trading-card chrome
+    var GLYPHS  = ['🔍','📦','🌐','🎓','🚀'];
+    var TAGS    = ['Rare','Popular','Featured','Signature','Current'];
+    var STATS   = [
+      { l:'Clients',  v:'11+' },
+      { l:'ASINs',    v:'50+' },
+      { l:'Verticals',v:'3'   },
+      { l:'Schemas',  v:'4'   },
+      { l:'Stack',    v:'ELK' }
+    ];
+    var LIGHT_CARDS = { 1: true }; // yellow card uses dark text
+    // SVG decoration shapes per card index (halftone rings, X, waves, orange gear, blob)
+    var DECOS = [
+      // 0: concentric rings (Nintendo pop)
+      '<svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="2"><circle cx="140" cy="60" r="80"/><circle cx="140" cy="60" r="60"/><circle cx="140" cy="60" r="40"/><circle cx="140" cy="60" r="20"/></svg>',
+      // 1: diagonal stripes / X (Best Buy)
+      '<svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="3"><path d="M-20 40L200 220M40 -20L220 200M-20 100L200 280M100 -20L280 200"/></svg>',
+      // 2: fluid wave (Seamless Integration)
+      '<svg viewBox="0 0 200 200" fill="currentColor"><path d="M20 60c30-40 70-40 100 0s70 40 100 0v160H20z" opacity=".55"/><path d="M0 110c30-30 70-30 100 10s70 30 100 0v100H0z" opacity=".9"/></svg>',
+      // 3: orbit / crosshair (dark HAPE feel)
+      '<svg viewBox="0 0 200 200" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="150" cy="55" r="70"/><circle cx="150" cy="55" r="4" fill="currentColor"/><path d="M40 55h220M150 -55v220" stroke-dasharray="2 6"/></svg>',
+      // 4: blob wave (Develope card)
+      '<svg viewBox="0 0 200 200" fill="currentColor"><path d="M0 130c40 30 80 -30 120 -10s60 -20 80 -40v120H0z" opacity=".55"/><path d="M0 160c30 -20 90 20 130 0s50 -30 70 -30v70H0z" opacity=".9"/></svg>'
     ];
 
-    nodes.forEach(n => {
-      n.x += n.vx * (1 + n.layer * .2);
-      n.y += n.vy * (1 + n.layer * .2);
-      if (n.x < -20) n.x = canvas.width + 20;
-      if (n.x > canvas.width + 20) n.x = -20;
-      if (n.y < -20) n.y = canvas.height + 20;
-      if (n.y > canvas.height + 20) n.y = -20;
-      // Cursor repel (stronger for front layer)
-      const repelStr = (.2 + n.layer * .1);
-      const dx = n.x - mx, dy = n.y - my, d = Math.hypot(dx, dy);
-      if (d < 90 && d > 0) {
-        const f = (90 - d) / 90 * repelStr;
-        n.x += (dx / d) * f; n.y += (dy / d) * f;
+    cards.forEach(function (card, i) {
+      if (LIGHT_CARDS[i]) card.classList.add('jc-light');
+      // Deco layer
+      if (!card.querySelector('.jc-deco')) {
+        var deco = document.createElement('div');
+        deco.className = 'jc-deco';
+        deco.setAttribute('aria-hidden','true');
+        deco.innerHTML = DECOS[i] || DECOS[0];
+        card.prepend(deco);
+      }
+      // Top strip: tag + eye
+      if (!card.querySelector('.jc-top')) {
+        var top = document.createElement('div');
+        top.className = 'jc-top';
+        top.innerHTML =
+          '<span class="jc-tag">' + (TAGS[i] || 'Chapter') + '</span>' +
+          '<span class="jc-eye" aria-hidden="true">' +
+            '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7"/><path d="M8 7h9v9"/></svg>' +
+          '</span>';
+        card.prepend(top);
+      }
+      // Glyph
+      if (!card.querySelector('.jc-glyph')) {
+        var g = document.createElement('span');
+        g.className = 'jc-glyph';
+        g.setAttribute('aria-hidden','true');
+        g.textContent = GLYPHS[i] || '✦';
+        // Insert after top strip, before date
+        var dateEl = card.querySelector('.jc-date');
+        if (dateEl) card.insertBefore(g, dateEl);
+        else card.appendChild(g);
+        card.classList.add('has-glyph');
+      }
+      // Bottom stat strip
+      if (!card.querySelector('.jc-foot')) {
+        var foot = document.createElement('div');
+        foot.className = 'jc-foot';
+        var s = STATS[i] || { l:'Chapter', v:(i+1) };
+        foot.innerHTML =
+          '<div class="jc-stat"><b>' + s.v + '</b><span>' + s.l + '</span></div>' +
+          '<div class="jc-stat jc-stat-accent" style="margin-left:auto;text-align:right"><b>0' + (i+1) + '/05</b><span>Chapter</span></div>' +
+          '<span class="jc-dot-row" aria-hidden="true"><i></i></span>';
+        card.appendChild(foot);
       }
     });
 
-    // Draw edges (only between same/adjacent layers)
-    for (let i = 0; i < nodes.length; i++) {
-      for (let j = i + 1; j < nodes.length; j++) {
-        if (Math.abs(nodes[i].layer - nodes[j].layer) > 1) continue;
-        const oi = layerOffsets[nodes[i].layer];
-        const oj = layerOffsets[nodes[j].layer];
-        const dx = (nodes[i].x + oi.x) - (nodes[j].x + oj.x);
-        const dy = (nodes[i].y + oi.y) - (nodes[j].y + oj.y);
-        const d = Math.hypot(dx, dy);
-        if (d < MAX) {
-          const avgLayer = (nodes[i].layer + nodes[j].layer) / 2;
-          const alpha = (1 - d / MAX) * (.05 + avgLayer * .04);
-          const col = (nodes[i].variant || nodes[j].variant)
-            ? `rgba(96,165,250,${alpha})` : `rgba(26,111,244,${alpha})`;
-          ctx.beginPath();
-          ctx.strokeStyle = col;
-          ctx.lineWidth = .5 + avgLayer * .3;
-          ctx.moveTo(nodes[i].x + oi.x, nodes[i].y + oi.y);
-          ctx.lineTo(nodes[j].x + oj.x, nodes[j].y + oj.y);
-          ctx.stroke();
-        }
-      }
-    }
+    // Detect touch/coarse pointers — on those, tap should open the modal
+    // (via career-modal.js) rather than being intercepted here for centering.
+    var isTouch = (window.matchMedia && window.matchMedia('(hover: none), (pointer: coarse)').matches);
 
-    // Draw nodes
-    nodes.forEach(n => {
-      const o = layerOffsets[n.layer];
-      const pulse = .35 + .65 * Math.sin(t * (1.2 + n.layer * .2) + n.phase);
-      const scale = .6 + n.layer * .25; // back nodes smaller
-      const col = n.variant ? `rgba(96,165,250,${pulse * (.3 + n.layer * .1)})` : `rgba(26,111,244,${pulse * (.3 + n.layer * .1)})`;
-      ctx.beginPath();
-      ctx.arc(n.x + o.x, n.y + o.y, n.r * scale, 0, Math.PI * 2);
-      ctx.fillStyle = col;
-      ctx.fill();
-      // Halo on front layer
-      if (n.layer === 2 && pulse > .7) {
-        ctx.beginPath();
-        ctx.arc(n.x + o.x, n.y + o.y, n.r * scale * 2.8, 0, Math.PI * 2);
-        ctx.fillStyle = n.variant ? `rgba(96,165,250,${(pulse-.7)*.06})` : `rgba(26,111,244,${(pulse-.7)*.06})`;
-        ctx.fill();
-      }
-    });
-
-    rafId = requestAnimationFrame(draw);
-  }
-
-  requestAnimationFrame(draw);
-  setTimeout(() => { canvas.style.opacity = '1'; }, 600);
-
-  new IntersectionObserver(e => {
-    running = e[0].isIntersecting;
-    if (running) rafId = requestAnimationFrame(draw);
-    else cancelAnimationFrame(rafId);
-  }, { threshold: 0 }).observe(section);
-
-  let rt;
-  window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(resize, 220); }, { passive: true });
-}
-
-/* ══════════════════════════════════════════
-   HERO PARTICLES — layered depth orbs
-   ══════════════════════════════════════════ */
-function initHeroParticles() {
-  const container = document.querySelector('.hero-particles');
-  if (!container) return;
-  const count = window.innerWidth < 768 ? 8 : 18;
-
-  for (let i = 0; i < count; i++) {
-    const orb = document.createElement('div');
-    const layer = Math.floor(Math.random() * 3);
-    const size = (1.5 + layer) + Math.random() * 3;
-    const isBlue = Math.random() > .45;
-    const dur = 10 + Math.random() * 14;
-    const delay = Math.random() * -16;
-    const tx = (Math.random() - .5) * (60 + layer * 30);
-    const ty = (Math.random() - .5) * (50 + layer * 20);
-    const opacity = .15 + layer * .12 + Math.random() * .2;
-    orb.style.cssText = `
-      position:absolute;
-      width:${size}px;height:${size}px;border-radius:50%;
-      left:${Math.random()*100}%;top:${Math.random()*100}%;
-      pointer-events:none;
-      background:${isBlue?'rgba(26,111,244,':'rgba(96,165,250,'}${opacity});
-      --tx:${tx}px;--ty:${ty}px;
-      animation:orbFloat ${dur}s ${delay}s ease-in-out infinite;
-      filter:blur(${layer===0?1:0}px);
-    `;
-    container.appendChild(orb);
-  }
-
-  if (!document.getElementById('orb-kf')) {
-    const s = document.createElement('style');
-    s.id = 'orb-kf';
-    s.textContent = `@keyframes orbFloat{0%,100%{transform:translate(0,0) scale(1);opacity:.6}33%{opacity:.9}50%{transform:translate(var(--tx),var(--ty)) scale(1.12);opacity:.4}66%{opacity:.75}83%{transform:translate(calc(var(--tx)*-.4),calc(var(--ty)*.6)) scale(.88)}}`;
-    document.head.appendChild(s);
-  }
-}
-
-/* ══════════════════════════════════════════
-   HERO PARALLAX + CODE CARD 3D TILT
-   ══════════════════════════════════════════ */
-function initHeroMotion() {
-  const wrap = document.querySelector('.hero-wrap');
-  const bg = document.querySelector('.hbg-el');
-  const card = document.querySelector('.cc-tilt');
-  const grid = document.querySelector('.hero-grid');
-  if (!wrap) return;
-
-  let tx = 0, ty = 0, cx = 0, cy = 0, raf = null;
-
-  function loop() {
-    cx += (tx - cx) * .06;
-    cy += (ty - cy) * .06;
-    if (bg) bg.style.transform = `translate3d(${cx * 22}px,${cy * 15}px,0)`;
-    if (grid) grid.style.transform = `translate3d(${cx * 10}px,${cy * 8}px,0)`;
-    if (card) {
-      card.style.transform = `
-        perspective(900px)
-        rotateY(${cx * 6}deg)
-        rotateX(${-cy * 5}deg)
-        translateZ(${Math.abs(cx) * 8 + Math.abs(cy) * 6}px)
-      `;
-    }
-    raf = requestAnimationFrame(loop);
-  }
-
-  wrap.addEventListener('mousemove', e => {
-    const r = wrap.getBoundingClientRect();
-    tx = ((e.clientX - r.left) / r.width - .5) * 2;
-    ty = ((e.clientY - r.top) / r.height - .5) * 2;
-    if (!raf) raf = requestAnimationFrame(loop);
-    // update spotlight
-    wrap.style.setProperty('--sx', `${(e.clientX - r.left)/r.width*100}%`);
-    wrap.style.setProperty('--sy', `${(e.clientY - r.top)/r.height*100}%`);
-  });
-
-  wrap.addEventListener('mouseleave', () => {
-    tx = 0; ty = 0;
-    const settle = setInterval(() => {
-      if (Math.abs(cx) < .006 && Math.abs(cy) < .006) {
-        cancelAnimationFrame(raf); raf = null;
-        if (bg) bg.style.transform = '';
-        if (grid) grid.style.transform = '';
-        if (card) card.style.transform = '';
-        clearInterval(settle);
-      }
-    }, 80);
-  });
-}
-
-/* ══════════════════════════════════════════
-   ABOUT PHOTO 3D TILT
-   ══════════════════════════════════════════ */
-function initAboutPhotoTilt() {
-  const wrap = document.querySelector('.aph-wrap');
-  const inner = wrap?.querySelector('.aph');
-  if (!wrap || !inner) return;
-
-  let raf = null;
-  let tx = 0, ty = 0, cx = 0, cy = 0;
-
-  function loop() {
-    cx += (tx - cx) * .08;
-    cy += (ty - cy) * .08;
-    inner.style.transform = `perspective(600px) rotateY(${cx * 9}deg) rotateX(${-cy * 9}deg) scale(1.04) translateZ(10px)`;
-    raf = requestAnimationFrame(loop);
-  }
-
-  wrap.addEventListener('mousemove', e => {
-    const r = wrap.getBoundingClientRect();
-    tx = (e.clientX - r.left) / r.width - .5;
-    ty = (e.clientY - r.top) / r.height - .5;
-    if (!raf) raf = requestAnimationFrame(loop);
-  });
-  wrap.addEventListener('mouseleave', () => {
-    tx = 0; ty = 0;
-    const settle = setInterval(() => {
-      if (Math.abs(cx) < .004 && Math.abs(cy) < .004) {
-        cancelAnimationFrame(raf); raf = null;
-        inner.style.transform = '';
-        clearInterval(settle);
-      }
-    }, 80);
-  });
-}
-
-/* ══════════════════════════════════════════
-   GENERIC 3D CARD TILT
-   maxDeg = max rotation, maxTZ = max translateZ
-   ══════════════════════════════════════════ */
-function initCardTilt3D(selector, maxDeg, maxTZ) {
-  document.querySelectorAll(selector).forEach(card => {
-    let raf = null;
-    let tx = 0, ty = 0, cx = 0, cy = 0;
-    let isHover = false;
-
-    function loop() {
-      cx += (tx - cx) * .1;
-      cy += (ty - cy) * .1;
-      const depth = (Math.abs(cx) + Math.abs(cy)) * .5 * maxTZ;
-
-      // Update CSS vars (used by style.css hover rules)
-      card.style.setProperty('--tiltX', `${cy * maxDeg}deg`);
-      card.style.setProperty('--tiltY', `${cx * maxDeg}deg`);
-
-      if (isHover) {
-        raf = requestAnimationFrame(loop);
-      } else if (Math.abs(cx) < .002 && Math.abs(cy) < .002) {
-        card.style.setProperty('--tiltX', '0deg');
-        card.style.setProperty('--tiltY', '0deg');
-        cancelAnimationFrame(raf); raf = null;
-      } else {
-        raf = requestAnimationFrame(loop);
-      }
-    }
-
-    card.addEventListener('mousemove', e => {
-      const r = card.getBoundingClientRect();
-      tx = (e.clientX - r.left) / r.width - .5;
-      ty = (e.clientY - r.top) / r.height - .5;
-      if (!raf) { isHover = true; raf = requestAnimationFrame(loop); }
-    });
-    card.addEventListener('mouseleave', () => {
-      isHover = false;
-      tx = 0; ty = 0;
-      if (!raf) raf = requestAnimationFrame(loop);
-    });
-  });
-}
-
-/* ══════════════════════════════════════════
-   MAGNETIC BUTTONS — spring physics
-   ══════════════════════════════════════════ */
-function initMagneticButtons() {
-  document.querySelectorAll('.bf, .bo, .ncta, .pcl, .sb').forEach(btn => {
-    let raf = null, bx = 0, by = 0, cx = 0, cy = 0, isH = false;
-
-    function loop() {
-      cx += (bx - cx) * .14;
-      cy += (by - cy) * .14;
-      if (Math.abs(cx) > .1 || Math.abs(by) > .1 || isH) {
-        btn.style.setProperty('--mag-x', `${cx}px`);
-        btn.style.setProperty('--mag-y', `${cy}px`);
-        raf = requestAnimationFrame(loop);
-      } else {
-        btn.style.setProperty('--mag-x', '0px');
-        btn.style.setProperty('--mag-y', '0px');
-        cancelAnimationFrame(raf); raf = null;
-      }
-    }
-
-    // Apply magnetic via transform on a wrapper span if needed — simple version: just nudge
-    btn.addEventListener('mousemove', e => {
-      const r = btn.getBoundingClientRect();
-      bx = (e.clientX - r.left - r.width / 2) * .25;
-      by = (e.clientY - r.top - r.height / 2) * .3;
-      isH = true;
-      if (!raf) raf = requestAnimationFrame(loop);
-    });
-    btn.addEventListener('mouseleave', () => {
-      isH = false; bx = 0; by = 0;
-      if (!raf) raf = requestAnimationFrame(loop);
-    });
-  });
-
-  // Apply --mag-x/y to actual transform via a style rule
-  if (!document.getElementById('mag-style')) {
-    const s = document.createElement('style');
-    s.id = 'mag-style';
-    s.textContent = `.bf:hover,.bo:hover,.ncta:hover,.pcl:hover,.sb:hover{--mag-tx:var(--mag-x,0px);--mag-ty:var(--mag-y,0px)}`;
-    document.head.appendChild(s);
-  }
-
-  // Simpler direct approach — just apply transform offset
-  document.querySelectorAll('.bf,.bo,.ncta,.sb').forEach(btn => {
-    btn.addEventListener('mousemove', e => {
-      const r = btn.getBoundingClientRect();
-      const ox = (e.clientX - r.left - r.width/2) * .22;
-      const oy = (e.clientY - r.top - r.height/2) * .28;
-      // Keep existing 3D transform and ADD magnetic offset
-      btn.dataset.magX = ox;
-      btn.dataset.magY = oy;
-    });
-    btn.addEventListener('mouseleave', () => {
-      btn.dataset.magX = 0;
-      btn.dataset.magY = 0;
-    });
-  });
-}
-
-/* ══════════════════════════════════════════
-   CURSOR SPOTLIGHT on project cards
-   ══════════════════════════════════════════ */
-function initSpotlight(selector) {
-  document.querySelectorAll(selector).forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const r = card.getBoundingClientRect();
-      card.style.setProperty('--mx', `${e.clientX - r.left}px`);
-      card.style.setProperty('--my', `${e.clientY - r.top}px`);
-    });
-  });
-}
-
-
-/* ══ PREMIUM EFFECTS (merged from premium.js) ══ */
-
-/* ══════════════════════════════════════════
-   INJECT AURORA + NOISE + GEO
-   ══════════════════════════════════════════ */
-function injectAurora() {
-  if (document.getElementById('aurora-bg')) return;
-  const el = document.createElement('div');
-  el.id = 'aurora-bg';
-  el.innerHTML = `
-    <div class="aurora-blob aurora-blob-1"></div>
-    <div class="aurora-blob aurora-blob-2"></div>
-    <div class="aurora-blob aurora-blob-3"></div>
-  `;
-  document.body.prepend(el);
-}
-
-function injectNoise() {
-  if (document.getElementById('noise-overlay')) return;
-  const el = document.createElement('div');
-  el.id = 'noise-overlay';
-  document.body.prepend(el);
-}
-
-function injectGeoShapes() {
-  if (document.querySelector('.geo-shape')) return;
-  [1, 2, 3].forEach(n => {
-    const el = document.createElement('div');
-    el.className = `geo-shape geo-shape-${n}`;
-    document.body.appendChild(el);
-  });
-}
-
-/* ══════════════════════════════════════════
-   PAGE TRANSITION OVERLAY
-   ══════════════════════════════════════════ */
-function injectPageTransition() {
-  if (document.getElementById('page-transition')) return;
-  const el = document.createElement('div');
-  el.id = 'page-transition';
-  el.innerHTML = `
-    <div class="pt-panel"></div>
-    <div class="pt-logo">Arun<em>.</em></div>
-    <div class="pt-bar"></div>
-  `;
-  document.body.appendChild(el);
-}
-
-function initPageTransitions() {
-  const overlay = document.getElementById('page-transition');
-  if (!overlay) return;
-
-  // Intercept external nav links (case studies)
-  document.querySelectorAll('a[href$=".html"]').forEach(link => {
-    if (link.hostname !== location.hostname) return;
-    link.addEventListener('click', e => {
-      const href = link.href;
-      e.preventDefault();
-      overlay.classList.add('entering');
-      setTimeout(() => {
-        overlay.classList.add('leaving');
-        window.location.href = href;
-      }, 500);
-    });
-  });
-
-  // On page load — reverse transition if coming from within
-  if (document.referrer.includes(location.hostname)) {
-    overlay.classList.add('entering');
-    setTimeout(() => {
-      overlay.classList.remove('entering');
-      overlay.classList.add('leaving');
-      setTimeout(() => overlay.classList.remove('leaving'), 550);
-    }, 200);
-  }
-}
-
-/* ══════════════════════════════════════════
-   MOUSE GLOW
-   ══════════════════════════════════════════ */
-function initMouseGlow() {
-  const glow = document.createElement('div');
-  glow.id = 'mouse-glow';
-  document.body.appendChild(glow);
-
-  let tx = 0, ty = 0, cx = 0, cy = 0, raf = null;
-
-  function loop() {
-    cx += (tx - cx) * .08;
-    cy += (ty - cy) * .08;
-    glow.style.left = cx + 'px';
-    glow.style.top = cy + 'px';
-    raf = requestAnimationFrame(loop);
-  }
-
-  document.addEventListener('mousemove', e => {
-    tx = e.clientX; ty = e.clientY;
-    if (!raf) raf = requestAnimationFrame(loop);
-  }, { passive: true });
-}
-
-/* ══════════════════════════════════════════
-   CURSOR TRAILER
-   ══════════════════════════════════════════ */
-function initCursorTrailer() {
-  const dot = document.createElement('div');
-  dot.id = 'cursor-dot';
-  const ring = document.createElement('div');
-  ring.id = 'cursor-ring';
-  document.body.appendChild(dot);
-  document.body.appendChild(ring);
-
-  let dx = 0, dy = 0, rx = 0, ry = 0, raf;
-
-  document.addEventListener('mousemove', e => {
-    dx = e.clientX; dy = e.clientY;
-    dot.style.left = dx + 'px'; dot.style.top = dy + 'px';
-    if (!raf) raf = requestAnimationFrame(loop);
-  }, { passive: true });
-
-  function loop() {
-    rx += (dx - rx) * .15;
-    ry += (dy - ry) * .15;
-    ring.style.left = rx + 'px';
-    ring.style.top = ry + 'px';
-    raf = requestAnimationFrame(loop);
-  }
-
-  // Hover detection
-  const hoverEls = 'a,button,.bf,.bo,.sb,.pc,.sk,.bento,.ts-card,.ncta,.pcl';
-  document.querySelectorAll(hoverEls).forEach(el => {
-    el.addEventListener('mouseenter', () => document.body.classList.add('cursor-hover'));
-    el.addEventListener('mouseleave', () => document.body.classList.remove('cursor-hover'));
-  });
-}
-
-/* ══════════════════════════════════════════
-   RIPPLE BUTTONS
-   ══════════════════════════════════════════ */
-function initRippleButtons() {
-  document.querySelectorAll('.bf, .bo, .ncta, .cf-btn').forEach(btn => {
-    btn.classList.add('ripple-container');
-    btn.addEventListener('click', e => {
-      const r = btn.getBoundingClientRect();
-      const size = Math.max(r.width, r.height) * 1.5;
-      const wave = document.createElement('span');
-      wave.className = 'ripple-wave';
-      wave.style.cssText = `
-        width:${size}px;height:${size}px;
-        left:${e.clientX - r.left - size/2}px;
-        top:${e.clientY - r.top - size/2}px;
-      `;
-      btn.appendChild(wave);
-      setTimeout(() => wave.remove(), 600);
-    });
-  });
-}
-
-/* ══════════════════════════════════════════
-   TEXT SPLIT REVEAL
-   ══════════════════════════════════════════ */
-function initTextSplitReveal() {
-  const titles = document.querySelectorAll('.stitle, .ts-callout-text');
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.querySelectorAll('.text-split-word').forEach((w, i) => {
-          setTimeout(() => w.classList.add('in'), i * 80);
+    // Card hover / click / keyboard
+    cards.forEach(function (card, i) {
+      // HOVER (desktop only) centers the card and freezes auto-cycle
+      if (!isTouch) {
+        card.addEventListener('mouseenter', function () {
+          isHover = true;
+          if (activeIdx !== i) scrollToIdx(i);
         });
-        obs.unobserve(e.target);
       }
+      card.addEventListener('focusin', function () {
+        isHover = true;
+        if (activeIdx !== i) scrollToIdx(i);
+      });
+      // Do NOT intercept clicks — career-modal.js opens the detail modal.
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') { e.preventDefault(); scrollToIdx(i + 1); cards[Math.min(i+1,cards.length-1)].focus(); }
+        else if (e.key === 'ArrowLeft')  { e.preventDefault(); scrollToIdx(i - 1); cards[Math.max(i-1,0)].focus(); }
+      });
     });
-  }, { threshold: .4 });
 
-  titles.forEach(el => {
-    if (el.dataset.split) return;
-    el.dataset.split = '1';
-    const words = el.innerHTML.split(/(\s+)/);
-    el.innerHTML = words.map(w =>
-      w.trim()
-        ? `<span class="text-split-word"><span class="text-split-inner">${w}</span></span>`
-        : w
-    ).join('');
-    obs.observe(el);
-  });
-}
-
-/* ══════════════════════════════════════════
-   PARALLAX SECTIONS
-   ══════════════════════════════════════════ */
-function initParallaxSections() {
-  const sections = document.querySelectorAll('.page-section');
-  window.addEventListener('scroll', () => {
-    const sy = window.scrollY;
-    sections.forEach(sec => {
-      const r = sec.getBoundingClientRect();
-      if (r.bottom < -100 || r.top > window.innerHeight + 100) return;
-      const progress = (window.innerHeight - r.top) / (window.innerHeight + r.height);
-      const bg = sec.querySelector('.hbg-el');
-      if (bg) bg.style.transform = `translateY(${progress * 20}px)`;
+    // Drag-to-scroll
+    var isDown = false, startX = 0, startLeft = 0;
+    track.addEventListener('pointerdown', function (e) {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      isDown = true; startX = e.clientX; startLeft = track.scrollLeft;
+      track.setPointerCapture && track.setPointerCapture(e.pointerId);
     });
-  }, { passive: true });
-}
+    track.addEventListener('pointermove', function (e) {
+      if (!isDown) return;
+      track.scrollLeft = startLeft - (e.clientX - startX);
+    });
+    function endDrag() { isDown = false; }
+    track.addEventListener('pointerup', endDrag);
+    track.addEventListener('pointercancel', endDrag);
+    track.addEventListener('pointerleave', endDrag);
 
-/* ══════════════════════════════════════════
-   SKILL GLOW SPOTLIGHT
-   ══════════════════════════════════════════ */
-function initSkillGlowSpotlight() {
-  document.querySelectorAll('.sk').forEach(card => {
-    let glow = card.querySelector('.sk-glow');
-    if (!glow) {
-      glow = document.createElement('div');
-      glow.className = 'sk-glow';
-      card.appendChild(glow);
+    // Initial: activate current role card (index 4) once in viewport
+    var section = document.getElementById('experience');
+    var started = false;
+    var autoTimer = 0;
+    var isHover = false;
+
+    function startAuto() {
+      stopAuto();
+      autoTimer = setInterval(function () {
+        if (isHover) return;
+        if (document.body.classList.contains('cm-open')) return; // modal open
+        var next = (activeIdx + 1) % cards.length;
+        scrollToIdx(next);
+      }, 5000);
     }
-    card.addEventListener('mousemove', e => {
-      const r = card.getBoundingClientRect();
-      card.style.setProperty('--mx', `${e.clientX - r.left}px`);
-      card.style.setProperty('--my', `${e.clientY - r.top}px`);
+    function stopAuto() { if (autoTimer) { clearInterval(autoTimer); autoTimer = 0; } }
+
+    // Pause on hover / focus / touch — resume on leave
+    ['mouseenter','focusin','touchstart'].forEach(function (ev) {
+      track.addEventListener(ev, function(){ isHover = true; }, { passive: true });
     });
-  });
-}
-
-/* ══════════════════════════════════════════
-   TECHNOLOGY CONSTELLATION CANVAS
-   ══════════════════════════════════════════ */
-function initConstellationCanvas() {
-  const container = document.getElementById('tech-universe');
-  if (!container) return;
-
-  const canvas = document.createElement('canvas');
-  canvas.style.cssText = 'position:absolute;inset:0;width:100%;height:100%';
-  container.appendChild(canvas);
-
-  const ctx = canvas.getContext('2d');
-  const techs = [
-    { name: 'Elasticsearch', icon: '🔍', color: '#00BFB3', orbit: 120, speed: .4 },
-    { name: 'Logstash', icon: '⚡', color: '#F04E23', orbit: 120, speed: .4 },
-    { name: 'Kibana', icon: '📊', color: '#1a6ff4', orbit: 120, speed: .4 },
-    { name: 'Python', icon: '🐍', color: '#3776AB', orbit: 190, speed: .25 },
-    { name: 'FastAPI', icon: '🚀', color: '#009688', orbit: 190, speed: .25 },
-    { name: 'LangChain', icon: '🔗', color: '#1c3c78', orbit: 190, speed: .25 },
-    { name: 'OpenAI', icon: '🤖', color: '#10a37f', orbit: 190, speed: .25 },
-    { name: 'RAG', icon: '📄', color: '#7c3aed', orbit: 260, speed: .15 },
-    { name: 'Docker', icon: '🐳', color: '#2496ED', orbit: 260, speed: .15 },
-    { name: 'Linux', icon: '🖥️', color: '#555', orbit: 260, speed: .15 },
-    { name: 'Git', icon: '📦', color: '#F05032', orbit: 260, speed: .15 },
-  ];
-
-  // Distribute angles evenly per orbit
-  const orbitGroups = {};
-  techs.forEach(t => {
-    if (!orbitGroups[t.orbit]) orbitGroups[t.orbit] = [];
-    orbitGroups[t.orbit].push(t);
-  });
-  Object.values(orbitGroups).forEach(group => {
-    group.forEach((t, i) => {
-      t.angle = (i / group.length) * Math.PI * 2;
-      t.baseAngle = t.angle;
-    });
-  });
-
-  let W = 0, H = 0, cx = 0, cy = 0;
-  let mouseX = null, mouseY = null;
-  let hoveredTech = null;
-  let rafId, running = true;
-
-  function resize() {
-    const r = container.getBoundingClientRect();
-    W = canvas.width = r.width;
-    H = canvas.height = r.height;
-    cx = W / 2; cy = H / 2;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  canvas.addEventListener('mousemove', e => {
-    const r = canvas.getBoundingClientRect();
-    mouseX = e.clientX - r.left;
-    mouseY = e.clientY - r.top;
-  });
-  canvas.addEventListener('mouseleave', () => { mouseX = null; mouseY = null; hoveredTech = null; });
-
-  let t = 0;
-
-  function draw() {
-    if (!running) return;
-    t += .008;
-    ctx.clearRect(0, 0, W, H);
-
-    // Draw orbit rings
-    Object.keys(orbitGroups).forEach(orbit => {
-      const r = parseFloat(orbit) * Math.min(W, H) / 620;
-      ctx.beginPath();
-      ctx.arc(cx, cy, r, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(26,111,244,.08)';
-      ctx.lineWidth = 1;
-      ctx.setLineDash([4, 8]);
-      ctx.stroke();
-      ctx.setLineDash([]);
+    ['mouseleave','focusout','touchend','touchcancel'].forEach(function (ev) {
+      track.addEventListener(ev, function(){ isHover = false; }, { passive: true });
     });
 
-    hoveredTech = null;
-
-    techs.forEach(tech => {
-      const scale = Math.min(W, H) / 620;
-      const r = tech.orbit * scale;
-      tech.angle = tech.baseAngle + t * tech.speed;
-
-      // Mouse attraction
-      if (mouseX !== null) {
-        const techX = cx + Math.cos(tech.angle) * r;
-        const techY = cy + Math.sin(tech.angle) * r;
-        const dx = mouseX - techX;
-        const dy = mouseY - techY;
-        const dist = Math.hypot(dx, dy);
-        if (dist < 60) {
-          hoveredTech = tech;
-          tech.angle += (dist < 30 ? .04 : .02) * Math.sign(dx + dy);
-        }
-      }
-
-      const x = cx + Math.cos(tech.angle) * r;
-      const y = cy + Math.sin(tech.angle) * r;
-      const isHovered = hoveredTech === tech;
-
-      // Connecting line to center
-      ctx.beginPath();
-      ctx.moveTo(cx, cy);
-      ctx.lineTo(x, y);
-      const gradient = ctx.createLinearGradient(cx, cy, x, y);
-      gradient.addColorStop(0, 'rgba(26,111,244,.0)');
-      gradient.addColorStop(1, isHovered ? tech.color + 'CC' : 'rgba(26,111,244,.12)');
-      ctx.strokeStyle = gradient;
-      ctx.lineWidth = isHovered ? 1.5 : .8;
-      ctx.stroke();
-
-      // Node
-      const nodeR = isHovered ? 20 : 15;
-      ctx.beginPath();
-      ctx.arc(x, y, nodeR, 0, Math.PI * 2);
-      ctx.fillStyle = isHovered ? tech.color + '33' : 'rgba(26,111,244,.1)';
-      ctx.fill();
-      ctx.strokeStyle = isHovered ? tech.color : 'rgba(26,111,244,.25)';
-      ctx.lineWidth = isHovered ? 1.5 : 1;
-      ctx.stroke();
-
-      // Icon text
-      ctx.font = `${isHovered ? 14 : 11}px serif`;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      ctx.fillText(tech.icon, x, y);
-
-      // Label
-      if (isHovered) {
-        const lw = ctx.measureText(tech.name).width + 16;
-        const lx = x, ly = y - nodeR - 16;
-        ctx.fillStyle = 'rgba(13,27,62,.85)';
-        roundRect(ctx, lx - lw/2, ly - 10, lw, 20, 6);
-        ctx.fill();
-        ctx.font = '500 10px Inter, sans-serif';
-        ctx.fillStyle = '#fff';
-        ctx.fillText(tech.name, lx, ly);
-      }
-    });
-
-    // Center pulse ring
-    const pulse = .5 + .5 * Math.sin(t * 2);
-    ctx.beginPath();
-    ctx.arc(cx, cy, 40 + pulse * 8, 0, Math.PI * 2);
-    ctx.strokeStyle = `rgba(26,111,244,${.06 + pulse * .04})`;
-    ctx.lineWidth = 1;
-    ctx.stroke();
-
-    // Floating particles
-    for (let i = 0; i < 6; i++) {
-      const angle = (i / 6) * Math.PI * 2 + t * .2;
-      const pr = 55 + Math.sin(t * 1.5 + i) * 8;
-      const px = cx + Math.cos(angle) * pr;
-      const py = cy + Math.sin(angle) * pr;
-      ctx.beginPath();
-      ctx.arc(px, py, 2, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(96,165,250,${.3 + .3 * Math.sin(t * 2 + i)})`;
-      ctx.fill();
+    function startOnce() {
+      if (started) return; started = true;
+      requestAnimationFrame(function () {
+        scrollToIdx(0);
+        startAuto();
+      });
     }
-
-    rafId = requestAnimationFrame(draw);
-  }
-
-  function roundRect(ctx, x, y, w, h, r) {
-    ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.lineTo(x + w - r, y);
-    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-    ctx.lineTo(x + w, y + h - r);
-    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-    ctx.lineTo(x + r, y + h);
-    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-    ctx.lineTo(x, y + r);
-    ctx.quadraticCurveTo(x, y, x + r, y);
-    ctx.closePath();
-  }
-
-  requestAnimationFrame(draw);
-
-  new IntersectionObserver(e => {
-    running = e[0].isIntersecting;
-    if (running) rafId = requestAnimationFrame(draw);
-    else cancelAnimationFrame(rafId);
-  }, { threshold: 0 }).observe(container);
-}
-
-/* ══════════════════════════════════════════
-   TRANSITION SECTION — scroll reveals
-   ══════════════════════════════════════════ */
-function initTransitionSection() {
-  const section = document.getElementById('transition-story');
-  if (!section) return;
-
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.querySelectorAll('.ts-card').forEach((card, i) => {
-          setTimeout(() => card.classList.add('ts-visible'), i * 120);
+    if (section && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { startOnce(); if (!autoTimer) startAuto(); }
+          else stopAuto();
         });
-        obs.unobserve(e.target);
+      }, { threshold: 0.35 }).observe(section);
+    } else {
+      startOnce();
+    }
+    setTimeout(startOnce, 2200);
+
+  }
+
+  if (document.readyState !== 'loading') init();
+  else document.addEventListener('DOMContentLoaded', init);
+})();
+;
+/* ===== career-modal.js ===== */
+/* Career modal — accessible detail view for a selected career card.
+   - Opens on click / Enter / Space on any .jc-card
+   - Focus is trapped inside the dialog; Escape or backdrop closes it
+   - Restores focus to the invoking card on close
+   - Mobile: renders as a bottom drawer (see career-modal.css)
+   - Pauses the carousel auto-cycle while open (via .cm-open on <body>)
+*/
+(function () {
+  var GLYPHS = ['🔍','📦','⚙️','🎓','🚀'];
+
+  function h(tag, attrs, html) {
+    var el = document.createElement(tag);
+    if (attrs) for (var k in attrs) {
+      if (k === 'class') el.className = attrs[k];
+      else el.setAttribute(k, attrs[k]);
+    }
+    if (html != null) el.innerHTML = html;
+    return el;
+  }
+
+  function buildRoot() {
+    var root = h('div', {
+      class: 'cm-root',
+      id: 'career-modal',
+      role: 'dialog',
+      'aria-modal': 'true',
+      'aria-labelledby': 'cm-title',
+      'aria-describedby': 'cm-desc',
+      'aria-hidden': 'true'
+    });
+    root.innerHTML =
+      '<div class="cm-backdrop" data-cm-close="1" aria-hidden="true"></div>' +
+      '<div class="cm-dialog" tabindex="-1" role="document">' +
+        '<header class="cm-head">' +
+          '<div class="cm-icon" aria-hidden="true"></div>' +
+          '<div class="cm-head-text">' +
+            '<div class="cm-date" aria-label="Role period"></div>' +
+            '<h3 class="cm-title" id="cm-title"></h3>' +
+            '<div class="cm-sub"></div>' +
+          '</div>' +
+          '<button type="button" class="cm-close" aria-label="Close role details (Escape)" data-cm-close="1">×</button>' +
+        '</header>' +
+        '<div class="cm-body">' +
+          '<div class="cm-meta" aria-label="Company and location"></div>' +
+          '<p class="cm-desc" id="cm-desc"></p>' +
+          '<div class="cm-section-label" id="cm-ach-label">Key achievements</div>' +
+          '<ul class="cm-points" aria-labelledby="cm-ach-label"></ul>' +
+          '<div class="cm-section-label" id="cm-stack-label">Stack &amp; focus</div>' +
+          '<div class="cm-tags" role="list" aria-labelledby="cm-stack-label"></div>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(root);
+    return root;
+  }
+
+  var root, dialog, lastFocus = null, currentIdx = -1;
+
+  function render(idx) {
+    var roles = window.ROLES;
+    if (!roles || !roles[idx]) return false;
+    var r = roles[idx];
+    var isCur = r.type === 'cur';
+
+    dialog.querySelector('.cm-icon').textContent = GLYPHS[idx] || '✦';
+    dialog.querySelector('.cm-date').textContent = r.date || '';
+    dialog.querySelector('.cm-title').textContent = r.title || '';
+    dialog.querySelector('.cm-sub').textContent = r.sub || '';
+    dialog.querySelector('.cm-desc').textContent = r.desc || '';
+
+    var meta = dialog.querySelector('.cm-meta');
+    meta.innerHTML =
+      (r.co ? '<span>🏢 ' + r.co + '</span>' : '') +
+      (r.loc ? '<span>' + r.loc + '</span>' : '') +
+      '<span class="cm-type ' + (isCur ? 'is-cur' : '') + '">' +
+        (isCur ? '● Current role' : (r.type || '')) +
+      '</span>';
+
+    var ul = dialog.querySelector('.cm-points');
+    ul.innerHTML = (r.points || []).map(function (p) { return '<li>' + p + '</li>'; }).join('');
+
+    var tags = dialog.querySelector('.cm-tags');
+    tags.innerHTML = (r.tags || []).map(function (t) {
+      return '<span class="et ' + (t.c || '') + '" role="listitem">' + t.t + '</span>';
+    }).join('');
+
+    return true;
+  }
+
+  function focusable() {
+    return Array.prototype.slice.call(
+      dialog.querySelectorAll('button, [href], [tabindex]:not([tabindex="-1"])')
+    ).filter(function (el) { return !el.disabled && el.offsetParent !== null; });
+  }
+
+  function onKey(e) {
+    if (!root.classList.contains('is-open')) return;
+    if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+    if (e.key === 'Tab') {
+      var f = focusable();
+      if (!f.length) { e.preventDefault(); dialog.focus(); return; }
+      var first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  }
+
+  function open(idx, invoker) {
+    if (!render(idx)) return;
+    currentIdx = idx;
+    lastFocus = invoker || document.activeElement;
+    root.setAttribute('aria-hidden', 'false');
+    root.classList.add('is-open');
+    document.body.classList.add('cm-lock', 'cm-open');
+    // Focus the close button (safe first stop)
+    setTimeout(function () {
+      var c = dialog.querySelector('.cm-close');
+      if (c) c.focus();
+    }, 30);
+    if (invoker && invoker.setAttribute) invoker.setAttribute('aria-expanded', 'true');
+  }
+
+  function close() {
+    if (!root.classList.contains('is-open')) return;
+    root.classList.remove('is-open');
+    root.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('cm-lock', 'cm-open');
+    // Reset any cards' aria-expanded
+    var cards = document.querySelectorAll('.jc-card[aria-expanded="true"]');
+    for (var i = 0; i < cards.length; i++) cards[i].setAttribute('aria-expanded', 'false');
+    if (lastFocus && lastFocus.focus) {
+      try { lastFocus.focus({ preventScroll: true }); } catch (_) { lastFocus.focus(); }
+    }
+    currentIdx = -1;
+  }
+
+  function bindCards() {
+    var cards = document.querySelectorAll('.jc-card');
+    Array.prototype.forEach.call(cards, function (card) {
+      // Ensure keyboard-reachable
+      if (!card.hasAttribute('tabindex')) card.setAttribute('tabindex', '0');
+      if (!card.hasAttribute('role')) card.setAttribute('role', 'button');
+      card.setAttribute('aria-haspopup', 'dialog');
+      card.setAttribute('aria-controls', 'career-modal');
+
+      // Rich, contextual aria-label from ROLES data so screen readers
+      // announce "Open role details: <Title> at <Company>, <Date>".
+      var roles = window.ROLES || [];
+      var meta = roles[parseInt(card.getAttribute('data-role'), 10)];
+      if (meta) {
+        card.setAttribute(
+          'aria-label',
+          'Open role details: ' + meta.title + ' at ' + meta.co + ', ' + meta.date
+        );
       }
-    });
-  }, { threshold: .1 });
-  obs.observe(section);
-}
 
-/* ══════════════════════════════════════════
-   TS CARD TILT
-   ══════════════════════════════════════════ */
-function initTsCardTilt() {
-  if (!window.matchMedia('(hover:hover)').matches) return;
-  document.querySelectorAll('.ts-card,.ts-skill-block,.ts-callout').forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const r = card.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width - .5;
-      const y = (e.clientY - r.top) / r.height - .5;
-      card.style.setProperty('--tiltX', `${-y * 6}deg`);
-      card.style.setProperty('--tiltY', `${x * 6}deg`);
+      var idx = parseInt(card.getAttribute('data-role'), 10);
+      // Use capture phase + stopImmediatePropagation so other listeners
+      // (e.g. main.js openRole scroll-jump) don't fire alongside us.
+      card.addEventListener('click', function (e) {
+        if (e.button && e.button !== 0) return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        open(idx, card);
+      }, true);
+      card.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          open(idx, card);
+        }
+      }, true);
     });
-    card.addEventListener('mouseleave', () => {
-      card.style.setProperty('--tiltX', '0deg');
-      card.style.setProperty('--tiltY', '0deg');
+  }
+
+  function init() {
+    if (document.querySelector('.cm-root')) return;
+    root = buildRoot();
+    dialog = root.querySelector('.cm-dialog');
+
+    root.addEventListener('click', function (e) {
+      var t = e.target;
+      if (t && t.getAttribute && t.getAttribute('data-cm-close') === '1') close();
     });
-  });
-}
+    document.addEventListener('keydown', onKey);
 
-/* ══════════════════════════════════════════
-   TS COUNTERS — count up on reveal
-   ══════════════════════════════════════════ */
-function initTsCounters() {
-  document.querySelectorAll('[data-ts-count]').forEach(el => {
-    const target = parseInt(el.dataset.tsCount);
-    const suffix = el.dataset.tsSuffix || '';
-    let fired = false;
-    new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting && !fired) {
-        fired = true;
-        const dur = 1400, start = performance.now();
-        const step = ts => {
-          const p = Math.min((ts - start) / dur, 1);
-          el.textContent = Math.round((1 - Math.pow(1 - p, 3)) * target) + suffix;
-          if (p < 1) requestAnimationFrame(step);
-        };
-        el.textContent = '0' + suffix;
-        requestAnimationFrame(step);
-      }
-    }, { threshold: .6 }).observe(el);
-  });
-}
+    bindCards();
+    // Expose for other scripts
+    window.openCareerModal = open;
+    window.closeCareerModal = close;
+  }
 
-/* ══════════════════════════════════════════
-   TS TIMELINE LINE — draw on scroll
-   ══════════════════════════════════════════ */
-function initTsTimelineLine() {
-  const tl = document.querySelector('.ts-timeline');
-  if (!tl) return;
-  new IntersectionObserver(e => {
-    if (e[0].isIntersecting) tl.classList.add('line-drawn');
-  }, { threshold: .2 }).observe(tl);
-}
+  if (document.readyState !== 'loading') init();
+  else document.addEventListener('DOMContentLoaded', init);
+})();
+;
