@@ -2881,27 +2881,7 @@ function initTsTimelineLine() {
     });
   }
 
-  /* ---------- 2. Racing marquee ---------- */
-  function injectMarquee(){
-    if (document.querySelector('.nx-marquee')) return;
-    const anchor = document.querySelector('.hero-merged') || document.querySelector('.hero-wrap');
-    if (!anchor) return;
-    const items = [
-      'ELK Stack', 'AI Integration', 'RAG Pipelines',
-      'FastAPI', 'Python', 'Elasticsearch', 'Kibana',
-      'LangChain', 'Available for Hire', 'Based in Jaipur'
-    ];
-    const row = items.map(t =>
-      `<span class="nx-marquee__item">${t}<span class="nx-marquee__dot"></span></span>`
-    ).join('');
-    const el = document.createElement('div');
-    el.className = 'nx-marquee';
-    el.setAttribute('aria-hidden', 'true');
-    // Duplicate the track so the -50% translate loops seamlessly
-    el.innerHTML = `<div class="nx-marquee__track">${row}${row}</div>`;
-    anchor.insertAdjacentElement('afterend', el);
-  }
-
+  
   /* ---------- 3. Magnetic buttons ---------- */
   function magneticButtons(){
     if (reduce) return;
