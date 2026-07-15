@@ -209,7 +209,7 @@
       <div class="h-eye">ELK Stack Developer · Evolving with the AI Era · Open to Relocation</div>
       <h1 class="h1">
         <span class="hl3">Python. ELK. AI</span><br>
-        <span class="hl">Search ➔ Systems </span><br>
+        <span class="hl3">Search ➔ Systems </span><br>
         <span class="hl2">Beyond Scale</span>
       </h1>
       <p class="h-sub">
@@ -1495,18 +1495,77 @@
           <span style="font-size:1rem;flex-shrink:0">💡</span>
           <span>Also open to <strong style="color:var(--ink)">freelance SEO work</strong> — technical audits, Amazon FBA listing SEO, on-page optimisation, and Core Web Vitals fixes. Mention it in your message.</span>
         </div>
-        <form class="cf" id="contact-form" novalidate>
-          <div class="cf-g"><label class="cf-l" for="cf-name">Name</label><input class="cf-i" id="cf-name" type="text" placeholder="Your name" required autocomplete="name"></div>
-          <div class="cf-g"><label class="cf-l" for="cf-email">Email</label><input class="cf-i" id="cf-email" type="email" placeholder="Your email" required autocomplete="email"></div>
-          <div class="cf-g"><label class="cf-l" for="cf-subject">Subject</label><input class="cf-i" id="cf-subject" type="text" placeholder="AI project · ELK work · SEO audit · Python collab"></div>
-          <div class="cf-g"><label class="cf-l" for="cf-msg">Message</label><textarea class="cf-i" id="cf-msg" rows="4" placeholder="What are you working on?" required></textarea></div>
-          <button type="submit" class="cf-btn" id="cfb" aria-label="Send message">
-            <span class="cfb-ic" aria-hidden="true">✉</span>
-            <span class="cfb-tx">Send Message</span>
-            <span class="cfb-ar" aria-hidden="true">→</span>
-          </button>
-          <p class="cfb-hint">Direct reply within <strong>3 hours</strong> · Or use the quick actions above.</p>
-        </form>
+<form
+  class="cf"
+  id="contact-form"
+  action="https://formspree.io/f/mnjkkzdk"
+  method="POST"
+  novalidate
+>
+    <div class="cf-g">
+        <label class="cf-l" for="cf-name">Name</label>
+        <input
+            class="cf-i"
+            id="cf-name"
+            name="name"
+            type="text"
+            placeholder="Your name"
+            required
+            autocomplete="name"
+        >
+    </div>
+
+    <div class="cf-g">
+        <label class="cf-l" for="cf-email">Email</label>
+        <input
+            class="cf-i"
+            id="cf-email"
+            name="email"
+            type="email"
+            placeholder="Your email"
+            required
+            autocomplete="email"
+        >
+    </div>
+
+    <div class="cf-g">
+        <label class="cf-l" for="cf-subject">Subject</label>
+        <input
+            class="cf-i"
+            id="cf-subject"
+            name="subject"
+            type="text"
+            placeholder="AI project · ELK work · SEO audit · Python collab"
+        >
+    </div>
+
+    <div class="cf-g">
+        <label class="cf-l" for="cf-msg">Message</label>
+        <textarea
+            class="cf-i"
+            id="cf-msg"
+            name="message"
+            rows="4"
+            placeholder="What are you working on?"
+            required
+        ></textarea>
+    </div>
+
+    <button
+        type="submit"
+        class="cf-btn"
+        id="cfb"
+        aria-label="Send message"
+    >
+        <span class="cfb-ic" aria-hidden="true">✉</span>
+        <span class="cfb-tx">Send Message</span>
+        <span class="cfb-ar" aria-hidden="true">→</span>
+    </button>
+
+    <p class="cfb-hint">
+        Direct reply within <strong>3 hours</strong> · Or use the quick actions above.
+    </p>
+</form>
         <!-- Sticky mobile send footer — always shows the submit action on small screens -->
         <div class="ct-sticky-send" id="ct-sticky-send" aria-hidden="true">
           <button type="button" class="ctss-btn" id="ctss-btn" aria-label="Send message">
