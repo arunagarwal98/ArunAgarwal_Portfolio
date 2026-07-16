@@ -3927,3 +3927,28 @@ footer{ margin-top: 0 !important; padding-top: 1.25rem !important; padding-botto
   clip-path: none !important;
   -webkit-clip-path: none !important;
 }
+
+/* Fix: About section profile photo was permanently invisible.
+   Root cause: main.js's imageMaskReveal() clips every <img> to
+   clip-path:inset(0 0 100% 0) and only un-clips it (adds
+   'pr-mask-in') once its IntersectionObserver fires — which never
+   happened reliably for this photo, leaving it hidden behind the
+   empty frame background forever. Forcing it visible here removes
+   the dependency on that fragile trigger. */
+#about .aph img{
+  clip-path: none !important;
+  -webkit-clip-path: none !important;
+  transform: none !important;
+}
+/* Decouple the whole photo block from the scroll-reveal system entirely
+   (the .rv/.rv.l fade-in that wraps it) so it is always visible from
+   first paint, rather than depending on scroll position + JS timing.
+   Scoped narrowly to the reveal wrapper + card itself only, so the
+   orbit-ring rotation animation and dot positioning are untouched. */
+#about .about-grid > .rv.l{
+  opacity: 1 !important;
+  transform: none !important;
+}
+#about .aph-wrap{
+  opacity: 1 !important;
+}
