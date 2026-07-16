@@ -904,6 +904,17 @@ function initContactForm() {
 
   const doSubmit = async () => {
     if (btn.disabled) return;
+
+    // Validate required fields before doing anything else. The <form>
+    // has novalidate (so the browser won't auto-block submission), but
+    // checkValidity()/reportValidity() still work and let us enforce it
+    // ourselves — this also fixes empty submissions silently showing
+    // "Sent ✓" and posting blank data to Formspree.
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
     // 3D button press animation
     setBtnText(btn, 'Sending...');
     setBtnText(stickyBtn, 'Sending...');
@@ -2802,6 +2813,14 @@ function initTsTimelineLine() {
       const r = el.getBoundingClientRect();
       if (r.top < vh * 1.15) reveal(el, 'in');
     });
+    // Images use a separate reveal system (pr-mask / pr-mask-in) driven
+    // by its own IntersectionObserver in imageMaskReveal(). That observer
+    // can fail to fire (e.g. inside content-visibility:auto sections),
+    // leaving photos permanently clipped/invisible. Cover it here too.
+    document.querySelectorAll('.pr-mask:not(.pr-mask-in)').forEach(el => {
+      const r = el.getBoundingClientRect();
+      if (r.top < vh * 1.15) reveal(el, 'pr-mask-in');
+    });
     const about = document.getElementById('about');
     if (about) {
       const r = about.getBoundingClientRect();
@@ -2826,6 +2845,7 @@ function initTsTimelineLine() {
   setTimeout(() => {
     document.querySelectorAll('.rv:not(.in), .stagger:not(.in), .jpath:not(.in)').forEach(el => el.classList.add('in'));
     document.querySelectorAll('.aline:not(.show)').forEach(el => el.classList.add('show'));
+    document.querySelectorAll('.pr-mask:not(.pr-mask-in)').forEach(el => el.classList.add('pr-mask-in'));
   }, 4000);
 })();
 ;
@@ -2845,7 +2865,7 @@ function initTsTimelineLine() {
 
   function init(){
     splitHeadline();
-    injectMarquee();
+    if (typeof injectMarquee === 'function') injectMarquee();
     magneticButtons();
     voltCursor();
     revealTitles();
