@@ -269,23 +269,29 @@ function initColumnSlider() {
   if (!cols.length) return;
 
   // Add a vertical drift to alternating skill cards
-  let lastSy = 0;
+  let lastSy = window.scrollY;
+  let csTicking = false;
   window.addEventListener('scroll', () => {
-    const sy = window.scrollY;
-    const delta = sy - lastSy;
-    lastSy = sy;
+    if (csTicking) return;
+    csTicking = true;
+    requestAnimationFrame(() => {
+      const sy = window.scrollY;
+      const delta = sy - lastSy;
+      lastSy = sy;
 
-    cols.forEach((col, ci) => {
-      const cards = col.querySelectorAll('.sk');
-      cards.forEach((card, i) => {
-        if (!card._colOffset) card._colOffset = 0;
-        const dir = (ci % 2 === 0) ? 1 : -1;
-        card._colOffset += delta * dir * 0.04;
-        card._colOffset = Math.max(-18, Math.min(18, card._colOffset));
-        card.style.transform = card.style.transform.includes('perspective')
-          ? card.style.transform
-          : `translateY(${card._colOffset}px)`;
+      cols.forEach((col, ci) => {
+        const cards = col.querySelectorAll('.sk');
+        cards.forEach((card, i) => {
+          if (!card._colOffset) card._colOffset = 0;
+          const dir = (ci % 2 === 0) ? 1 : -1;
+          card._colOffset += delta * dir * 0.04;
+          card._colOffset = Math.max(-18, Math.min(18, card._colOffset));
+          card.style.transform = card.style.transform.includes('perspective')
+            ? card.style.transform
+            : `translateY(${card._colOffset}px)`;
+        });
       });
+      csTicking = false;
     });
   }, { passive: true });
 }
@@ -301,14 +307,20 @@ function initHorizontalParallax() {
     { el: document.querySelector('.proj-ticker-inner'), speed: 0, dir: 1 }, // already animated
   ].filter(r => r.el);
 
+  let hpTicking = false;
   window.addEventListener('scroll', () => {
-    rows.forEach(row => {
-      if (!row.speed) return;
-      const r = row.el.getBoundingClientRect();
-      if (r.bottom < 0 || r.top > window.innerHeight) return;
-      const prog = (window.innerHeight - r.top) / (window.innerHeight + r.height);
-      const offset = (prog - 0.5) * 100 * row.speed * row.dir;
-      row.el.style.transform = `translateX(${offset}px)`;
+    if (hpTicking) return;
+    hpTicking = true;
+    requestAnimationFrame(() => {
+      rows.forEach(row => {
+        if (!row.speed) return;
+        const r = row.el.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > window.innerHeight) return;
+        const prog = (window.innerHeight - r.top) / (window.innerHeight + r.height);
+        const offset = (prog - 0.5) * 100 * row.speed * row.dir;
+        row.el.style.transform = `translateX(${offset}px)`;
+      });
+      hpTicking = false;
     });
   }, { passive: true });
 }
@@ -1088,9 +1100,15 @@ document.addEventListener('DOMContentLoaded', () => {
 function initScrollProgress() {
   const bar = document.getElementById('scroll-progress');
   if (!bar) return;
+  let spTicking = false;
   window.addEventListener('scroll', () => {
-    const total = document.documentElement.scrollHeight - window.innerHeight;
-    if (total > 0) bar.style.width = (window.scrollY / total * 100) + '%';
+    if (spTicking) return;
+    spTicking = true;
+    requestAnimationFrame(() => {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      if (total > 0) bar.style.width = (window.scrollY / total * 100) + '%';
+      spTicking = false;
+    });
   }, { passive: true });
 }
 
