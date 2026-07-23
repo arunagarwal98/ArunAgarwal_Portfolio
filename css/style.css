@@ -539,7 +539,8 @@ body{background:linear-gradient(120deg,rgba(240,247,255,.96),rgba(255,255,255,.9
 .ot-pills{display:flex;flex-wrap:wrap;gap:.4rem}
 .otp{font-size:.67rem;font-family:var(--fm);color:var(--blue);background:rgba(26,111,244,.07);border:1.5px solid rgba(26,111,244,.18);padding:.24rem .72rem;border-radius:50px;cursor:default;transition:transform var(--dur) var(--ease-spring),background .2s,color .2s}
 .otp:hover{background:var(--blue);color:#fff;transform:perspective(var(--persp-c)) translateZ(6px) translateY(-2px) scale(1.06)}
-.ct-cols{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:start}
+.ct-cols{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:start;max-width:100%}
+.ct-cols > *{min-width:0}
 .ct-w h3{font-family:var(--fd);font-size:1.05rem;font-weight:800;color:var(--ink);margin-bottom:.25rem}
 .ct-w p{font-size:.78rem;color:var(--muted2);font-family:var(--fm);margin-bottom:1.5rem}
 .cf{display:flex;flex-direction:column;gap:.8rem}
@@ -2986,6 +2987,7 @@ html{ height: auto; }
   gap:.6rem;
   width: 100%;
   min-height: 58px;
+  flex-shrink: 0 !important;
   font-size: 1rem !important;
   letter-spacing:.02em;
   margin-top:.5rem;
