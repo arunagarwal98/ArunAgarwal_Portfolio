@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap');
 /* ===== style.css ===== */
 /* ════════════════════════════════════════════════════════════
    STYLE.CSS — 2026 AI Portfolio · Full 3D + Bento + Halo System
@@ -3531,8 +3532,6 @@ footer{ margin-top: 0 !important; padding-top: 1.25rem !important; padding-botto
    Off-white paper · DM Serif Display · orange accent
    Floating rotated code card · offset stats
    ═══════════════════════════════════════════════════ */
-
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600;700&display=swap');
 
 /* Override page bg for hero+about area only */
 .hero-merged{
