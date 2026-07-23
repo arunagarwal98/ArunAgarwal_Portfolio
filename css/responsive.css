@@ -197,6 +197,15 @@
 #contact .ct-cols{ align-items:stretch; }
 #contact .ct-cols > .rv,
 #contact .ct-cols > div{ display:flex; flex-direction:column; height:100%; }
+/* Bug fix: the form column's real content (fields + button + hint) can be
+   taller than the row height set by the shorter info column. Combined with
+   overflow:hidden on the card and default flex-shrink, that was crushing
+   the submit button to near-zero height. Let this column size to its own
+   content instead of being forced/clipped to match the other column. */
+#contact .ct-w{ height:auto !important; min-height:100%; overflow:visible !important; }
+#contact .ct-w > *{ flex-shrink:0; }
+#contact .ct-w .cf{ flex-shrink:0; }
+#contact .ct-w .cf > *{ flex-shrink:0; }
 #contact .ct-info{
   display:flex; flex-direction:column; height:100%;
   background:linear-gradient(180deg,
